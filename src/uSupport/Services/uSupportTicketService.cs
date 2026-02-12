@@ -1,20 +1,11 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Cache;
-using Umbraco.Cms.Infrastructure.Scoping;
-#else
-using Umbraco.Core.Cache;
-using Umbraco.Core.Scoping;
-#endif
-
-using NPoco;
-using System;
-using System.Linq;
+﻿using NPoco;
 using uSupport.Dtos;
 using uSupport.Extensions;
 using uSupport.Dtos.Tables;
-using System.Collections.Generic;
+using Umbraco.Cms.Core.Cache;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
+using Umbraco.Cms.Infrastructure.Scoping;
 using static uSupport.Helpers.uSupportPageHelper;
 using static uSupport.Constants.uSupportConstants;
 

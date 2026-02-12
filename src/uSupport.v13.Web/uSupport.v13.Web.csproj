@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="13.0.3" />
+    <PackageReference Include="Umbraco.Cms" Version="13.13.0" />
   </ItemGroup>
 
   <!-- Force Windows to use ICU. Otherwise Windows 10 2019H1+ will do it, but older Windows 10 and most, if not all, Windows Server editions will run NLS -->
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot" />
+    <Folder Include="wwwroot\media\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP
-using uSupport.Dtos.Tables;
+﻿using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Notifications;
 
 namespace uSupport.Notifications
@@ -15,4 +14,3 @@ namespace uSupport.Notifications
         }
     }
 }
-#endif

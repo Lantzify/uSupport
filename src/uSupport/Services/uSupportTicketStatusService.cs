@@ -1,14 +1,7 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Infrastructure.Scoping;
-#else
-using Umbraco.Core.Scoping;
-#endif
-using System;
-using System.Linq;
-using uSupport.Dtos.Tables;
-using System.Collections.Generic;
+﻿using uSupport.Dtos.Tables;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
+using Umbraco.Cms.Infrastructure.Scoping;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Services

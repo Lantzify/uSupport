@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core;
+﻿using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Services;
@@ -7,7 +6,6 @@ using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
-
 
 namespace uSupport.Migrations
 {
@@ -44,4 +42,3 @@ namespace uSupport.Migrations
 		}
 	}
 }
-#endif

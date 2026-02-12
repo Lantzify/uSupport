@@ -1,12 +1,6 @@
-﻿#if NETCOREAPP
+﻿using uSupport.Constants;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Dashboards;
-#else
-using Umbraco.Core.Composing;
-using Umbraco.Core.Dashboards;
-#endif
-using System;
-using uSupport.Constants;
 
 namespace uSupport.Backoffice.Dashboards
 {

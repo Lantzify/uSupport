@@ -1,25 +1,13 @@
-﻿#if NETCOREAPP
+﻿using NPoco;
+using uSupport.Helpers;
+using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Services;
+using uSupport.Migrations.Schemas;
+using uSupport.Services.Interfaces;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.ContentEditing;
-#else
-using Umbraco.Core.Scoping;
-using Umbraco.Core.Mapping;
-using Umbraco.Core.Services;
-using Umbraco.Core.Models.Membership;
-using Umbraco.Web.Models.ContentEditing;
-#endif
-using NPoco;
-using System;
-using System.Linq;
-using uSupport.Helpers;
-using uSupport.Extensions;
-using uSupport.Dtos.Tables;
-using System.Collections.Generic;
-using uSupport.Migrations.Schemas;
-using uSupport.Services.Interfaces;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Services
@@ -28,20 +16,12 @@ namespace uSupport.Services
 	{
 		private readonly IUserService _userService;
 		private static IScopeProvider _scopeProvider;
-#if NETCOREAPP
 		private readonly IUmbracoMapper _umbracoMapper;
-#else
-		private readonly UmbracoMapper _umbracoMapper;
-#endif
 
 
 		public uSupportTicketCommentService(IUserService userService,
 			IScopeProvider scopeProvider,
-#if NETCOREAPP
 		 IUmbracoMapper umbracoMapper
-#else
-		 UmbracoMapper umbracoMapper
-#endif
 		) : base(TicketCommentTableAlias, scopeProvider)
 		{
 			_userService = userService;

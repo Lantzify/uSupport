@@ -1,11 +1,5 @@
-﻿#if NETCOREAPP
+﻿using NPoco;
 using Umbraco.Cms.Core.Models.ContentEditing;
-#else
-using Umbraco.Web.Models.ContentEditing;
-#endif
-using NPoco;
-using System;
-using System.Collections.Generic;
 
 namespace uSupport.Dtos.Tables
 {

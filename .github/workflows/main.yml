@@ -1,0 +1,19 @@
+name: Release
+on:
+  release:
+    types:
+      - published
+permissions:
+  contents: read
+jobs:
+  release_name:
+    name: Publish NuGet Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build project
+        run: dotnet build --configuration Release uSupport
+      - name: Package files
+        run: dotnet pack --configuration Release  uSupport /p:Version=${{github.ref_name}}
+      - name: Publish the package
+        run: dotnet nuget push uSupport/build/Release/uSupport.${{github.ref_name}}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.PRIVATE_NUGET_KEY }}

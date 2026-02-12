@@ -1,13 +1,7 @@
-﻿#if NETCOREAPP
+﻿using NPoco;
 using Umbraco.Cms.Core.Models.ContentEditing;
-using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-#else
-using Umbraco.Web.Models.ContentEditing;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
-#endif
-using NPoco;
-using System;
 using static uSupport.Constants.uSupportConstants;
+using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace uSupport.Migrations.Schemas
 {

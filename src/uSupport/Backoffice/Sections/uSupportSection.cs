@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Sections;
-#else
-using Umbraco.Core.Models.Sections;
-#endif
+﻿using Umbraco.Cms.Core.Sections;
 
 namespace uSupport.Backoffice.Sections
 {

@@ -1,10 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Models.ContentEditing;
-#else
-using Umbraco.Web.Models.ContentEditing;
-#endif
-
-using System;
+﻿using Umbraco.Cms.Core.Models.ContentEditing;
 
 namespace uSupport.Dtos.Tables
 {

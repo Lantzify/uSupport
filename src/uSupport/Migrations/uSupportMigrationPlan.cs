@@ -1,11 +1,7 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Infrastructure.Migrations;
-#else
-using Umbraco.Core.Migrations;
-#endif
-using uSupport.Migrations.Create;
+﻿using uSupport.Migrations.Create;
 using uSupport.Migrations.Updates._1._2._0;
 using uSupport.Migrations.Updates._2._0._0;
+using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uSupport.Migrations
 {

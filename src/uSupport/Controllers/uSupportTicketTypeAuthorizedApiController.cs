@@ -1,55 +1,32 @@
-﻿#if NETCOREAPP
+﻿using uSupport.Helpers;
+using uSupport.Dtos.Tables;
 using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Services;
-using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Web.BackOffice.Controllers;
-#else
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Umbraco.Web.WebApi;
-using Umbraco.Core.Models;
-using Umbraco.Core.Services;
-using Umbraco.Core.Logging;
-#endif
-using System;
-using System.Linq;
-using uSupport.Helpers;
-using uSupport.Dtos.Tables;
-using System.Collections.Generic;
 using uSupport.Migrations.Schemas;
+using Microsoft.Extensions.Logging;
 using uSupport.Services.Interfaces;
+using Umbraco.Cms.Web.BackOffice.Controllers;
 
 namespace uSupport.Controllers
 {
 	public class uSupportTicketTypeAuthorizedApiController : UmbracoAuthorizedApiController
 	{
-#if NETCOREAPP
 		private readonly ILogger<IuSupportTicketTypeService> _logger;
         private readonly IEventAggregator _eventAggregator;
-#else
-		private readonly ILogger _logger;
-#endif
         private readonly IDataTypeService _dataTypeService;
 		private readonly IuSupportTicketTypeService _uSupportTicketTypeService;
 		
 		public uSupportTicketTypeAuthorizedApiController(
-#if NETCOREAPP
 			ILogger<IuSupportTicketTypeService> logger,
 			IEventAggregator eventAggregator,
-#else
-			ILogger logger,
-#endif
 			IDataTypeService dataTypeService,
 			IuSupportTicketTypeService uSupportTicketTypeService
 			)
 		{
-#if NETCOREAPP
             _eventAggregator = eventAggregator;
-#endif
             _logger = logger;
 			_dataTypeService = dataTypeService;
 			_uSupportTicketTypeService = uSupportTicketTypeService;
@@ -111,7 +88,6 @@ namespace uSupport.Controllers
 		public Guid GetTypeIdFromName(string name) => _uSupportTicketTypeService.GetTypeIdFromName(name);
 
 
-		#if NETCOREAPP
 		[HttpPost]
 		public ActionResult<uSupportTicketType> CreateTicketType(uSupportTicketTypeSchema ticketType)
 		{
@@ -146,48 +122,12 @@ namespace uSupport.Controllers
 				return ValidationProblem("Failed to update ticket type.");
 			}			
 		}
-#else
-		[HttpPost]
-		public HttpResponseMessage CreateTicketType(uSupportTicketTypeSchema ticketType)
-		{
-            try
-            {
-				ticketType.Order = _uSupportTicketTypeService.GetTypesCount() + 1;
-
-				var createdTicketType = _uSupportTicketTypeService.Create(ticketType);
-				return Request.CreateResponse(HttpStatusCode.OK, createdTicketType.Id);
-			}
-            catch (Exception ex)
-            {
-				_logger.Error<IuSupportTicketTypeService>(ex, "Failed to create ticket type.");
-                return Request.CreateValidationErrorResponse("Failed to create ticket type.");
-            }
-		}
-
-		[HttpPost]
-		public HttpResponseMessage UpdateTicketType(uSupportTicketType ticketType)
-		{
-            try
-            {
-				var updatedTicketType = _uSupportTicketTypeService.Update(ticketType.ConvertDtoToSchema());
-
-				return Request.CreateResponse(HttpStatusCode.OK, updatedTicketType.Id);
-			}
-            catch (Exception ex)
-            {
-				_logger.Error<IuSupportTicketTypeService>(ex, "Failed to update ticket type '{TicketTypeName}'", ticketType.Name);
-                return Request.CreateValidationErrorResponse("Failed to update ticket type");
-            }			
-		}
-#endif
 
 		[HttpGet]
 		public void DeleteTicket(Guid id)
 		{
-#if NETCOREAPP
             var ticketType = _uSupportTicketTypeService.Get(id);
             _eventAggregator.Publish(new DeleteTicketTypeNotification(ticketType));
-#endif
             _uSupportTicketTypeService.Delete(id);
 		}
 	}

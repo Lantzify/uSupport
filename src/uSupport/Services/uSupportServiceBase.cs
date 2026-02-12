@@ -1,14 +1,6 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Infrastructure.Scoping;
-#else
-using Umbraco.Core.Scoping;
-#endif
-
-using NPoco;
-using System;
-using System.Linq;
+﻿using NPoco;
 using uSupport.Extensions;
-using System.Collections.Generic;
+using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace uSupport.Services.Interfaces
 {

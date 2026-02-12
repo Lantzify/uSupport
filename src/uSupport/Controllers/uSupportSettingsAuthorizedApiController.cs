@@ -1,12 +1,6 @@
-﻿#if NETCOREAPP
-using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Web.BackOffice.Controllers;
-#else
-using System.Web.Http;
-using Umbraco.Web.WebApi;
-#endif
+﻿using Microsoft.AspNetCore.Mvc;
 using uSupport.Services.Interfaces;
-
+using Umbraco.Cms.Web.BackOffice.Controllers;
 
 namespace uSupport.Controllers
 {

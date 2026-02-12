@@ -1,18 +1,9 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core;
+﻿using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Core.Services;
+using static Umbraco.Cms.Core.Constants;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Infrastructure.Migrations;
-using static Umbraco.Cms.Core.Constants;
-#else
-using Umbraco.Core;
-using Umbraco.Web;
-using Umbraco.Core.Scoping;
-using Umbraco.Core.Services;
-using Umbraco.Core.Migrations;
-using static Umbraco.Core.Constants;
-#endif
 
 namespace uSupport.Migrations.Updates._2._0._0
 {

@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Infrastructure.Migrations;
-#else
-using Umbraco.Core.Migrations;
-#endif
+﻿using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uSupport.Migrations
 {
@@ -12,10 +8,6 @@ namespace uSupport.Migrations
 
         protected abstract void DoMigrate();
 
-#if NETCOREAPP
         protected override void Migrate() => DoMigrate();
-#else
-        public override void Migrate() => DoMigrate();
-#endif
     }
 }

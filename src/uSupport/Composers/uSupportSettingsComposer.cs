@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP
-using uSupport.Dtos.Settings;
+﻿using uSupport.Dtos.Settings;
 using Umbraco.Cms.Core.Composing;
 using Microsoft.Extensions.Configuration;
 using Umbraco.Cms.Core.DependencyInjection;
@@ -20,4 +19,3 @@ namespace uSupport.Composers
 		}
 	}
 }
-#endif

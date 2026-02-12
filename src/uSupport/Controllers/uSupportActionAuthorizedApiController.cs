@@ -1,20 +1,11 @@
-﻿#if NETCOREAPP
-using Umbraco.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Web.BackOffice.Controllers;
-#else
-using Umbraco.Core;
-using System.Web.Http;
-using Umbraco.Web.WebApi;
-#endif
-using System.Linq;
-using uSupport.Dtos;
+﻿using uSupport.Dtos;
 using uSupport.Helpers;
+using Umbraco.Extensions;
 using uSupport.Constants;
 using uSupport.Dtos.Tables;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using uSupport.Services.Interfaces;
-
+using Umbraco.Cms.Web.BackOffice.Controllers;
 
 namespace uSupport.Controllers
 {

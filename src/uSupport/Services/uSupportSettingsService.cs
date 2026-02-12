@@ -1,13 +1,12 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Mail;
-using System.Threading.Tasks;
+﻿using Umbraco.Cms.Core.Mail;
+using uSupport.Dtos.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Models.Email;
-using Umbraco.Cms.Core.Extensions;
 using Microsoft.Extensions.Hosting;
+using uSupport.Services.Interfaces;
+using Umbraco.Cms.Core.Models.Email;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -15,27 +14,12 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Umbraco.Cms.Core.Configuration.Models;
-#else
-using System.Web;
-using Umbraco.Core;
-using System.Web.Mvc;
-using System.Net.Mail;
-using System.Web.Routing;
-using Umbraco.Core.Logging;
-using static System.Configuration.ConfigurationManager;
-#endif
-using System;
-using System.IO;
-using uSupport.Dtos.Settings;
-using uSupport.Services.Interfaces;
 
 namespace uSupport.Services
 {
 	public class uSupportSettingsService : IuSupportSettingsService
 	{
 		private readonly uSupportSettingsTicket _defaultSettings;
-
-#if NETCOREAPP
 		private readonly IEmailSender _emailSender;
 		private readonly IRazorViewEngine _razorViewEngine;
 		private readonly IOptions<GlobalSettings> _globalSettings;
@@ -44,12 +28,7 @@ namespace uSupport.Services
 		private readonly ITempDataProvider _tempDataProvider;
         private readonly IHostEnvironment _hostingEnvironment;
         private readonly ILogger<IuSupportTicketService> _logger;
-#else
-		private readonly EmailSender _emailSender;
-		private readonly ILogger _logger;
-#endif
 		public uSupportSettingsService(
-#if NETCOREAPP
 	IEmailSender emailSender,
 	ITempDataProvider tempDataProvider,
 	IRazorViewEngine razorViewEngine,
@@ -58,13 +37,8 @@ namespace uSupport.Services
     IHttpContextAccessor httpContextAccessor,
 	IOptions<GlobalSettings> globalSettings,
 	IOptions<uSupportSettings> uSupportSettings
-#else
-
-	ILogger logger
-#endif
             )
         {
-#if NETCOREAPP
 			_tempDataProvider = tempDataProvider;
 			_globalSettings = globalSettings;
 			_uSupportSettings = uSupportSettings;
@@ -72,9 +46,6 @@ namespace uSupport.Services
 			_httpContextAccessor = httpContextAccessor;
 			_razorViewEngine = razorViewEngine;
 			_emailSender = emailSender;
-#else
-			_emailSender = new EmailSender();
-#endif
 			_logger = logger;
 			
             _defaultSettings = new uSupportSettingsTicket();
@@ -82,30 +53,18 @@ namespace uSupport.Services
 
 		public bool GetSendEmailOnTicketCreatedSetting()
 		{
-#if NETCOREAPP
             return _uSupportSettings.Value.Tickets.SendEmailOnTicketCreated;
-#else
-			return bool.Parse(AppSettings["SendEmailOnTicketCreated"]);
-#endif
         }
 
 
         public string GetTicketUpdateEmailSetting()
 		{
-#if NETCOREAPP
 			return _uSupportSettings.Value.Tickets.TicketUpdateEmail;
-#else
-			return AppSettings["TicketUpdateEmail"];
-#endif
 		}
 
 		public string GetEmailSubjectNewTicket()
 		{
-#if NETCOREAPP
 			var emailSubjectNewTicket = _uSupportSettings.Value.Tickets.EmailSubjectNewTicket;
-#else
-			var emailSubjectNewTicket = AppSettings["EmailSubjectNewTicket"];
-#endif
 			if (!string.IsNullOrWhiteSpace(emailSubjectNewTicket))
 				return emailSubjectNewTicket;
 
@@ -114,11 +73,7 @@ namespace uSupport.Services
 
 		public string GetEmailSubjectUpdateTicket()
 		{
-#if NETCOREAPP
 			var emailSubjectUpdateTicket = _uSupportSettings.Value.Tickets.EmailSubjectUpdateTicket;
-#else
-			var emailSubjectUpdateTicket = AppSettings["EmailSubjectUpdateTicket"];
-#endif
 			if (!string.IsNullOrWhiteSpace(emailSubjectUpdateTicket))
 				return emailSubjectUpdateTicket;
 
@@ -127,11 +82,7 @@ namespace uSupport.Services
 
 		public string GetEmailTemplateNewTicketPath()
 		{
-#if NETCOREAPP
 			var emailTemplateNewTicketPath = _uSupportSettings.Value.Tickets.EmailTemplateNewTicketPath;
-#else
-			var emailTemplateNewTicketPath = AppSettings["EmailTemplateNewTicketPath"];
-#endif
 			if (!string.IsNullOrWhiteSpace(emailTemplateNewTicketPath))
 				return emailTemplateNewTicketPath;
 
@@ -140,18 +91,13 @@ namespace uSupport.Services
 
 		public string GetEmailTemplateUpdateTicketPath()
 		{
-#if NETCOREAPP
 			var emailTemplateUpdateTicketPath = _uSupportSettings.Value.Tickets.EmailTemplateUpdateTicketPath;
-#else
-			var emailTemplateUpdateTicketPath = AppSettings["EmailTemplateUpdateTicketPath"];
-#endif
 			if (!string.IsNullOrWhiteSpace(emailTemplateUpdateTicketPath))
 				return emailTemplateUpdateTicketPath;
 
 			return _defaultSettings.EmailTemplateUpdateTicketPath;
 		}
 
-#if NETCOREAPP
 		public async void SendEmail(string toAddress, string subject, string templateViewPath, object model)
 		{
 			try
@@ -207,75 +153,5 @@ namespace uSupport.Services
                 return stringWriter.ToString();
             }
         }
-#else
-		public void SendEmail(string toAddress, string subject, string templateViewPath, object model)
-		{
-			try
-			{
-                if (string.IsNullOrEmpty(toAddress) || toAddress == "None")
-                    throw new Exception("Failed to send email. TicketUpdateEmail is not set in web.config");
-
-                MailMessage message = new MailMessage()
-                {
-                    Subject = subject,
-                    IsBodyHtml = true,
-                    Body = RenderEmailTemplateAsync(templateViewPath, model)
-                };
-
-                message.To.Add(toAddress);
-
-                _emailSender.Send(message);
-            }
-			catch (Exception ex)
-			{
-                _logger.Error<IuSupportSettingsService>(ex, "Failed to send email");
-            }
-		}
-
-		private string RenderEmailTemplateAsync(string templateViewPath, object model)
-		{
-
-			if (string.IsNullOrEmpty(templateViewPath))
-                throw new Exception("Failed to find email template.");
-
-			if (!templateViewPath.EndsWith(".cshtml"))
-                throw new Exception("Template file must end with '.cshtml'");
-
-            using (StringWriter stringWriter = new StringWriter())
-            {
-                var controllerContext = CreateController();
-                ViewEngineResult viewEngineResult = ViewEngines.Engines.FindView(controllerContext.ControllerContext, templateViewPath, "");
-                ViewDataDictionary viewData = new ViewDataDictionary(model);
-
-                var view = viewEngineResult.View;
-
-                ViewContext viewContext = new ViewContext(controllerContext.ControllerContext, view, viewData, new TempDataDictionary(), stringWriter);
-
-                viewEngineResult.View.Render(viewContext, stringWriter);
-
-                return stringWriter.ToString();
-            }
-
-        }
-#endif
-
-#if NETFRAMEWORK
-		private static EmptyController CreateController()
-		{
-			EmptyController instance = (EmptyController)Activator.CreateInstance(typeof(EmptyController), null);
-
-			HttpContextBase httpContext = new HttpContextWrapper(HttpContext.Current);
-			RouteData routeData = new RouteData();
-
-			routeData.Values.Add("controller", "Empty");
-			instance.ControllerContext = new ControllerContext(httpContext, routeData, instance);
-
-			return instance;
-		}
-#endif
     }
-
-#if NETFRAMEWORK
-	public class EmptyController : Controller { }
-#endif
 }

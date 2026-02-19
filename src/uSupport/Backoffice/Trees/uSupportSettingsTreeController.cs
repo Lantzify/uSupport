@@ -9,13 +9,12 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.BackOffice.Trees;
 using Umbraco.Cms.Web.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
-using Umbraco.Cms.Web.Common.Authorization;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Backoffice.Trees
 {
     [PluginController(uSupportConstants.SectionAlias)]
-	[Authorize(Policy = AuthorizationPolicies.TreeAccessDocumentTypes)]
+	[Authorize(Policy = uSupportSectionAccess)]
     [Tree(uSupportConstants.SectionAlias, "settings", SortOrder = 5, TreeTitle = "Settings", TreeGroup = TreeGroupAlias)]
     public class uSupportSettingsTreeController : TreeController
     {

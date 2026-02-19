@@ -7,6 +7,8 @@ namespace uSupport.Constants
 		//Section
 		public const string SectionAlias = "uSupport";
 
+		public const string uSupportSectionAccess = "uSupportSectionAccess";
+
 		//Tree
 		public const string TicketsTreeAlias = "tickets";
 		public const string SettingsTreeAlias = "settings";

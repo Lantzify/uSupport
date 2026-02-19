@@ -26,23 +26,19 @@ namespace uSupport.Services
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IOptions<uSupportSettings> _uSupportSettings;
 		private readonly ITempDataProvider _tempDataProvider;
-        private readonly IHostEnvironment _hostingEnvironment;
         private readonly ILogger<IuSupportTicketService> _logger;
-		public uSupportSettingsService(
-	IEmailSender emailSender,
-	ITempDataProvider tempDataProvider,
-	IRazorViewEngine razorViewEngine,
-    ILogger<IuSupportTicketService> logger,
-	IHostEnvironment hostingEnvironment,
-    IHttpContextAccessor httpContextAccessor,
-	IOptions<GlobalSettings> globalSettings,
-	IOptions<uSupportSettings> uSupportSettings
-            )
+		public uSupportSettingsService(IEmailSender emailSender,
+			ITempDataProvider tempDataProvider,
+			IRazorViewEngine razorViewEngine,
+			ILogger<IuSupportTicketService> logger,
+			IHostEnvironment hostingEnvironment,
+			IHttpContextAccessor httpContextAccessor,
+			IOptions<GlobalSettings> globalSettings,
+			IOptions<uSupportSettings> uSupportSettings)
         {
 			_tempDataProvider = tempDataProvider;
 			_globalSettings = globalSettings;
 			_uSupportSettings = uSupportSettings;
-			_hostingEnvironment = hostingEnvironment;
 			_httpContextAccessor = httpContextAccessor;
 			_razorViewEngine = razorViewEngine;
 			_emailSender = emailSender;
@@ -110,11 +106,34 @@ namespace uSupport.Services
                 if (string.IsNullOrEmpty(toAddress) || toAddress == "None")
                     throw new Exception("Failed to send email. TicketUpdateEmail is not set in appsettings.");
 
-                EmailMessage message = new(smtpSettings?.From,
-                                            toAddress,
-                                            subject,
-                                            await RenderEmailTemplateAsync(templateViewPath, model),
-                                            true);
+				EmailMessage message;
+				var emailBody = await RenderEmailTemplateAsync(templateViewPath, model);
+
+				if (toAddress.Contains(","))
+				{
+
+					message = new(smtpSettings?.From,
+												toAddress.Split(",", StringSplitOptions.RemoveEmptyEntries)
+														.Select(email => email.Trim())
+														.ToArray(),
+												null,
+												null,
+												null,
+												subject,
+												emailBody,
+												true,
+												null);
+				}
+				else
+				{
+
+					message = new(smtpSettings?.From,
+												toAddress.Trim(),
+												subject,
+												emailBody,
+												true);
+				}
+
 
                 await _emailSender.SendAsync(message, emailType: "Contact");
             }

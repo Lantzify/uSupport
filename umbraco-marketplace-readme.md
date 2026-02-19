@@ -12,7 +12,7 @@ Say goodbye to the days of digging through countless old emails in search of vit
 * Ticketing dashboard
 
 ## Useful links
-- [Documentation](https://weberistic.github.io/uSupport-documentation/)
+- [Documentation](https://lantzify.github.io/uSupport-documentation/)
 
 ## Exentions
 

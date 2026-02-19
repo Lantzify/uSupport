@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build project
-        run: dotnet build --configuration Release uSupport
+        run: dotnet build --configuration Release src/uSupport
       - name: Package files
-        run: dotnet pack --configuration Release  uSupport /p:Version=${{github.ref_name}}
+        run: dotnet pack --configuration Release  src/uSupport /p:Version=${{github.ref_name}}
       - name: Publish the package
-        run: dotnet nuget push uSupport/build/Release/uSupport.${{github.ref_name}}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.PRIVATE_NUGET_KEY }}
+        run: dotnet nuget push src/uSupport/build/Release/uSupport.${{github.ref_name}}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.PRIVATE_NUGET_KEY }}

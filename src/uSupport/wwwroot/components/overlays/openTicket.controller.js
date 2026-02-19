@@ -1,6 +1,7 @@
 ﻿angular.module("umbraco").controller("uSupport.openTicket.controller", function (
     $q,
     $scope,
+    userService,
     uSupportConfig,
     uSupportHelperResources,
     uSupportTicketCommentResources,
@@ -32,10 +33,11 @@
 
     $q.all({
         author: uSupportHelperResources.getUserById(vm.ticket.AuthorId),
-        comments: uSupportTicketCommentResources.getCommentsFromTicketId(vm.ticket.Id)
+        comments: uSupportTicketCommentResources.getCommentsFromTicketId(vm.ticket.Id),
+        user: userService.getCurrentUser()
     }).then(function (promises) {
 
-        vm.user = promises.author;
+        vm.user = promises.user;
 
         vm.properties.push({
             alias: "author",

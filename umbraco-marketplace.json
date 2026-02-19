@@ -21,27 +21,27 @@
     ],
     "Screenshots": [
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/dashboard.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/dashboard.PNG",
             "Caption": "Custom dashboard"
         },
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/ticketDetails.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/ticketDetails.PNG",
             "Caption": "Creating a new ticket"
         },
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/editTicket.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/editTicket.PNG",
             "Caption": "Managing ticket"
         },
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/ticketTypes.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/ticketTypes.PNG",
             "Caption": "Default ticket types"
         },
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/ticketStatus.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/ticketStatus.PNG",
             "Caption": "Default ticket statuses"
         },
         {
-            "ImageUrl": "https://raw.githubusercontent.com/Weberistic/uSupport/main/assets/settings.PNG",
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/settings.PNG",
             "Caption": "Overview over the current settings"
         }
     ]

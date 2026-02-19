@@ -12,7 +12,7 @@ namespace uSupport.Composers
 		{
 			builder.Services.AddAuthorization(options =>
 			{
-				options.AddPolicy("uSupportSectionAccess", policy =>
+				options.AddPolicy(uSupportConstants.uSupportSectionAccess, policy =>
 				{
 					policy.Requirements.Add(new SectionRequirement(uSupportConstants.SectionAlias));
 				});

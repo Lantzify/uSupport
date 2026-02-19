@@ -4,6 +4,9 @@
 
 ![version](https://img.shields.io/nuget/v/uSupport?label=version)
 [![Nuget](https://img.shields.io/nuget/dt/uSupport?color=2346c018&logo=Nuget)](https://www.nuget.org/packages/uSupport/)
+[![Umbraco](https://img.shields.io/badge/marketplace-umbraco-%233544b1#f5c1bc)](https://marketplace.umbraco.com/package/usupport)
+
+[![Release](https://github.com/Lantzify/uSupport/actions/workflows/main.yml/badge.svg)](https://github.com/Lantzify/uSupport/actions/workflows/main.yml)
 [![Umbraco](https://img.shields.io/badge/our-umbraco-%233544b1)](https://our.umbraco.com/packages/backoffice-extensions/usupport/)
 
 ## What is uSupport

@@ -147,6 +147,8 @@ namespace uSupport.Controllers
 						_uSupportSettingsService.GetEmailSubjectUpdateTicket(),
 						_uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
 						updatedTicket);
+
+					_eventAggregator.Publish(new UpdateTicketSendEmailNotification(updatedTicket));
 				}
 
                 _uSupportTicketService.ClearTicketCache();

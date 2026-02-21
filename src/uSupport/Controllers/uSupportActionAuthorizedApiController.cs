@@ -3,6 +3,8 @@ using uSupport.Helpers;
 using Umbraco.Extensions;
 using uSupport.Constants;
 using uSupport.Dtos.Tables;
+using uSupport.Notifications;
+using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Web.BackOffice.Controllers;
@@ -11,14 +13,17 @@ namespace uSupport.Controllers
 {
 	public class uSupportActionAuthorizedApiController : UmbracoAuthorizedApiController
 	{
+		private readonly IEventAggregator _eventAggregator;
 		private readonly IuSupportTicketService _uSupportTicketService;
 		private readonly IuSupportTicketTypeService _uSupportTicketTypeService;
 		private readonly IuSupportTicketStatusService _uSupportTicketStatusService;
 
-		public uSupportActionAuthorizedApiController(IuSupportTicketService uSupportTicketService, 
+		public uSupportActionAuthorizedApiController(IEventAggregator eventAggregator,
+			IuSupportTicketService uSupportTicketService, 
 			IuSupportTicketTypeService uSupportTicketTypeService,
 			IuSupportTicketStatusService uSupportTicketStatusService)
 		{
+			_eventAggregator = eventAggregator;
 			_uSupportTicketService = uSupportTicketService;
 			_uSupportTicketTypeService = uSupportTicketTypeService;
 			_uSupportTicketStatusService = uSupportTicketStatusService;
@@ -30,14 +35,20 @@ namespace uSupport.Controllers
             switch (dto.Type)
             {
 				case uSupportConstants.TicketsTreeAlias:
+					var ticket = _uSupportTicketService.Get(dto.Id);
 					_uSupportTicketService.Delete(dto.Id);
                     _uSupportTicketService.ClearTicketCache();
-                    break;
+					_eventAggregator.Publish(new DeleteTicketNotification(ticket));
+					break;
 				case uSupportConstants.TicketTypesTreeAlias:
+					var ticketType = _uSupportTicketTypeService.Get(dto.Id);
 					_uSupportTicketTypeService.Delete(dto.Id);
+					_eventAggregator.Publish(new DeleteTicketTypeNotification(ticketType));
 					break;
 				case uSupportConstants.TicketStatusesTreeAlias:
+					var ticketStatus = _uSupportTicketStatusService.Get(dto.Id);
 					_uSupportTicketStatusService.Delete(dto.Id);
+					_eventAggregator.Publish(new DeleteTicketStatusNotification(ticketStatus));
 					break;
 			};
 		}
@@ -103,6 +114,7 @@ namespace uSupport.Controllers
 						var type = _uSupportTicketTypeService.Get(item.Id);
 						type.Order = dto.List.FindIndex(x => x.Id == item.Id) + 1;
 						_uSupportTicketTypeService.Update(type.ConvertDtoToSchema());
+						_eventAggregator.Publish(new UpdateTicketTypeNotification(type));
 					}
 
 					break;
@@ -113,6 +125,7 @@ namespace uSupport.Controllers
 						var status = _uSupportTicketStatusService.Get(item.Id);
 						status.Order = dto.List.FindIndex(x => x.Id == item.Id) + 1;
 						_uSupportTicketStatusService.Update(status.ConvertDtoToSchema());
+						_eventAggregator.Publish(new UpdateTicketStatusNotification(status));
 					}
 
 					break;

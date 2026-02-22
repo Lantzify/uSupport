@@ -18,7 +18,8 @@
     "PackagesByAuthor": [
         "AutoDictionaries",
         "AutoBlockList",
-        "UmbracoNaviHideIcon"
+        "UmbracoNaviHideIcon",
+        "uSupport.uSync"
     ],
     "Screenshots": [
         {

@@ -13,6 +13,7 @@ Say goodbye to the days of digging through countless old emails in search of vit
 
 ## Useful links
 - [Documentation](https://lantzify.github.io/uSupport-documentation/)
+- [uSync](https://marketplace.umbraco.com/package/usupport.usync)
 
 ## Exentions
 

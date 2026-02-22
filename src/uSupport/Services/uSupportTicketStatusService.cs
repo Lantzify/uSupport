@@ -8,74 +8,99 @@ namespace uSupport.Services
 {
 	public class uSupportTicketStatusService : uSupportServiceBase<uSupportTicketStatus, uSupportTicketStatusSchema>, IuSupportTicketStatusService
 	{
-		private static IScopeProvider _scopeProvider;
 
-		public uSupportTicketStatusService(IScopeProvider scopeProvider) : base(TicketStatusTableAlias, scopeProvider)
-		{
-			_scopeProvider = scopeProvider;
-		}
+		public uSupportTicketStatusService(IScopeProvider scopeProvider,
+			IScopeAccessor scopeAccessor) : base(TicketStatusTableAlias, scopeProvider, scopeAccessor)
+		{ }
 
 		public uSupportTicketStatus GetDefaultStatus()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var status = db.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Default] = '1'").FirstOrDefault();
-
-				return status;
+				return context.Scope.Database.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Default] = '1'").FirstOrDefault();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public IEnumerable<uSupportTicketStatus> GetActiveStatuses()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var statuses = db.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Active] = '1'");
+				var statuses = context.Scope.Database.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Active] = '1'");
+				
+				if (context.Created)
+					context.Scope.Complete();
 
 				return statuses.ToList();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public IEnumerable<uSupportTicketStatus> GetResolvedStatuses()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var statuses = db.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Active] = '0'");
-
+				var statuses = context.Scope.Database.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} WHERE [Active] = '0'");
 				return statuses.ToList();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public IEnumerable<uSupportTicketStatus> GetAll()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var ticketStatus = db.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} ORDER BY [Order]");
-
-				return ticketStatus;
+				return context.Scope.Database.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} ORDER BY [Order]");
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public Guid GetStatusIdFromName(string name)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var ticketStatus = db.Query<uSupportTicketStatus>($"SELECT Id FROM {TicketStatusTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
-
+				var ticketStatus = context.Scope.Database.Query<uSupportTicketStatus>($"SELECT Id FROM {TicketStatusTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
 				return ticketStatus.Id;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public int GetStatusCount()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				return db.Query<int>($"SELECT COUNT([Order]) FROM {TicketStatusTableAlias}").FirstOrDefault();
+				return context.Scope.Database.Query<int>($"SELECT COUNT([Order]) FROM {TicketStatusTableAlias}").FirstOrDefault();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 	}

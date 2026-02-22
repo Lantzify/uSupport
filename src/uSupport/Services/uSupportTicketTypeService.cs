@@ -9,44 +9,57 @@ namespace uSupport.Services
 {
 	public class uSupportTicketTypeService : uSupportServiceBase<uSupportTicketType, uSupportTicketTypeSchema>, IuSupportTicketTypeService
 	{
-		private static IScopeProvider _scopeProvider;
-
-		public uSupportTicketTypeService(IScopeProvider scopeProvider) : base(TicketTypeTableAlias, scopeProvider)
-		{
-			_scopeProvider = scopeProvider;
-		}
+		public uSupportTicketTypeService(IScopeProvider scopeProvider,
+			IScopeAccessor scopeAccessor) : base(TicketTypeTableAlias, scopeProvider, scopeAccessor)
+		{ }
 
 		public IEnumerable<uSupportTicketType> GetAll()
 		{
-			using (var scope = _scopeProvider.CreateScope())
-			{
-				var db = scope.Database;
-				var sql = new Sql()
-					.Select("*")
-					.From(TicketTypeTableAlias)
-					.OrderBy("[Order]");
+			var context = GetScope();
 
-				return scope.Database.Fetch<uSupportTicketType>(sql);
+			try
+			{
+				var sql = new Sql()
+								.Select("*")
+								.From(TicketTypeTableAlias)
+								.OrderBy("[Order]");
+
+				return context.Scope.Database.Fetch<uSupportTicketType>(sql);
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public Guid GetTypeIdFromName(string name)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
-				var ticketStatus = db.Query<uSupportTicketStatus>($"SELECT Id FROM {TicketTypeTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
-
+				var ticketStatus = context.Scope.Database.Query<uSupportTicketType>($"SELECT Id FROM {TicketTypeTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
 				return ticketStatus.Id;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public int GetTypesCount()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+
+			try
 			{
-				var db = scope.Database;
-				return db.Query<uSupportTicketType>($"SELECT [Order] FROM {TicketTypeTableAlias}").ToList().Count;
+				return context.Scope.Database.Query<uSupportTicketType>($"SELECT [Order] FROM {TicketTypeTableAlias}").ToList().Count;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 	}

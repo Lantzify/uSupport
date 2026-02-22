@@ -1,13 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
-	<area alias="sections">
-		<key alias="uSupport">uSupport</key>
-	</area>
-	<area alias="treeHeaders">
-		<key alias="uSupportGroup">uSupport</key>
-	</area>
-	<area alias="dashboardTabs">
-		<key alias="uSupportAdminDashboard">Support</key>
-		<key alias="uSupportUserDashboard">Support</key>
-	</area>
+		<area alias="sections">
+				<key alias="uSupport">uSupport</key>
+		</area>
+		<area alias="treeHeaders">
+				<key alias="uSupportGroup">uSupport</key>
+		</area>
+		<area alias="dashboardTabs">
+				<key alias="uSupportAdminDashboard">Support</key>
+				<key alias="uSupportUserDashboard">Support</key>
+		</area>
+		<area alias="usync">
+				<key alias="usupport-description">Ticket types and statuses</key>
+		</area>
 </language>

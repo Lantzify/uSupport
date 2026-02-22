@@ -15,46 +15,49 @@ namespace uSupport.Services
 	public class uSupportTicketCommentService : uSupportServiceBase<uSupportTicketComment, uSupportTicketCommentSchema>, IuSupportTicketCommentService
 	{
 		private readonly IUserService _userService;
-		private static IScopeProvider _scopeProvider;
 		private readonly IUmbracoMapper _umbracoMapper;
-
 
 		public uSupportTicketCommentService(IUserService userService,
 			IScopeProvider scopeProvider,
-		 IUmbracoMapper umbracoMapper
-		) : base(TicketCommentTableAlias, scopeProvider)
+			IScopeAccessor scopeAccessor,
+			IUmbracoMapper umbracoMapper) : base(TicketCommentTableAlias, scopeProvider, scopeAccessor)
 		{
 			_userService = userService;
-			_scopeProvider = scopeProvider;
 			_umbracoMapper = umbracoMapper;
 		}
 
 		public override uSupportTicketComment Get(Guid id)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
 				var sql = new Sql()
-					.Select("*")
-					.From(TicketCommentTableAlias)
-					.Where($"Id = UPPER('{id}')");
+							.Select("*")
+							.From(TicketCommentTableAlias)
+							.Where($"Id = UPPER('{id}')");
 
-				return scope.Database.Fetch<uSupportTicketCommentSchema>(sql).FirstOrDefault()?.ConvertSchemaToDto();
+				return context.Scope.Database.Fetch<uSupportTicketCommentSchema>(sql).FirstOrDefault()?.ConvertSchemaToDto();
+
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public IEnumerable<uSupportTicketComment> GetCommentsFromTicketId(Guid ticketId)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
 				var sql = new Sql()
 					.Select("*")
 					.From(TicketCommentTableAlias)
 					.Where($"TicketId = UPPER('{ticketId}')")
 					.OrderBy("Date");
 
-				var comments = scope.Database.Query<uSupportTicketCommentSchema>(sql);
+				var comments = context.Scope.Database.Query<uSupportTicketCommentSchema>(sql);
 
 				List<uSupportTicketComment> commentDtos = new List<uSupportTicketComment>();
 
@@ -69,6 +72,11 @@ namespace uSupport.Services
 				}
 
 				return commentDtos;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 	}

@@ -13,36 +13,41 @@ namespace uSupport.Services
 {
 	public class uSupportTicketService : uSupportServiceBase<uSupportTicket, uSupportTicketSchema>, IuSupportTicketService
 	{
-		private readonly AppCaches _appCaches;	
-		private static IScopeProvider _scopeProvider;	
+		private readonly AppCaches _appCaches;
 		private readonly IuSupportTicketStatusService _uSupportTicketStatusService;
 
 		public uSupportTicketService(AppCaches appCaches,
-        IScopeProvider scopeProvider,
-			IuSupportTicketStatusService uSupportTicketStatusService) : base(TicketTableAlias, scopeProvider)
+			IScopeProvider scopeProvider,
+			IScopeAccessor scopeAccessor,
+			IuSupportTicketStatusService uSupportTicketStatusService) : base(TicketTableAlias, scopeProvider, scopeAccessor)
 		{
 			_appCaches = appCaches;
-			_scopeProvider = scopeProvider;
 			_uSupportTicketStatusService = uSupportTicketStatusService;
 		}
 
 		public IEnumerable<uSupportTicket> GetAll()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
 				var sql = new Sql()
-					.Select("*")
-					.From(TicketTableAlias)
-					.OrderBy("Submitted");
+								.Select("*")
+								.From(TicketTableAlias)
+								.OrderBy("Submitted");
 
-				return scope.Database.Fetch<uSupportTicket>(sql);
+				return context.Scope.Database.Fetch<uSupportTicket>(sql);
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page)
-		{			
-			using (var scope = _scopeProvider.CreateScope())
+		{
+			var context = GetScope();
+			try
 			{
 				var statuses = _uSupportTicketStatusService.GetActiveStatuses().ConvertStatusesToSql();
 
@@ -58,16 +63,23 @@ namespace uSupport.Services
 					.From(TicketTableAlias)
 					.Where($"StatusId IN ({statuses})");
 
-				var ticketCount = scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
-				var tickets = scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
-					
+				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
+				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
+
 				return MapPageToUSupportPage(tickets, ticketCount, page, PageSize);
 			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+
 		}
 
 		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
 				var statuses = _uSupportTicketStatusService.GetResolvedStatuses().ConvertStatusesToSql();
 				var sql = new Sql()
@@ -82,16 +94,22 @@ namespace uSupport.Services
 					.From(TicketTableAlias)
 					.Where($"StatusId IN ({statuses})");
 
-				var ticketCount = scope.Database.Fetch<uSupportTicket>(sqlCount).ToList().Count;
-				var tickets = scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
+				var ticketCount = context.Scope.Database.Fetch<uSupportTicket>(sqlCount).ToList().Count;
+				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
 
 				return MapPageToUSupportPage(tickets, ticketCount, page, PageSize);
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public bool AnyResolvedTickets()
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
 				var statuses = _uSupportTicketStatusService.GetResolvedStatuses().ConvertStatusesToSql();
 				var sqlCount = new Sql()
@@ -99,32 +117,49 @@ namespace uSupport.Services
 					.From(TicketTableAlias)
 					.Where($"StatusId IN ({statuses})");
 
-				return scope.Database.Fetch<uSupportTicket>(sqlCount).Any();
+				return context.Scope.Database.Fetch<uSupportTicket>(sqlCount).Any();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public override uSupportTicket Get(Guid id)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
 				var sql = new Sql()
-					.Select("*")
-					.From(TicketTableAlias)
-					.GetFullTicket()
-					.Where($"{TicketTableAlias}.Id = UPPER('{id}')");
-					
-				var ticket = scope.Database.Fetch<uSupportTicket>(sql).FirstOrDefault();
+								.Select("*")
+								.From(TicketTableAlias)
+								.GetFullTicket()
+								.Where($"{TicketTableAlias}.Id = UPPER('{id}')");
 
-				return ticket;
+				return context.Scope.Database.Fetch<uSupportTicket>(sql).FirstOrDefault();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public override uSupportTicket Update(uSupportTicketSchema dto)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				scope.Database.Update(dto);
-				scope.Complete();
+				context.Scope.Database.Update(dto);
+
+				if (context.Created)
+					context.Scope.Complete();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 
 			return Get(dto.Id);

@@ -10,10 +10,10 @@ namespace uSupport.Composers
 	{
 		public void Compose(IUmbracoBuilder builder)
 		{
-			builder.Services.AddScoped<IuSupportTicketTypeService, uSupportTicketTypeService>()
-							.AddScoped<IuSupportTicketStatusService, uSupportTicketStatusService>()
-							.AddScoped<IuSupportTicketCommentService, uSupportTicketCommentService>()
-							.AddScoped<IuSupportTicketService, uSupportTicketService>()
+			builder.Services.AddTransient<IuSupportTicketTypeService, uSupportTicketTypeService>()
+							.AddTransient<IuSupportTicketStatusService, uSupportTicketStatusService>()
+							.AddTransient<IuSupportTicketCommentService, uSupportTicketCommentService>()
+							.AddTransient<IuSupportTicketService, uSupportTicketService>()
 							.AddScoped<IuSupportSettingsService, uSupportSettingsService>();
 		}
 	}

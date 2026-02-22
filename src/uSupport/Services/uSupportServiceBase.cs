@@ -6,82 +6,141 @@ namespace uSupport.Services.Interfaces
 {
 	public abstract class uSupportServiceBase<T, Schema>
 	{
-		private static IScopeProvider _scopeProvider;
+		private readonly IScopeProvider _scopeProvider;
+		private readonly IScopeAccessor _scopeAccessor;
 
 		private readonly string _tableAlias;
 
-		public uSupportServiceBase(string tableAlias, IScopeProvider scopeProvider)
+		public uSupportServiceBase(string tableAlias,
+			IScopeProvider scopeProvider,
+			IScopeAccessor scopeAccessor)
 		{
 			_tableAlias = tableAlias;
 			_scopeProvider = scopeProvider;
+			_scopeAccessor = scopeAccessor;
 		}
-		
+
 		public virtual T Create(Schema dto)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+
+			try
 			{
-				scope.Database.Insert(_tableAlias, "Id", false, dto);
-				scope.Complete();
+				context.Scope.Database.Insert(_tableAlias, "Id", false, dto);
+
+				if (context.Created)
+					context.Scope.Complete();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 
 			var dtoType = dto.GetType();
 			var dtoIdProperty = dtoType.GetProperty("Id");
-			var get = Get(Guid.Parse(dtoIdProperty.GetValue(dto).ToString()));
 
-			return get;
+			return Get(Guid.Parse(dtoIdProperty.GetValue(dto).ToString()));
 		}
 
 		public virtual T Get(Guid id)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
 				var sql = new Sql()
-					.Select("*")
-					.From(_tableAlias)
-					.Where($"Id = UPPER('{id}')");
+							.Select("*")
+							.From(_tableAlias)
+							.Where($"Id = UPPER('{id}')");
 
-				return scope.Database.Fetch<T>(sql).FirstOrDefault();
+				return context.Scope.Database.Fetch<T>(sql).FirstOrDefault();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public virtual IEnumerable<T> GetByIds(List<Guid> ids)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var db = scope.Database;
 				var sql = new Sql()
-					.Select("*")
-					.From(_tableAlias)
-					.Where($"Id IN({ids.ConvertGuidToSqlString()})");
+								.Select("*")
+								.From(_tableAlias)
+								.Where($"Id IN({ids.ConvertGuidToSqlString()})");
 
-				return scope.Database.Fetch<T>(sql);
+				return context.Scope.Database.Fetch<T>(sql);
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 		}
 
 		public virtual T Update(Schema dto)
 		{
+			var context = GetScope();
+
 			var dtoType = dto.GetType();
 			var dtoIdProperty = dtoType.GetProperty("Id");
-			var id = dtoIdProperty.GetValue(dto).ToString();
+			var id = Guid.Parse(dtoIdProperty.GetValue(dto).ToString());
 
-			using (var scope = _scopeProvider.CreateScope())
+			try
 			{
-				scope.Database.UpdateWhere(dto, $"Id = UPPER('{id}')");
-				scope.Complete();
+				context.Scope.Database.UpdateWhere(dto, $"Id = UPPER('{id}')");
+				if (context.Created)
+					context.Scope.Complete();
+
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
 			}
 
-			var updatedNotification = Get(Guid.Parse(id));
-
-			return updatedNotification;
+			return Get(id);
 		}
 
 		public void Delete(Guid id)
 		{
-			using (var scope = _scopeProvider.CreateScope())
+			var context = GetScope();
+			try
 			{
-				var result = scope.Database.Delete<T>($"WHERE Id = UPPER('{id}')");
-				scope.Complete();
+				context.Scope.Database.Delete<T>($"WHERE Id = UPPER('{id}')");
+
+				if (context.Created)
+					context.Scope.Complete();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+		}
+
+		protected ScopeContext GetScope()
+		{
+			var ambient = _scopeAccessor.AmbientScope;
+
+			if (ambient != null)
+				return new ScopeContext(ambient, false);
+
+			return new ScopeContext(_scopeProvider.CreateScope(), true);
+		}
+
+		protected class ScopeContext
+		{
+			public IScope Scope { get; }
+			public bool Created { get; }
+
+			public ScopeContext(IScope scope, bool created)
+			{
+				Scope = scope;
+				Created = created;
 			}
 		}
 	}

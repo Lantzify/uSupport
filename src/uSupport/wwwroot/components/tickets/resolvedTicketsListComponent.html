@@ -1,59 +1,78 @@
-﻿<umb-box ng-if="vm.tickets.length">
-	<umb-box-header title="Resolved tickets"></umb-box-header>
-	<umb-box-content>
-		<table class="table mb0">
-			<thead>
-				<tr>
-					<th>Status</th>
-					<th>Type</th>
-					<th>Title</th>
-					<th ng-if="vm.useLongList">Summary</th>
-					<th ng-if="vm.useLongList">Submitted</th>
-					<th>Resolved</th>
-					<th ng-if="vm.useLongList">Last update by</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="ticket in vm.tickets">
-					<td>
-						<umb-badge size="s"
-								   color="{{ticket.Status.Color}}"
-								   class="">
-							{{ticket.Status.Name}}
-						</umb-badge>
-					</td>
-					<td class="status-icon">
-						<umb-icon title="{{ticket.Type.Name}}" icon="{{ticket.Type.Icon}}" class="{{ticket.Type.Color}}"></umb-icon>
-					</td>
-					<td><strong>{{ticket.Title}}</strong></td>
-					<td  ng-if="vm.useLongList">
-						<strong>
-							{{ ticket.Summary | limitTo: 10  }}
-							{{ ticket.Summary .length > 10 ? '...' : ''}}
-						</strong>
-					</td>
-					<td ng-if="vm.useLongList"><strong>{{ticket.Submitted | date:'yyyy-MM-dd'}}</strong></td>
-					<td><strong>{{ticket.Resolved | date:'yyyy-MM-dd'}}</strong></td>
-					<td ng-if="vm.useLongList"><strong>{{ticket.LastUpdatedBy}}</strong></td>
-					<td>
-						<umb-button action="vm.openTicket(ticket.Id)"
-									type="button"
-									button-style="link"
-									label="Open">
-						</umb-button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+﻿<div ng-if="vm.resolvedTickets.length || vm.searchTerm">
 
-		<umb-pagination page-number="vm.pagination.pageNumber"
-						total-pages="vm.pagination.totalPages"
-						on-next="vm.loadPage"
-						on-prev="vm.loadPage"
-						on-change="vm.loadPage"
-						on-go-to-page="vm.loadPage"
-						ng-if="vm.pagination.totalPages >= 1">
-		</umb-pagination>
-	</umb-box-content>
-</umb-box>
+    <umb-editor-sub-header>
+        <umb-editor-sub-header-content-right>
+            <umb-search-filter model="vm.searchTerm"
+                               label-key="placeholders_filter"
+                               on-change="vm.search()"
+                               text="Type to filter...">
+            </umb-search-filter>
+        </umb-editor-sub-header-content-right>
+    </umb-editor-sub-header>
+
+    <umb-box>
+        <umb-box-header title="Resolved tickets"></umb-box-header>
+        <umb-box-content>
+            <table class="table mb0" ng-if="vm.resolvedTickets.length">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Type</th>
+                        <th>Title</th>
+                        <th ng-if="vm.useLongList">Summary</th>
+                        <th ng-if="vm.useLongList">Submitted</th>
+                        <th>Resolved</th>
+                        <th ng-if="vm.useLongList">Last update by</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="ticket in vm.resolvedTickets">
+                        <td>
+                            <umb-badge size="s"
+                                       color="{{ticket.Status.Color}}"
+                                       class="">
+                                {{ticket.Status.Name}}
+                            </umb-badge>
+                        </td>
+                        <td class="status-icon">
+                            <umb-icon title="{{ticket.Type.Name}}" icon="{{ticket.Type.Icon}}" class="{{ticket.Type.Color}}"></umb-icon>
+                        </td>
+                        <td><strong>{{ticket.Title}}</strong></td>
+                        <td ng-if="vm.useLongList">
+                            <strong>
+                                {{ ticket.Summary | limitTo: 10  }}
+                                {{ ticket.Summary .length > 10 ? '...' : ''}}
+                            </strong>
+                        </td>
+                        <td ng-if="vm.useLongList"><strong>{{ticket.Submitted | date:'yyyy-MM-dd'}}</strong></td>
+                        <td><strong>{{ticket.Resolved | date:'yyyy-MM-dd'}}</strong></td>
+                        <td ng-if="vm.useLongList"><strong>{{ticket.LastUpdatedBy}}</strong></td>
+                        <td>
+                            <umb-button action="vm.openTicket(ticket.Id)"
+                                        type="button"
+                                        button-style="link"
+                                        label="Open">
+                            </umb-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <umb-pagination page-number="vm.pagination.pageNumber"
+                            total-pages="vm.pagination.totalPages"
+                            on-next="vm.loadPage"
+                            on-prev="vm.loadPage"
+                            on-change="vm.loadPage"
+                            on-go-to-page="vm.loadPage"
+                            ng-if="vm.pagination.totalPages >= 1">
+            </umb-pagination>
+
+            <div>
+                <localize ng-if="!vm.resolvedTickets.length && vm.searchTerm" key="general_searchNoResult" />
+
+            </div>
+        </umb-box-content>
+    </umb-box>
+
+</div>

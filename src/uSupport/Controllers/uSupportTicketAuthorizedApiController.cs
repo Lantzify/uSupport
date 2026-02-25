@@ -14,14 +14,12 @@ using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using static uSupport.Helpers.uSupportTypeHelper;
-using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Controllers
 {
 	public class uSupportTicketAuthorizedApiController : UmbracoAuthorizedApiController
 	{
 		private readonly IUserService _userService;
-		private readonly AppCaches _appCaches;
         private readonly IUmbracoMapper _umbracoMapper;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger<IuSupportTicketService> _logger;
@@ -31,7 +29,6 @@ namespace uSupport.Controllers
 		private readonly IuSupportTicketCommentService _uSupportTicketCommentService;
 
 		public uSupportTicketAuthorizedApiController(IUserService userService,
-			AppCaches appCaches,
             IUmbracoMapper umbracoMapper,
             IEventAggregator eventAggregator,
             ILogger<IuSupportTicketService> logger,
@@ -42,7 +39,6 @@ namespace uSupport.Controllers
 		{
 			_eventAggregator = eventAggregator;
 			_logger = logger;
-			_appCaches = appCaches;
 			_umbracoMapper = umbracoMapper;
             _userService = userService;
 			_uSupportTicketService = uSupportTicketService;
@@ -52,21 +48,15 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page)
+		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null)
 		{
-			return _appCaches.RuntimeCache.GetCacheItem(uSupportActivePagedTicketCacheKey + page, () =>
-			{
-				return _uSupportTicketService.GetPagedActiveTickets(page);
-			});
+			return _uSupportTicketService.GetPagedActiveTickets(page, searchTerm);
 		} 
 
 		[HttpGet]
-		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page)
+		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null)
 		{
-            return _appCaches.RuntimeCache.GetCacheItem(uSupportResolvedPagedTicketCacheKey + page, () =>
-            {
-                return _uSupportTicketService.GetPagedResolvedTickets(page);
-            });
+			return _uSupportTicketService.GetPagedResolvedTickets(page, searchTerm);
         }
 			
 

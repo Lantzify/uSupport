@@ -44,7 +44,7 @@ namespace uSupport.Services
 			}
 		}
 
-		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page)
+		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null)
 		{
 			var context = GetScope();
 			try
@@ -55,13 +55,21 @@ namespace uSupport.Services
 					.Select("*")
 					.From(TicketTableAlias)
 					.GetFullTicket()
-					.Where($"StatusId IN ({statuses})")
-					.OrderBy("Submitted");
+					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
 				var sqlCount = new Sql()
-					.Select("COUNT(Id)")
+					.Select($"COUNT({TicketTableAlias}.Id)")
 					.From(TicketTableAlias)
-					.Where($"StatusId IN ({statuses})");
+					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
+
+				if (!string.IsNullOrWhiteSpace(searchTerm))
+				{
+					string searchPattern = $"{TicketTableAlias}.Title LIKE @0 OR {TicketTableAlias}.Summary LIKE @0 OR {TicketTableAlias}.ExternalTicketId LIKE @0";
+					sql.Where(searchPattern, $"%{searchTerm}%");
+					sqlCount.Where(searchPattern, $"%{searchTerm}%");
+				}
+
+				sql.OrderBy("Submitted");
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -76,7 +84,7 @@ namespace uSupport.Services
 
 		}
 
-		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page)
+		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null)
 		{
 			var context = GetScope();
 			try
@@ -86,15 +94,23 @@ namespace uSupport.Services
 					.Select("*")
 					.From(TicketTableAlias)
 					.GetFullTicket()
-					.Where($"StatusId IN ({statuses})")
-					.OrderBy("Submitted");
+					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
 				var sqlCount = new Sql()
-					.Select("Id")
+					.Select($"COUNT({TicketTableAlias}.Id)")
 					.From(TicketTableAlias)
-					.Where($"StatusId IN ({statuses})");
+					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
-				var ticketCount = context.Scope.Database.Fetch<uSupportTicket>(sqlCount).ToList().Count;
+				if(!string.IsNullOrWhiteSpace(searchTerm))
+				{
+					string searchPattern = $"{TicketTableAlias}.Title LIKE @0 OR {TicketTableAlias}.Summary LIKE @0 OR {TicketTableAlias}.ExternalTicketId LIKE @0";
+					sql.Where(searchPattern, $"%{searchTerm}%");
+					sqlCount.Where(searchPattern, $" %{searchTerm}%");
+				}
+
+				sql.OrderBy("Submitted");
+
+				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
 
 				return MapPageToUSupportPage(tickets, ticketCount, page, PageSize);
@@ -113,9 +129,9 @@ namespace uSupport.Services
 			{
 				var statuses = _uSupportTicketStatusService.GetResolvedStatuses().ConvertStatusesToSql();
 				var sqlCount = new Sql()
-					.Select("Id")
+					.Select($"COUNT({TicketTableAlias}.Id)")
 					.From(TicketTableAlias)
-					.Where($"StatusId IN ({statuses})");
+					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
 				return context.Scope.Database.Fetch<uSupportTicket>(sqlCount).Any();
 			}

@@ -17,13 +17,9 @@
 
 	<div class="flex uSupport-flex-column" ng-if="!vm.loading">
 		<div class="umb-package-details__main-content">
-			<umb-box>
-				<umb-box-header title="Active tickets"></umb-box-header>
-				<umb-box-content>
-					<active-tickets-list use-long-list="true" />
-				</umb-box-content>
-			</umb-box>
-			<resolved-tickets-list use-long-list="true" />
+			<active-tickets-list use-long-list="true"></active-tickets-list>
+
+			<resolved-tickets-list use-long-list="true"></resolved-tickets-list>
 		</div>
 
 		<div class="umb-package-details__sidebar">

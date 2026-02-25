@@ -3,7 +3,7 @@
     angular.module("umbraco.resources").factory("uSupportTicketResources", function ($http, umbRequestHelper, uSupportConfig) {
         return {
             //Ticket Api
-            createTicket: function (ticket,) {
+            createTicket: function (ticket) {
                 return umbRequestHelper.resourcePromise(
                     $http({
                         method: "POST",
@@ -30,14 +30,14 @@
                     $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetTicket?ticketId=" + ticketId)
                 );
             },
-            getPagedActiveTickets: function (page) {
+            getPagedActiveTickets: function (page, searchTerm) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedActiveTickets?page=" + page)
+                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedActiveTickets?page=" + page + "&searchTerm=" + searchTerm)
                 );
             },
-            getPagedResolvedTickets: function (page) {
+            getPagedResolvedTickets: function (page, searchTerm) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedResolvedTickets?page=" + page)
+                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedResolvedTickets?page=" + page + "&searchTerm=" + searchTerm)
                 );
             },
             anyResolvedTickets: function () {

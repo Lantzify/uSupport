@@ -30,6 +30,7 @@
 <div class="flex justify-end mt3" style="max-width:800px;">
     <umb-button type="button"
                 button-style="success"
+                disabled="!vm.comment.length"
                 label="Comment"
                 state="vm.commentbuttonState"
                 action="vm.addComment()">

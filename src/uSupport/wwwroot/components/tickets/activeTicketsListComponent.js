@@ -7,11 +7,13 @@
     },
     controller: function (uSupportTicketResources, userService, uSupportConfig, overlayService, $location) {
         var vm = this;
+
+        vm.searchTerm = "";
         vm.useLongList = vm.useLongList === "true";
 
         vm.$onInit = function () {
             (vm.loadPage = function (pageNumber) {
-                uSupportTicketResources.getPagedActiveTickets(pageNumber).then(function (tickets) {
+                uSupportTicketResources.getPagedActiveTickets(pageNumber, vm.searchTerm).then(function (tickets) {
                     vm.activeTickets = tickets.Items;
                     vm.pagination = {
                         pageNumber: pageNumber,
@@ -44,6 +46,10 @@
                     };
                 }
             });
+        }
+
+        vm.search = function () {
+            vm.loadPage(1);
         }
     }
 });

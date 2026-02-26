@@ -13,9 +13,5 @@ Say goodbye to the days of digging through countless old emails in search of vit
 
 ## Useful links
 - [Documentation](https://lantzify.github.io/uSupport-documentation/)
-- [uSync](https://marketplace.umbraco.com/package/usupport.usync)
-
-## Exentions
-
-### uSupport hub
-With uSupport hub you can now connect your clients sites to a hub. The hub allows you manage all connected sites tickets. You can manage ticket, ticket types/statuses. All via the hub.
+- [uSync](https://github.com/Lantzify/uSupport-uSync)
+- [Email Templates](https://github.com/Lantzify/uSupport/raw/refs/heads/main/assets/email-templates.zip)

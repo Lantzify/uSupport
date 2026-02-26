@@ -1,16 +1,5 @@
-﻿@*
-===============================================
- THIS FILE WILL GET REPLACED DURING AN UPDATE.
- ANY CHANGES YOU MAKE TO IT WILL BE LOST.
- 
- If you need to edit this file. Copy and modify
- the copied file. Then update the
- 'GetEmailTemplateNewTicketPath' setting.
- ================================================
-*@
-@using uSupport.Extensions
-@using uSupport.Dtos.Tables
-@inherits uSupportTemplate<uSupportTicket>
+﻿@using uSupport.Extensions
+@inherits uSupportTemplate<uSupport.Dtos.Tables.uSupportTicket>
 @{
 	var baseUrl = GetBaseUrl(Context.Request);
 }

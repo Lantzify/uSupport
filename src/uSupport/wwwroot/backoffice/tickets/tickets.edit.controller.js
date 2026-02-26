@@ -28,13 +28,6 @@
         icon: "icon-document",
         view: uSupportConfig.basePathAppPlugins + "backoffice/tickets/apps/ticket/ticket.html",
         active: true
-    },
-    {
-        name: "History",
-        alias: "history",
-        icon: "icon-chart-curve",
-        view: uSupportConfig.basePathAppPlugins + "backoffice/tickets/apps/history/history.html",
-        active: false
     }];
 
     uSupportTicketResources.getTicket($routeParams.id).then(function (ticket) {
@@ -69,10 +62,22 @@
 
             vm.history = promises.history;
 
+            if (vm.history.length) {
+                vm.navigation.push({
+                    name: "History",
+                    alias: "history",
+                    icon: "icon-chart-curve",
+                    view: uSupportConfig.basePathAppPlugins + "backoffice/tickets/apps/history/history.html",
+                    active: false
+                })
+            }
+
+            vm.statuses = promises.statuses;
             vm.statusNamesArr = promises.statuses.map(function (status) {
                 return status.Name;
             });
 
+            vm.types = promises.types;
             vm.typesNamesArr = promises.types.map(function (type) {
                 return type.Name;
             });

@@ -1,11 +1,9 @@
 ﻿using NPoco;
 using uSupport.Dtos;
-using NPoco.fastJSON;
 using System.Text.Json;
 using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Services;
-using System.Collections.Generic;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.Models.Membership;
@@ -45,8 +43,11 @@ namespace uSupport.Services
 				foreach (var item in history)
 				{
 					var user = _userService.GetUserById(item.UserId);
-					item.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
-					item.Changes = JsonSerializer.Deserialize<IEnumerable<uSupportChange>>(item.ChangesJson);
+					if(user != null)
+						item.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+
+					if(!string.IsNullOrWhiteSpace(item.ChangesJson))
+						item.Changes = JsonSerializer.Deserialize<IEnumerable<uSupportChange>>(item.ChangesJson);
 				}
 
 				return history;

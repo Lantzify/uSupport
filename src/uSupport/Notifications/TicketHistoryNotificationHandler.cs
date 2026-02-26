@@ -52,21 +52,15 @@ namespace uSupport.Notifications
 				});
 			}
 
-
-			if (notification.OldTicket.PropertyValue != notification.NewTicket.PropertyValue)
-			{
-				changes.Add(new uSupportChange()
-				{
-					Field = "Property value",
-					Old = notification.OldTicket.PropertyValue,
-					New = notification.NewTicket.PropertyValue
-				});
-			}
+			if (!notification.NewTicket.Status.Active)
 
 			if (!changes.Any())
 				return;
 
 			history.ChangesJson = JsonSerializer.Serialize(changes);
+
+			if(!notification.NewTicket.Status.Active)
+				history.ActionType = "Resolved";
 
 			_uSupportTicketHistoryService.Create(history);
 		}

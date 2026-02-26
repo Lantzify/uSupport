@@ -22,16 +22,22 @@
                             </div>
                         </div>
                         <div class="history-item__break">
-                            <umb-badge size="s"
-                                       color="success">
+                            <umb-badge size="xs"
+                                       color="{{vm.getBadgeColor(item.ActionType)}}"
+                                       class="history-item__badge">
                                 {{item.ActionType}}
                             </umb-badge>
                   
                             <span class="history-item__description">
                                 <div ng-repeat="change in item.Changes">
-                                    <p> {{change.Field}}</p>
-                                    <p> {{change.Old}}</p>
-                                    <p> {{change.New}}</p>
+
+                                    <div ng-if="change.Field == 'Status'">
+                                        Status: <s class="mr1" style="color: #d42054;">{{vm.getStatusName(change.Old)}}</s><span style="color: #2bc37c;">{{vm.getStatusName(change.New)}}</span>
+                                    </div>
+                                    
+                                    <div ng-if="change.Field == 'Type'">
+                                        Type: <s class="mr1" style="color: #d42054;">{{vm.getTypeName(change.Old)}}</s><span style="color: #2bc37c;">{{vm.getTypeName(change.New)}}</span>
+                                    </div>
                                 </div>
                             </span>
                         </div>

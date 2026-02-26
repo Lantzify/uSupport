@@ -31,8 +31,9 @@ namespace uSupport.Migrations.Schemas
 		public IEnumerable<uSupportChange> Changes { get; set; }
 
 		[Column("ChangesJson")]
+		[NullSetting]
 		[SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
-		public string ChangesJson { get; set; }
+		public string? ChangesJson { get; set; }
 
 		[Column("Date")]
 		public DateTime Date { get; set; } = DateTime.Now;

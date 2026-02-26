@@ -2,7 +2,8 @@
 using uSupport.Dtos;
 using uSupport.Extensions;
 using uSupport.Dtos.Tables;
-using Umbraco.Cms.Core.Cache;
+using uSupport.Notifications;
+using Umbraco.Cms.Core.Events;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Infrastructure.Scoping;
@@ -13,16 +14,19 @@ namespace uSupport.Services
 {
 	public class uSupportTicketService : uSupportServiceBase<uSupportTicket, uSupportTicketSchema>, IuSupportTicketService
 	{
-		private readonly AppCaches _appCaches;
+		private readonly IEventAggregator _eventAggregator;
 		private readonly IuSupportTicketStatusService _uSupportTicketStatusService;
+		private readonly IuSupportTicketHistoryService _uSupportTicketHistoryService;
 
-		public uSupportTicketService(AppCaches appCaches,
+		public uSupportTicketService(IEventAggregator eventAggregator,
 			IScopeProvider scopeProvider,
 			IScopeAccessor scopeAccessor,
-			IuSupportTicketStatusService uSupportTicketStatusService) : base(TicketTableAlias, scopeProvider, scopeAccessor)
+			IuSupportTicketStatusService uSupportTicketStatusService,
+			IuSupportTicketHistoryService uSupportTicketHistoryService) : base(TicketTableAlias, scopeProvider, scopeAccessor)
 		{
-			_appCaches = appCaches;
+			_eventAggregator = eventAggregator;
 			_uSupportTicketStatusService = uSupportTicketStatusService;
+			_uSupportTicketHistoryService = uSupportTicketHistoryService;
 		}
 
 		public IEnumerable<uSupportTicket> GetAll()
@@ -181,9 +185,27 @@ namespace uSupport.Services
 			return Get(dto.Id);
 		}
 
-		public void ClearTicketCache()
+		public override void Delete(Guid id)
 		{
-			_appCaches.RuntimeCache.ClearByRegex("uSupportPaged");
+			var context = GetScope();
+
+			try
+			{
+				var ticket = Get(id);
+
+				base.Delete(id);
+				_uSupportTicketHistoryService.DeleteByTicketId(id);
+				_eventAggregator.Publish(new DeleteTicketNotification(ticket));
+
+				if (context.Created)
+					context.Scope.Complete();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+
 		}
 	}
 }

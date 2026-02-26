@@ -4,7 +4,7 @@ using Umbraco.Cms.Core.Events;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
 
-namespace uSupport.Notifications
+namespace uSupport.Notifications.Handlers
 {
 	public class TicketHistoryNotificationHandler : INotificationHandler<TicketHistoryNotification>
 	{

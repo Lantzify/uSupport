@@ -14,6 +14,5 @@ namespace uSupport.Services.Interfaces
 		uSupportTicket Create(uSupportTicketSchema ticket);
 		uSupportTicket Update(uSupportTicketSchema ticketDto);
 		void Delete(Guid id);
-		void ClearTicketCache();
 	}
 }

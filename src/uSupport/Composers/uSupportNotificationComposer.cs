@@ -1,6 +1,7 @@
 ﻿using uSupport.Notifications;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using uSupport.Notifications.Handlers;
 
 namespace uSupport.Composers
 {

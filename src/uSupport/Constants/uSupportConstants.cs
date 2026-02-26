@@ -37,9 +37,5 @@ namespace uSupport.Constants
 
 		//Page size
 		public const int PageSize = 10;
-
-		//Cache keys
-		public const string uSupportActivePagedTicketCacheKey = "uSupportPagedActiveTickets";
-		public const string uSupportResolvedPagedTicketCacheKey = "uSupportPagedResolvedTickets";
 	}
 }

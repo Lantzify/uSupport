@@ -35,10 +35,7 @@ namespace uSupport.Controllers
             switch (dto.Type)
             {
 				case uSupportConstants.TicketsTreeAlias:
-					var ticket = _uSupportTicketService.Get(dto.Id);
 					_uSupportTicketService.Delete(dto.Id);
-                    _uSupportTicketService.ClearTicketCache();
-					_eventAggregator.Publish(new DeleteTicketNotification(ticket));
 					break;
 				case uSupportConstants.TicketTypesTreeAlias:
 					var ticketType = _uSupportTicketTypeService.Get(dto.Id);

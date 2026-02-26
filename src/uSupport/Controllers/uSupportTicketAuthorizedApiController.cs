@@ -103,7 +103,6 @@ namespace uSupport.Controllers
                         createdTicket);
                 }
 
-				_uSupportTicketService.ClearTicketCache();
 
 				_eventAggregator.Publish(new TicketHistoryNotification(author.Id, null, createdTicket));
 				_eventAggregator.Publish(new CreateTicketNotification(createdTicket));
@@ -150,7 +149,6 @@ namespace uSupport.Controllers
 					_eventAggregator.Publish(new UpdateTicketSendEmailNotification(updatedTicket));
 				}
 
-                _uSupportTicketService.ClearTicketCache();
 
 				if (!updatedTicket.Status.Active)			
                     _eventAggregator.Publish(new UpdateTicketResolvedNotification(updatedTicket));
@@ -171,9 +169,7 @@ namespace uSupport.Controllers
 		[HttpGet]
 		public void DeleteTicket(Guid ticketId)
 		{
-            _eventAggregator.Publish(new DeleteTicketNotification(_uSupportTicketService.Get(ticketId)));
             _uSupportTicketService.Delete(ticketId);
-            _uSupportTicketService.ClearTicketCache();
         }
 	}
 }

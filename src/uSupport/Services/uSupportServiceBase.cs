@@ -105,7 +105,7 @@ namespace uSupport.Services.Interfaces
 			return Get(id);
 		}
 
-		public void Delete(Guid id)
+		public virtual void Delete(Guid id)
 		{
 			var context = GetScope();
 			try

@@ -1,4 +1,5 @@
-﻿using Umbraco.Cms.Core.Models.ContentEditing;
+﻿using NPoco;
+using Umbraco.Cms.Core.Models.ContentEditing;
 
 namespace uSupport.Dtos.Tables
 {
@@ -7,6 +8,8 @@ namespace uSupport.Dtos.Tables
 		public Guid Id { get; set; }
 		public Guid TicketId { get; set; }
 		public int UserId { get; set; }
+
+		[ResultColumn]
 		public UserDisplay User { get; set; }
 		public DateTime Date { get; set; }
 		public string Comment { get; set; }

@@ -1,6 +1,7 @@
 ﻿using uSupport.Migrations.Create;
 using uSupport.Migrations.Updates._1._2._0;
 using uSupport.Migrations.Updates._2._0._0;
+using uSupport.Migrations.Updates._2._3._0;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uSupport.Migrations
@@ -21,7 +22,8 @@ namespace uSupport.Migrations
 				.To<uSupportTicketTable>("uSupport-ticket")
 				.To<MakeExistingGuidIdsUpperCase>("uSupport-ticket-status-type-guid-update")
 				.To<AddSectionForAdminsMigration>("uSupport-add-section-for-admin-update")
-				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history");
+				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history")
+				.To<RemoveOrphanTicketComments>("uSuppor-remove-orphan-comments");
 		}
 	}
 }

@@ -26,18 +26,16 @@ namespace uSupport.Services
 			_umbracoMapper = umbracoMapper;
 		}
 
-		public override uSupportTicketComment Get(Guid id)
+		public IEnumerable<uSupportTicketComment> GetAll()
 		{
 			var context = GetScope();
 			try
 			{
 				var sql = new Sql()
-							.Select("*")
-							.From(TicketCommentTableAlias)
-							.Where($"Id = UPPER('{id}')");
+								.Select("*")
+								.From(TicketCommentTableAlias);
 
-				return context.Scope.Database.Fetch<uSupportTicketCommentSchema>(sql).FirstOrDefault()?.ConvertSchemaToDto();
-
+				return context.Scope.Database.Fetch<uSupportTicketComment>(sql);
 			}
 			finally
 			{
@@ -55,23 +53,39 @@ namespace uSupport.Services
 					.Select("*")
 					.From(TicketCommentTableAlias)
 					.Where($"TicketId = UPPER('{ticketId}')")
-					.OrderBy("Date");
+					.OrderBy("Date DESC");
 
-				var comments = context.Scope.Database.Query<uSupportTicketCommentSchema>(sql);
+				var comments = context.Scope.Database.Query<uSupportTicketComment>(sql);
 
 				List<uSupportTicketComment> commentDtos = new List<uSupportTicketComment>();
 
 				foreach (var comment in comments.ToList())
 				{
-					var dto = comment.ConvertSchemaToDto();
-					var user = _userService.GetUserById(dto.UserId);
+					var user = _userService.GetUserById(comment.UserId);
 
-					dto.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+					comment.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
 
-					commentDtos.Add(dto);
+					commentDtos.Add(comment);
 				}
 
 				return commentDtos;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+		}
+
+		public void DeleteByTicketId(Guid ticketId)
+		{
+			var context = GetScope();
+			try
+			{
+				context.Scope.Database.Delete<uSupportTicketComment>($"WHERE {TicketCommentTableAlias}.TicketId = UPPER('{ticketId}')");
+
+				if (context.Created)
+					context.Scope.Complete();
 			}
 			finally
 			{

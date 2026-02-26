@@ -16,16 +16,19 @@ namespace uSupport.Services
 	{
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IuSupportTicketStatusService _uSupportTicketStatusService;
+		private readonly IuSupportTicketCommentService _uSupportTicketCommentService;
 		private readonly IuSupportTicketHistoryService _uSupportTicketHistoryService;
 
 		public uSupportTicketService(IEventAggregator eventAggregator,
 			IScopeProvider scopeProvider,
 			IScopeAccessor scopeAccessor,
 			IuSupportTicketStatusService uSupportTicketStatusService,
+			IuSupportTicketCommentService uSupportTicketCommentService,
 			IuSupportTicketHistoryService uSupportTicketHistoryService) : base(TicketTableAlias, scopeProvider, scopeAccessor)
 		{
 			_eventAggregator = eventAggregator;
 			_uSupportTicketStatusService = uSupportTicketStatusService;
+			_uSupportTicketCommentService = uSupportTicketCommentService;
 			_uSupportTicketHistoryService = uSupportTicketHistoryService;
 		}
 
@@ -194,6 +197,7 @@ namespace uSupport.Services
 				var ticket = Get(id);
 
 				base.Delete(id);
+				_uSupportTicketCommentService.DeleteByTicketId(id);
 				_uSupportTicketHistoryService.DeleteByTicketId(id);
 				_eventAggregator.Publish(new DeleteTicketNotification(ticket));
 

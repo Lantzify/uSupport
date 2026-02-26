@@ -21,6 +21,7 @@ namespace uSupport.Constants
 		public const string TicketTableAlias = "uSupportTicket";
 		public const string TicketTypeTableAlias = "uSupportTicketType";
 		public const string TicketStatusTableAlias = "uSupportTicketStatus";
+		public const string TicketHistoryTableAlias = "uSupportTicketHistory";
 		public const string TicketCommentTableAlias = "uSupportTicketComment";
 
 		//Default ticket types

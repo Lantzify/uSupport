@@ -6,5 +6,6 @@ namespace uSupport.Dtos
     {
         public uSupportTicket Ticket { get; set; }
         public bool SendEmail { get; set; }
-    }
+		public int UserId { get; set; }
+	}
 }

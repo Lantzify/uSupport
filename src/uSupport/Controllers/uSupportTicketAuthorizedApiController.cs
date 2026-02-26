@@ -1,7 +1,5 @@
 ﻿using uSupport.Dtos;
-using Umbraco.Extensions;
 using uSupport.Dtos.Tables;
-using Umbraco.Cms.Core.Cache;
 using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
@@ -27,24 +25,28 @@ namespace uSupport.Controllers
 		private readonly IuSupportSettingsService _uSupportSettingsService;
 		private readonly IuSupportTicketStatusService _uSupportTicketStatusService;
 		private readonly IuSupportTicketCommentService _uSupportTicketCommentService;
+		private readonly IuSupportTicketHistoryService _uSupportTicketHistoryService;
+
 
 		public uSupportTicketAuthorizedApiController(IUserService userService,
             IUmbracoMapper umbracoMapper,
-            IEventAggregator eventAggregator,
-            ILogger<IuSupportTicketService> logger,
-            IuSupportTicketService uSupportTicketService,
+			IEventAggregator eventAggregator,
+			ILogger<IuSupportTicketService> logger,
+			IuSupportTicketService uSupportTicketService,
 			IuSupportTicketStatusService uSupportTicketStatusService,
 			IuSupportSettingsService uSupportSettingsService,
-			IuSupportTicketCommentService uSupportTicketCommentService)
+			IuSupportTicketCommentService uSupportTicketCommentService,
+			IuSupportTicketHistoryService uSupportTicketHistoryService)
 		{
 			_eventAggregator = eventAggregator;
 			_logger = logger;
 			_umbracoMapper = umbracoMapper;
-            _userService = userService;
+			_userService = userService;
 			_uSupportTicketService = uSupportTicketService;
 			_uSupportTicketStatusService = uSupportTicketStatusService;
 			_uSupportSettingsService = uSupportSettingsService;
 			_uSupportTicketCommentService = uSupportTicketCommentService;
+			_uSupportTicketHistoryService = uSupportTicketHistoryService;
 		}
 
 		[HttpGet]
@@ -58,7 +60,13 @@ namespace uSupport.Controllers
 		{
 			return _uSupportTicketService.GetPagedResolvedTickets(page, searchTerm);
         }
-			
+
+		[HttpGet]
+		public IEnumerable<uSupportTicketHistory> GetTicketHistory(Guid ticketId)
+		{
+			return _uSupportTicketHistoryService.GetByTicketId(ticketId);
+		}
+
 
 		[HttpGet]
 		public bool AnyResolvedTickets() => _uSupportTicketService.AnyResolvedTickets();
@@ -97,6 +105,7 @@ namespace uSupport.Controllers
 
 				_uSupportTicketService.ClearTicketCache();
 
+				_eventAggregator.Publish(new TicketHistoryNotification(author.Id, null, createdTicket));
 				_eventAggregator.Publish(new CreateTicketNotification(createdTicket));
 
 				return createdTicket;
@@ -146,6 +155,8 @@ namespace uSupport.Controllers
 				if (!updatedTicket.Status.Active)			
                     _eventAggregator.Publish(new UpdateTicketResolvedNotification(updatedTicket));
 
+
+				_eventAggregator.Publish(new TicketHistoryNotification(dto.UserId, oldTicket, updatedTicket));
                 _eventAggregator.Publish(new UpdateTicketNotification(updatedTicket));
 
                 return updatedTicket;

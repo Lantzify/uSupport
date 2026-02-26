@@ -20,7 +20,8 @@ namespace uSupport.Migrations
 				.To<uSupportTicketStatusTable>("uSupport-ticket-status")
 				.To<uSupportTicketTable>("uSupport-ticket")
 				.To<MakeExistingGuidIdsUpperCase>("uSupport-ticket-status-type-guid-update")
-				.To<AddSectionForAdminsMigration>("uSupport-add-section-for-admin-update");
+				.To<AddSectionForAdminsMigration>("uSupport-add-section-for-admin-update")
+				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history");
 		}
 	}
 }

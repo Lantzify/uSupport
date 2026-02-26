@@ -13,16 +13,22 @@
                     })
                 );
             },
-            updateTicket: function (ticket, sendEmail) {
+            updateTicket: function (ticket, sendEmail, userId) {
                 return umbRequestHelper.resourcePromise(
                     $http({
                         method: "POST",
                         url: uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/UpdateTicket",
                         data: {
                             ticket,
-                            sendEmail
+                            sendEmail,
+                            userId
                         }
                     })
+                );
+            },
+            getTicketHistory: function (ticketId) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetTicketHistory?ticketId=" + ticketId)
                 );
             },
             getTicket: function (ticketId) {

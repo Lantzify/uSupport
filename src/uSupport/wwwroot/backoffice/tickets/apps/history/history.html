@@ -1,0 +1,135 @@
+﻿<div ng-controller="uSupport.history.contentApp.controller as vm" class="flex">
+    <div class="umb-package-details__main-content">
+        <umb-box class="form-horizontal">
+            <umb-box-header title="History"></umb-box-header>
+            <umb-box-content>
+                <div class="history">
+                    <div class="history-line"></div>
+
+                    <div class="history-item" ng-repeat="item in model.history">
+                        <div class="history-item__break">
+                            <div class="history-item__avatar">
+                                <umb-avatar size="xs"
+                                            name="{{item.User.name}}"
+                                            color="secondary"
+                                            img-src="{{item.User.avatars[0]}}"
+                                            img-srcset="{{item.User.avatars[1]}} 2x, {{item.User.avatars[2]}} 3x">
+                                </umb-avatar>
+                            </div>
+                            <div>
+                                <div class="ng-binding">Admin</div>
+                                <div class="history-item__date">{{item.Date | date:'yyyy-MM-dd HH:mm'}}</div>
+                            </div>
+                        </div>
+                        <div class="history-item__break">
+                            <umb-badge size="s"
+                                       color="success">
+                                {{item.ActionType}}
+                            </umb-badge>
+                  
+                            <span class="history-item__description">
+                                <div ng-repeat="change in item.Changes">
+                                    <p> {{change.Field}}</p>
+                                    <p> {{change.Old}}</p>
+                                    <p> {{change.New}}</p>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </umb-box-content>
+        </umb-box>
+    </div>
+
+    <div class="umb-package-details__sidebar">
+        <umb-box>
+            <umb-box-header title="Details"></umb-box-header>
+            <umb-box-content>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Type</span>
+                        </label>
+                        <div class="controls">
+                            <div class="flex align-items-center">
+                                <umb-icon title="{{model.ticket.Type.Name}}" icon="{{model.ticket.Type.Icon}}" class="{{model.ticket.Type.Color}} umb-node-preview__icon"></umb-icon>
+
+                                <div class="umb-node-preview__content">
+                                    <div class="umb-node-preview__name">
+                                        {{model.ticket.Type.Name}}
+                                    </div>
+                                    <div class="umb-node-preview__description">
+                                        {{model.ticket.Type.Description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Status</span>
+                        </label>
+                        <div class="controls">
+                            <umb-badge size="s"
+                                       color="{{model.ticket.Status.Color}}">
+                                {{model.ticket.Status.Name}}
+                            </umb-badge>
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Author</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.Author.name }}
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Submitted</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.Submitted | date:'yyyy-MM-dd'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property" ng-if="model.ticket.LastUpdatedBy">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Last updated by</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.LastUpdatedBy }}
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property" ng-if="model.ticket.Resolved">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Resolved</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.Resolved | date:'yyyy-MM-dd'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group no-border mb2">
+                        <label class="control-label">
+                            <span>Id</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.ExternalTicketId }}
+                        </div>
+                    </div>
+                </div>
+            </umb-box-content>
+        </umb-box>
+    </div>
+</div>

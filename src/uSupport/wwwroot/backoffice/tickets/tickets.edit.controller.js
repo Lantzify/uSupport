@@ -28,6 +28,13 @@
         icon: "icon-document",
         view: uSupportConfig.basePathAppPlugins + "backoffice/tickets/apps/ticket/ticket.html",
         active: true
+    },
+    {
+        name: "History",
+        alias: "history",
+        icon: "icon-chart-curve",
+        view: uSupportConfig.basePathAppPlugins + "backoffice/tickets/apps/history/history.html",
+        active: false
     }];
 
     uSupportTicketResources.getTicket($routeParams.id).then(function (ticket) {
@@ -35,6 +42,7 @@
 
         $q.all({
             user: userService.getCurrentUser(),
+            history: uSupportTicketResources.getTicketHistory(ticket.Id),
             statuses: uSupportTicketStatusResources.getAllTicketStatuses(),
             types: uSupportTicketTypeResources.getAllTicketTypes(),
             getChildActions: uSupportHelperServices.getChildActions("tickets", "-1", ticket.Id)
@@ -58,6 +66,8 @@
             });
 
             vm.user = promises.user;
+
+            vm.history = promises.history;
 
             vm.statusNamesArr = promises.statuses.map(function (status) {
                 return status.Name;
@@ -88,7 +98,7 @@
                 vm.ticket.TypeId = promises.typeId;
                 vm.ticket.LastUpdatedBy = vm.user.name;
 
-                uSupportTicketResources.updateTicket(vm.ticket, sendEmail).then(function () {
+                uSupportTicketResources.updateTicket(vm.ticket, sendEmail, vm.user.id).then(function () {
                     if (sendEmail) {
                         vm.SaveAndSendbuttonState = "success";
                     } else {

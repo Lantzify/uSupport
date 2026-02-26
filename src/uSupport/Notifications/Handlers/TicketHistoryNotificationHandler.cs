@@ -14,7 +14,6 @@ namespace uSupport.Notifications.Handlers
 			_uSupportTicketHistoryService = uSupportTicketHistoryService;
 		}
 
-		//Update
 		public void Handle(TicketHistoryNotification notification)
 		{
 			var history = new uSupportTicketHistorySchema()

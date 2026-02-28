@@ -36,6 +36,25 @@
 
 	</PropertyGroup>
 
+		<!-- Auto-generate schema file only for Release builds before packing -->
+		<Target Name="GenerateSchema" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
+				<Message Text="Generating uSupport schema file..." Importance="high" />
+				<Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)\..\uSupport.SchemaGenerator\uSupport.SchemaGenerator.csproj&quot; -- -o &quot;$(MSBuildThisFileDirectory)appsettings-schema.uSupport.json&quot;" />
+		</Target>
+		<ItemGroup>
+				<None Include="$(MSBuildThisFileDirectory)appsettings-schema.uSupport.json">
+						<Pack>True</Pack>
+						<PackagePath>content</PackagePath>
+				</None>
+		</ItemGroup>
+
+		<ItemGroup>
+				<None Include="buildTransitive\**\*.*">
+						<Pack>True</Pack>
+						<PackagePath>buildTransitive</PackagePath>
+				</None>
+		</ItemGroup>
+		
 	<ItemGroup>
 		<None Include="..\..\umbraco-marketplace-readme.md" Pack="true" PackagePath="\" />
 		<None Include="..\..\assets\usupport.png">

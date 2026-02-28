@@ -8,10 +8,14 @@
     controller: function (uSupportTicketResources, uSupportConfig, overlayService, userService, $location) {
         var vm = this;
         vm.searchTerm = "";
+        vm.sortOrder = {
+            column: null,
+            reverse: false
+        };
 
         vm.$onInit = function () {
             (vm.loadPage = function (pageNumber) {
-                uSupportTicketResources.getPagedResolvedTickets(pageNumber, vm.searchTerm).then(function (tickets) {
+                uSupportTicketResources.getPagedResolvedTickets(pageNumber, vm.searchTerm, vm.sortOrder).then(function (tickets) {
                     vm.resolvedTickets = tickets.Items;
                     vm.pagination = {
                         pageNumber: pageNumber,
@@ -23,7 +27,7 @@
             userService.getCurrentUser().then(function (user) {
                 if (user.allowedSections.indexOf("uSupport") === -1) {
                     vm.openTicket = function (ticketId) {
-                        uSupportTicketResources.getTicket(id).then(function (ticket) {
+                        uSupportTicketResources.getTicket(ticketId).then(function (ticket) {
                             var options = {
                                 view: uSupportConfig.basePathAppPlugins + "components/overlays/openTicket.html",
                                 title: ticket.Title,
@@ -52,5 +56,12 @@
         vm.search = function () {
             vm.loadPage(1);
         }
+
+        vm.sortBy = function (columnName) {
+            vm.sortOrder.column = columnName;
+            vm.sortOrder.reverse = !vm.sortOrder.reverse;
+          
+            vm.loadPage(1);
+        };
     }
 });

@@ -51,7 +51,7 @@ namespace uSupport.Services
 			}
 		}
 
-		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null)
+		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null, uSupportSort? sort = null)
 		{
 			var context = GetScope();
 			try
@@ -76,7 +76,14 @@ namespace uSupport.Services
 					sqlCount.Where(searchPattern, $"%{searchTerm}%");
 				}
 
-				sql.OrderBy("LastUpdated DESC");
+				if(sort != null)
+				{
+					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "DESC" : "ASC")}");
+				}
+				else
+				{
+				 sql.OrderBy("LastUpdated DESC");
+				}
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -91,7 +98,7 @@ namespace uSupport.Services
 
 		}
 
-		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null)
+		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null, uSupportSort? sort = null)
 		{
 			var context = GetScope();
 			try
@@ -112,10 +119,17 @@ namespace uSupport.Services
 				{
 					string searchPattern = $"{TicketTableAlias}.Title LIKE @0 OR {TicketTableAlias}.Summary LIKE @0 OR {TicketTableAlias}.ExternalTicketId LIKE @0";
 					sql.Where(searchPattern, $"%{searchTerm}%");
-					sqlCount.Where(searchPattern, $" %{searchTerm}%");
+					sqlCount.Where(searchPattern, $"%{searchTerm}%");
 				}
 
-				sql.OrderBy("Resolved DESC");
+				if (sort != null)
+				{
+					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "DESC" : "ASC")}");
+				}
+				else
+				{
+					sql.OrderBy("Resolved DESC");
+				}
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -181,8 +195,21 @@ namespace uSupport.Services
 
 		public override uSupportTicket Update(uSupportTicketSchema dto)
 		{
-			var ticket = base.Update(dto);
+			var context = GetScope();
+			try
+			{
+				context.Scope.Database.Update(dto);
 
+				if (context.Created)
+					context.Scope.Complete();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+
+			var ticket = Get(dto.Id);
 			_eventAggregator.Publish(new UpdateTicketNotification(ticket));
 
 			return ticket;

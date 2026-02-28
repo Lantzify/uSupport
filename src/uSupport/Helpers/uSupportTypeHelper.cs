@@ -13,6 +13,7 @@ namespace uSupport.Helpers
 				AuthorId = ticket.AuthorId,
 				ExternalTicketId = ticket.ExternalTicketId,
 				LastUpdatedBy = ticket.LastUpdatedBy,
+				LastUpdated = ticket.LastUpdated,
 				Id = ticket.Id,
 				Resolved = ticket.Resolved,
 				StatusId = ticket.StatusId,

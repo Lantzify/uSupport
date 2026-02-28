@@ -10,10 +10,14 @@
 
         vm.searchTerm = "";
         vm.useLongList = vm.useLongList === "true";
+        vm.sortOrder = {
+            column: null,
+            reverse: false
+        };
 
         vm.$onInit = function () {
             (vm.loadPage = function (pageNumber) {
-                uSupportTicketResources.getPagedActiveTickets(pageNumber, vm.searchTerm).then(function (tickets) {
+                uSupportTicketResources.getPagedActiveTickets(pageNumber, vm.searchTerm, vm.sortOrder).then(function (tickets) {
                     vm.activeTickets = tickets.Items;
                     vm.pagination = {
                         pageNumber: pageNumber,
@@ -50,6 +54,13 @@
 
         vm.search = function () {
             vm.loadPage(1);
-        }
+        };
+
+        vm.sortBy = function (columnName) {
+            vm.sortOrder.column = columnName;
+            vm.sortOrder.reverse = !vm.sortOrder.reverse;
+         
+            vm.loadPage(1);
+        };
     }
 });

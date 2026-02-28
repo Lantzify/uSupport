@@ -36,14 +36,26 @@
                     $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetTicket?ticketId=" + ticketId)
                 );
             },
-            getPagedActiveTickets: function (page, searchTerm) {
+            getPagedActiveTickets: function (page, searchTerm, sort) {
+                var url = uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedActiveTickets?page=" + page + "&sortColumnName=" + sort.column + "&sortReverse=" + sort.reverse;
+
+                if (searchTerm) {
+                    url += "&searchTerm=" + searchTerm;
+                }
+                
                 return umbRequestHelper.resourcePromise(
-                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedActiveTickets?page=" + page + "&searchTerm=" + searchTerm)
+                    $http.get(url)
                 );
             },
-            getPagedResolvedTickets: function (page, searchTerm) {
+            getPagedResolvedTickets: function (page, searchTerm, sort) {
+                var url = uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedResolvedTickets?page=" + page + "&sortColumnName=" + sort.column + "&sortReverse=" + sort.reverse;
+
+                if (searchTerm) {
+                    url += "&searchTerm=" + searchTerm;
+                }
+                
                 return umbRequestHelper.resourcePromise(
-                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedResolvedTickets?page=" + page + "&searchTerm=" + searchTerm)
+                    $http.get(url)
                 );
             },
             anyResolvedTickets: function () {

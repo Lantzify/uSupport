@@ -325,3 +325,4 @@ src/uSupport.v8.Web/[Cc]ss/
 src/uSupport.v8.Web/[Ww]eb.config
 
 
+/src/uSupport/appsettings-schema.uSupport.json

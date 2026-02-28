@@ -23,7 +23,8 @@ namespace uSupport.Migrations
 				.To<MakeExistingGuidIdsUpperCase>("uSupport-ticket-status-type-guid-update")
 				.To<AddSectionForAdminsMigration>("uSupport-add-section-for-admin-update")
 				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history")
-				.To<RemoveOrphanTicketComments>("uSuppor-remove-orphan-comments");
+				.To<RemoveOrphanTicketComments>("uSuppor-remove-orphan-comments")
+				.To<AddLastUpdatedToTickets>("uSupport-add-last-updated-to-tickets");
 		}
 	}
 }

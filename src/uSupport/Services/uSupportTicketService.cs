@@ -40,7 +40,7 @@ namespace uSupport.Services
 				var sql = new Sql()
 								.Select("*")
 								.From(TicketTableAlias)
-								.OrderBy("Submitted");
+								.OrderBy("LastUpdated DESC");
 
 				return context.Scope.Database.Fetch<uSupportTicket>(sql);
 			}
@@ -76,7 +76,7 @@ namespace uSupport.Services
 					sqlCount.Where(searchPattern, $"%{searchTerm}%");
 				}
 
-				sql.OrderBy("Submitted");
+				sql.OrderBy("LastUpdated DESC");
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -108,14 +108,14 @@ namespace uSupport.Services
 					.From(TicketTableAlias)
 					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
-				if(!string.IsNullOrWhiteSpace(searchTerm))
+				if (!string.IsNullOrWhiteSpace(searchTerm))
 				{
 					string searchPattern = $"{TicketTableAlias}.Title LIKE @0 OR {TicketTableAlias}.Summary LIKE @0 OR {TicketTableAlias}.ExternalTicketId LIKE @0";
 					sql.Where(searchPattern, $"%{searchTerm}%");
 					sqlCount.Where(searchPattern, $" %{searchTerm}%");
 				}
 
-				sql.OrderBy("Submitted");
+				sql.OrderBy("Resolved DESC");
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -169,23 +169,23 @@ namespace uSupport.Services
 			}
 		}
 
+		public override uSupportTicket Create(uSupportTicketSchema dto)
+		{
+			var ticket = base.Create(dto);
+
+			_eventAggregator.Publish(new CreateTicketNotification(ticket));
+			_eventAggregator.Publish(new TicketHistoryNotification(dto.AuthorId, null, ticket));
+
+			return ticket;
+		}
+
 		public override uSupportTicket Update(uSupportTicketSchema dto)
 		{
-			var context = GetScope();
-			try
-			{
-				context.Scope.Database.Update(dto);
+			var ticket = base.Update(dto);
 
-				if (context.Created)
-					context.Scope.Complete();
-			}
-			finally
-			{
-				if (context.Created)
-					context.Scope.Dispose();
-			}
+			_eventAggregator.Publish(new UpdateTicketNotification(ticket));
 
-			return Get(dto.Id);
+			return ticket;
 		}
 
 		public override void Delete(Guid id)
@@ -197,8 +197,10 @@ namespace uSupport.Services
 				var ticket = Get(id);
 
 				base.Delete(id);
+
 				_uSupportTicketCommentService.DeleteByTicketId(id);
 				_uSupportTicketHistoryService.DeleteByTicketId(id);
+
 				_eventAggregator.Publish(new DeleteTicketNotification(ticket));
 
 				if (context.Created)
@@ -209,7 +211,6 @@ namespace uSupport.Services
 				if (context.Created)
 					context.Scope.Dispose();
 			}
-
 		}
 	}
 }

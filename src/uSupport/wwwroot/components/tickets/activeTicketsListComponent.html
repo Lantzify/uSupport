@@ -22,7 +22,7 @@
 						<th ng-if="vm.useLongList">Summary</th>
 						<th ng-if="vm.useLongList && vm.adminDashboard">Ticket Id</th>
 						<th>Submitted</th>
-						<th ng-if="vm.useLongList">Last update by</th>
+						<th ng-if="vm.useLongList">Last update</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -52,7 +52,7 @@
 						</td>
 						<td ng-if="vm.useLongList && vm.adminDashboard"><strong>{{ticket.ExternalTicketId}}</strong></td>
 						<td><strong>{{ticket.Submitted | date:'yyyy-MM-dd'}}</strong></td>
-						<td ng-if="vm.useLongList"><strong>{{ticket.LastUpdatedBy}}</strong></td>
+						<td ng-if="vm.useLongList"><strong>{{ticket.LastUpdated | date:'yyyy-MM-dd'}}</strong></td>
 						<td>
 							<umb-button action="vm.openTicket(ticket.Id)"
 										type="button"

@@ -1,4 +1,5 @@
-﻿using uSupport.Dtos.Tables;
+﻿using uSupport.Helpers;
+using uSupport.Dtos.Tables;
 using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
@@ -55,15 +56,25 @@ namespace uSupport.Controllers
 
                 var ticket = _uSupportTicketService.Get(ticketComment.TicketId);
                 var author = _userService.GetUserById(ticket.AuthorId);
-                ticket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
+                if (author != null)
+                {
+					ticket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
+					ticket.LastUpdatedBy = comment.User.Name;
+				}
 
-                _uSupportSettingsService.SendEmail(
-                    _uSupportSettingsService.GetTicketUpdateEmailSetting(),
-                    _uSupportSettingsService.GetEmailSubjectNewTicket(),
-                    _uSupportSettingsService.GetEmailTemplateNewTicketPath(),
-                    ticket);
+				var updatedTicket =_uSupportTicketService.Update(ticket.ConvertDtoToSchema());
 
-                _eventAggregator.Publish(new AddTicketCommentNotification(ticket, comment));
+                string emailSetting = _uSupportSettingsService.GetTicketUpdateEmailSetting();
+                if (!string.IsNullOrWhiteSpace(emailSetting))
+                {
+					_uSupportSettingsService.SendEmail(
+	                    emailSetting,
+	                    _uSupportSettingsService.GetEmailSubjectUpdateTicket(),
+	                    _uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
+	                    ticket);
+				}
+
+                _eventAggregator.Publish(new AddTicketCommentNotification(updatedTicket, comment));
 
                 return _uSupportTicketCommentService.GetCommentsFromTicketId(ticketComment.TicketId).ToList();
             }

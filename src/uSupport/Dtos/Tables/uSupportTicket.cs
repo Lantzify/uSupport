@@ -18,7 +18,8 @@ namespace uSupport.Dtos.Tables
 		public UserDisplay Author { get; set; }
         public DateTime Submitted { get; set; }
 		public DateTime? Resolved { get; set; }
-		public string LastUpdatedBy { get; set; }
+		public string? LastUpdatedBy { get; set; }
+		public DateTime? LastUpdated { get; set; }
 		public string ExternalTicketId { get; set; }
 		public string PropertyValue { get; set; }
 		public IEnumerable<uSupportTicketComment> Comments { get; set; }

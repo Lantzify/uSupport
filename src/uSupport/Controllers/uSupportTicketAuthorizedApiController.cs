@@ -101,11 +101,7 @@ namespace uSupport.Controllers
                         _uSupportSettingsService.GetEmailSubjectNewTicket(),
                         _uSupportSettingsService.GetEmailTemplateNewTicketPath(),
                         createdTicket);
-                }
-
-
-				_eventAggregator.Publish(new TicketHistoryNotification(author.Id, null, createdTicket));
-				_eventAggregator.Publish(new CreateTicketNotification(createdTicket));
+                }				
 
 				return createdTicket;
 			}
@@ -137,7 +133,7 @@ namespace uSupport.Controllers
 					dto.Ticket.PropertyValue = null;
 
 				var updatedTicket = _uSupportTicketService.Update(dto.Ticket.ConvertDtoToSchema());
-
+				
 				if (dto.SendEmail)
 				{
 					_uSupportSettingsService.SendEmail(
@@ -153,10 +149,8 @@ namespace uSupport.Controllers
 				if (!updatedTicket.Status.Active)			
                     _eventAggregator.Publish(new UpdateTicketResolvedNotification(updatedTicket));
 
-
 				_eventAggregator.Publish(new TicketHistoryNotification(dto.UserId, oldTicket, updatedTicket));
-                _eventAggregator.Publish(new UpdateTicketNotification(updatedTicket));
-
+               
                 return updatedTicket;
 			}
             catch (Exception ex)

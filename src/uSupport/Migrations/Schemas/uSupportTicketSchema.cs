@@ -44,13 +44,17 @@ namespace uSupport.Migrations.Schemas
 
         [Column("LastUpdatedBy")]
         [NullSetting]
-        public string LastUpdatedBy { get; set; }
+        public string? LastUpdatedBy { get; set; }
+
+        [Column("LastUpdated")]
+        [NullSetting]
+        public DateTime? LastUpdated { get; set; } = DateTime.Now;
 
         [Column("ExternalTicketId")]
         public string ExternalTicketId { get; set; }
 
         [Column("PropertyValue")]
         [NullSetting]
-        public string PropertyValue { get; set; }
+        public string? PropertyValue { get; set; }
     }
 }

@@ -80,6 +80,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="umb-property" ng-if="model.ticket.LastUpdated">
+                    <div class="control-group umb-control-group no-border mb3">
+                        <label class="control-label">
+                            <span>Last updated</span>
+                        </label>
+                        <div class="controls">
+                            {{ model.ticket.LastUpdated | date:'yyyy-MM-dd'}}
+                        </div>
+                    </div>
+                </div>
                 <div class="umb-property" ng-if="model.ticket.LastUpdatedBy">
                     <div class="control-group umb-control-group no-border mb3">
                         <label class="control-label">

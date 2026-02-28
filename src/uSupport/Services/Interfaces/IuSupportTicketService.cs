@@ -7,8 +7,8 @@ namespace uSupport.Services.Interfaces
 	public interface IuSupportTicketService
 	{
 		IEnumerable<uSupportTicket> GetAll();
-		uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null);
-		uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null);
+		uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null, uSupportSort? sort = null);
+		uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null, uSupportSort? sort = null);
 		bool AnyResolvedTickets();
 		uSupportTicket Get(Guid id);
 		uSupportTicket Create(uSupportTicketSchema ticket);

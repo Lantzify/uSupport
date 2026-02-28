@@ -2,6 +2,7 @@
 	box-sizing: border-box;
 }
 
+
 /*Dashboard*/
 @media (max-width:1200px) {
 
@@ -245,4 +246,15 @@
 
 .uSupport .umb-node-preview-add{
 	cursor: pointer;
+}
+
+.uSupport .clickable-th{
+	cursor: pointer;
+	position: relative;
+}
+
+.uSupport .clickable-th > span {
+	position: absolute;
+	top: 50%;
+    transform: translateY(-50%);
 }

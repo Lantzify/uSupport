@@ -50,16 +50,28 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null)
+		public uSupportPage<uSupportTicket> GetPagedActiveTickets(long page, string? searchTerm = null, string? sortColumnName = null, bool? sortReverse = null)
 		{
-			return _uSupportTicketService.GetPagedActiveTickets(page, searchTerm);
+			return _uSupportTicketService.GetPagedActiveTickets(page, searchTerm, !string.IsNullOrWhiteSpace(sortColumnName) ? 
+				new uSupportSort
+				{
+					ColumnName = sortColumnName,
+					Reverse = sortReverse ?? false
+				} : null
+			);
 		} 
 
 		[HttpGet]
-		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null)
+		public uSupportPage<uSupportTicket> GetPagedResolvedTickets(long page, string? searchTerm = null, string? sortColumnName = null, bool? sortReverse = null)
 		{
-			return _uSupportTicketService.GetPagedResolvedTickets(page, searchTerm);
-        }
+			return _uSupportTicketService.GetPagedResolvedTickets(page, searchTerm, !string.IsNullOrWhiteSpace(sortColumnName) ?
+				new uSupportSort
+				{
+					ColumnName = sortColumnName,
+					Reverse = sortReverse ?? false
+				} : null
+			);
+		}
 
 		[HttpGet]
 		public IEnumerable<uSupportTicketHistory> GetTicketHistory(Guid ticketId)
@@ -116,7 +128,7 @@ namespace uSupport.Controllers
 		public ActionResult<uSupportTicket> UpdateTicket(UpdateTicketDto dto)
 		{
             try
-            {
+			{
 				var oldTicket = _uSupportTicketService.Get(dto.Ticket.Id);
 
 				var oldStatus = _uSupportTicketStatusService.Get(oldTicket.StatusId);

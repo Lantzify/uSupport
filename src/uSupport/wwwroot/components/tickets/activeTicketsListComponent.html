@@ -16,13 +16,37 @@
 			<table class="table mb0" ng-if="vm.activeTickets.length">
 				<thead>
 					<tr>
-						<th>Status</th>
-						<th>Type</th>
-						<th>Title</th>
-						<th ng-if="vm.useLongList">Summary</th>
-						<th ng-if="vm.useLongList && vm.adminDashboard">Ticket Id</th>
-						<th>Submitted</th>
-						<th ng-if="vm.useLongList">Last update</th>
+						<th class="clickable-th" ng-click="vm.sortBy('StatusId')">
+							Status
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'StatusId'"></umb-icon>
+						</th>
+						<th class="clickable-th" ng-click="vm.sortBy('TypeId')">
+							Type
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'TypeId'"></umb-icon>
+
+						</th>
+						<th class="clickable-th" ng-click="vm.sortBy('Title')">
+							Title
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Title'"></umb-icon>
+
+						</th>
+						<th class="clickable-th" ng-click="vm.sortBy('Summary')" ng-if="vm.useLongList">
+							Summary
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Summary'"></umb-icon>
+
+						</th>
+						<th class="clickable-th" ng-click="vm.sortBy('ExternalTicketId')" ng-if="vm.useLongList && vm.adminDashboard">
+							Ticket Id
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'ExternalTicketId'"></umb-icon>
+						</th>
+						<th class="clickable-th" ng-click="vm.sortBy('Submitted')">
+							Submitted
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Submitted'"></umb-icon>
+						</th>
+						<th ng-if="vm.useLongList" class="clickable-th" ng-click="vm.sortBy('LastUpdated')">
+							Last update
+							<umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'LastUpdated'"></umb-icon>
+						</th>
 						<th></th>
 					</tr>
 				</thead>

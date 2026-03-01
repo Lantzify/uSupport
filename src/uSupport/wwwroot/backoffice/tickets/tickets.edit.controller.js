@@ -90,7 +90,7 @@
         } else {
             vm.SavebuttonState = "busy";
         }
-        console.log(vm.ticket)
+
         if (formHelper.submitForm({ scope: $scope })) {
 
             $q.all({

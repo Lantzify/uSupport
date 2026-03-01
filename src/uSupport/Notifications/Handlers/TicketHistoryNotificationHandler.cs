@@ -51,7 +51,15 @@ namespace uSupport.Notifications.Handlers
 				});
 			}
 
-			if (!notification.NewTicket.Status.Active)
+			if (notification.OldTicket.InternalComment != notification.NewTicket.InternalComment)
+			{
+				changes.Add(new uSupportChange()
+				{
+					Field = "InternalComment",
+					Old = notification.OldTicket?.InternalComment ?? "",
+					New = notification.NewTicket?.InternalComment ?? ""
+				});
+			}
 
 			if (!changes.Any())
 				return;

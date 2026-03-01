@@ -20,6 +20,8 @@ namespace uSupport.Helpers
 				Submitted = ticket.Submitted,
 				Summary = ticket.Summary,
 				Title = ticket.Title,
+				InternalComment = ticket.InternalComment,
+				PropertyValue = ticket.PropertyValue,
 				TypeId = ticket.TypeId
 			};
 		}

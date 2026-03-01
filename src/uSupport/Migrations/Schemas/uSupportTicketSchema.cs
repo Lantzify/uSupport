@@ -56,5 +56,10 @@ namespace uSupport.Migrations.Schemas
         [Column("PropertyValue")]
         [NullSetting]
         public string? PropertyValue { get; set; }
-    }
+
+		[Column("InternalComment")]
+		[NullSetting]
+		[SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
+		public string? InternalComment { get; set; }
+	}
 }

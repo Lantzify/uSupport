@@ -32,7 +32,6 @@
 
     uSupportTicketResources.getTicket($routeParams.id).then(function (ticket) {
         vm.ticket = ticket;
-
         $q.all({
             user: userService.getCurrentUser(),
             history: uSupportTicketResources.getTicketHistory(ticket.Id),
@@ -91,7 +90,7 @@
         } else {
             vm.SavebuttonState = "busy";
         }
-
+        console.log(vm.ticket)
         if (formHelper.submitForm({ scope: $scope })) {
 
             $q.all({
@@ -102,6 +101,7 @@
                 vm.ticket.StatusId = promises.statusId;
                 vm.ticket.TypeId = promises.typeId;
                 vm.ticket.LastUpdatedBy = vm.user.name;
+                vm.ticket.InternalComment = getPropertyValue("internalComment")[0]?.value;
 
                 uSupportTicketResources.updateTicket(vm.ticket, sendEmail, vm.user.id).then(function () {
                     if (sendEmail) {

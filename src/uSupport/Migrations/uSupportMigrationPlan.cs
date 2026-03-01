@@ -24,7 +24,8 @@ namespace uSupport.Migrations
 				.To<AddSectionForAdminsMigration>("uSupport-add-section-for-admin-update")
 				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history")
 				.To<RemoveOrphanTicketComments>("uSuppor-remove-orphan-comments")
-				.To<AddLastUpdatedToTickets>("uSupport-add-last-updated-to-tickets");
+				.To<AddLastUpdatedToTickets>("uSupport-add-last-updated-to-tickets")
+				.To<AddInternalCommentColumn>("uSupport-add-internal-comment-column");
 		}
 	}
 }

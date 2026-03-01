@@ -22,6 +22,7 @@ namespace uSupport.Dtos.Tables
 		public DateTime? LastUpdated { get; set; }
 		public string ExternalTicketId { get; set; }
 		public string PropertyValue { get; set; }
+		public string? InternalComment { get; set; }
 		public IEnumerable<uSupportTicketComment> Comments { get; set; }
 	}
 }

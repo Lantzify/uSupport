@@ -54,5 +54,11 @@
             mandatory: true,
             pattern: ""
         },
+    },
+    {
+        alias: "internalComment",
+        label: "Internal comment",
+        view: "textarea",
+        value: $scope.model.ticket.InternalComment,
     });
 });

@@ -34,9 +34,13 @@
                                     <div ng-if="change.Field == 'Status'">
                                         Status: <s class="mr1" style="color: #d42054;">{{vm.getStatusName(change.Old)}}</s><span style="color: #2bc37c;">{{vm.getStatusName(change.New)}}</span>
                                     </div>
-                                    
+
                                     <div ng-if="change.Field == 'Type'">
                                         Type: <s class="mr1" style="color: #d42054;">{{vm.getTypeName(change.Old)}}</s><span style="color: #2bc37c;">{{vm.getTypeName(change.New)}}</span>
+                                    </div>
+
+                                    <div ng-if="change.Field == 'InternalComment'">
+                                        Internal comment: <s class="mr1" style="color: #d42054;">{{change.Old}}</s><span style="color: #2bc37c;">{{change.New}}</span>
                                     </div>
                                 </div>
                             </span>

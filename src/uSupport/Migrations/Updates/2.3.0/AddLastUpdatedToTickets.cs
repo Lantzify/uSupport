@@ -14,9 +14,7 @@ namespace uSupport.Migrations.Updates._2._3._0
 			if (ColumnExists(TicketTableAlias, "LastUpdated"))
 				return;
 
-			var colums = Context.SqlContext.SqlSyntax.GetColumnsInSchema(Context.Database);
-
-			AddColumnIfNotExists<uSupportTicketSchema>(colums, "LastUpdated");
+			AddColumn<uSupportTicketSchema>("LastUpdated");
 
 			Execute.Sql($"UPDATE {TicketTableAlias} SET LastUpdated = Submitted WHERE Resolved IS NULL").Do();
 			Execute.Sql($"UPDATE {TicketTableAlias} SET LastUpdated = Resolved WHERE Resolved IS NOT NULL").Do();

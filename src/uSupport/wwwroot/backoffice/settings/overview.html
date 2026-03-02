@@ -35,7 +35,7 @@
 							<div class="uSupport-row uSupport-no-gutters align-items-center mb3 settings-row">
 								<div class="uSupport-col-8 mb3">
 									New ticket email subject<br />
-									<i>Subject of the email when a new ticket is created</i>
+									<i>Subject of the email when a new ticket is created. You can add ticket properties by adding {} around the property name (e.g., {ExternalTicketId}, {Title}, {Status.Name}, {Type.Name})</i>
 								</div>
 								<div class="uSupport-col-12 text-right">
 									<strong>{{vm.emailSubjectNewTicket}}</strong>
@@ -44,7 +44,7 @@
 							<div class="uSupport-row uSupport-no-gutters align-items-center mb3 settings-row">
 								<div class="uSupport-col-12 mb3">
 									Update ticket email subject<br />
-									<i>Subject of the email when a new ticket is updated</i>
+									<i>Subject of the email when a ticket is updated. You can add ticket properties by adding {} around the property name (e.g., {ExternalTicketId}, {Title}, {Status.Name}, {Type.Name})</i>
 								</div>
 								<div class="uSupport-col-12 text-right">
 									<strong>{{vm.emailSubjectUpdateTicket}}</strong>

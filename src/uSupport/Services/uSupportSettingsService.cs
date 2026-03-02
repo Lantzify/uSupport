@@ -1,10 +1,12 @@
-﻿using Umbraco.Cms.Core.Mail;
+﻿using uSupport.Helpers;
+using uSupport.Dtos.Tables;
+using Umbraco.Cms.Core.Mail;
 using uSupport.Dtos.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.Models.Email;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -47,33 +49,25 @@ namespace uSupport.Services
             _defaultSettings = new uSupportSettingsTicket();
 		}
 
-		public bool GetSendEmailOnTicketCreatedSetting()
-		{
-            return _uSupportSettings.Value.Tickets.SendEmailOnTicketCreated;
-        }
+		public bool GetSendEmailOnTicketCreatedSetting() => _uSupportSettings.Value.Tickets.SendEmailOnTicketCreated;
+        public string GetTicketUpdateEmailSetting() => _uSupportSettings.Value.Tickets.TicketUpdateEmail;
 
-
-        public string GetTicketUpdateEmailSetting()
-		{
-			return _uSupportSettings.Value.Tickets.TicketUpdateEmail;
-		}
-
-		public string GetEmailSubjectNewTicket()
+		public string GetEmailSubjectNewTicket(uSupportTicket? ticket = null)
 		{
 			var emailSubjectNewTicket = _uSupportSettings.Value.Tickets.EmailSubjectNewTicket;
 			if (!string.IsNullOrWhiteSpace(emailSubjectNewTicket))
-				return emailSubjectNewTicket;
+				return uSupportTokenHelper.ReplaceTokens(emailSubjectNewTicket, ticket);
 
-			return _defaultSettings.EmailSubjectNewTicket;
+			return uSupportTokenHelper.ReplaceTokens(_defaultSettings.EmailSubjectNewTicket, ticket);
 		}
 
-		public string GetEmailSubjectUpdateTicket()
+		public string GetEmailSubjectUpdateTicket(uSupportTicket? ticket = null)
 		{
 			var emailSubjectUpdateTicket = _uSupportSettings.Value.Tickets.EmailSubjectUpdateTicket;
 			if (!string.IsNullOrWhiteSpace(emailSubjectUpdateTicket))
-				return emailSubjectUpdateTicket;
+				return uSupportTokenHelper.ReplaceTokens(emailSubjectUpdateTicket, ticket);
 
-			return _defaultSettings.EmailSubjectUpdateTicket;
+			return uSupportTokenHelper.ReplaceTokens(_defaultSettings.EmailSubjectUpdateTicket, ticket);
 		}
 
 		public string GetEmailTemplateNewTicketPath()

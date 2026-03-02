@@ -35,6 +35,7 @@ If you find any issues with the package feel free to raise a issue!
 ![Dashboard](assets/dashboard.PNG "Dashboard")
 ![Ticket details](assets/ticketDetails.PNG "Ticket details")
 ![Edit ticket](assets/editTicket.PNG "Edit ticket")
+![Ticket history](assets/ticket-history.png "Ticket history")
 ![Ticket types](assets/ticketTypes.PNG "Ticket types")
 ![Ticket statuses](assets/ticketStatus.PNG "Ticket statuses")
 ![Settings](assets/settings.PNG "Settings")

@@ -35,6 +35,10 @@
             "Caption": "Managing ticket"
         },
         {
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/ticket-history.png",
+            "Caption": "Ticket history"
+        },
+        {
             "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/ticketTypes.PNG",
             "Caption": "Default ticket types"
         },

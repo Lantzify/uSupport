@@ -110,7 +110,7 @@ namespace uSupport.Controllers
 				{
                     _uSupportSettingsService.SendEmail(
                         _uSupportSettingsService.GetTicketUpdateEmailSetting(),
-                        _uSupportSettingsService.GetEmailSubjectNewTicket(),
+						_uSupportSettingsService.GetEmailSubjectNewTicket(createdTicket),
                         _uSupportSettingsService.GetEmailTemplateNewTicketPath(),
                         createdTicket);
                 }				
@@ -150,7 +150,7 @@ namespace uSupport.Controllers
 				{
 					_uSupportSettingsService.SendEmail(
 						_userService.GetUserById(dto.Ticket.AuthorId).Email,
-						_uSupportSettingsService.GetEmailSubjectUpdateTicket(),
+						_uSupportSettingsService.GetEmailSubjectUpdateTicket(updatedTicket),
 						_uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
 						updatedTicket);
 

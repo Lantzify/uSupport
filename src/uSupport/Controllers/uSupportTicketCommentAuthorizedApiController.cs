@@ -55,13 +55,11 @@ namespace uSupport.Controllers
                 var comment = _uSupportTicketCommentService.Create(ticketComment);
 
                 var ticket = _uSupportTicketService.Get(ticketComment.TicketId);
-                var author = _userService.GetUserById(ticket.AuthorId);
-                if (author != null)
-                {
-					ticket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
-					ticket.LastUpdatedBy = comment.User.Name;
-				}
 
+                var user = _userService.GetUserById(ticketComment.UserId);
+                if (user != null)
+					ticket.LastUpdatedBy = user.Name;
+				
 				var updatedTicket =_uSupportTicketService.Update(ticket.ConvertDtoToSchema());
 
                 string emailSetting = _uSupportSettingsService.GetTicketUpdateEmailSetting();

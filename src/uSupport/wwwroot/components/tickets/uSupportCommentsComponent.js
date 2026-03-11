@@ -7,7 +7,7 @@
         userId: "=",
         adminView: "="
     },
-    controller: function (uSupportTicketCommentResources) {
+    controller: function (uSupportTicketCommentResources, notificationsService) {
         var vm = this;
 
         vm.addComment = function () {
@@ -17,9 +17,9 @@
                 UserId: vm.userId,
                 Comment: vm.comment
             }).then(function (comments) {
-                vm.comment = "";
                 vm.comments = comments;
                 vm.commentbuttonState = "success";
+                vm.comment = "";
             }, function (err) {
                 if (err.data && (err.data.message || err.data.Detail)) {
                     notificationsService.error("uSupport", err.data.message ?? err.data.Detail);

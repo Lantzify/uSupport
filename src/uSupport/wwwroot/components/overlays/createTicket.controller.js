@@ -1,6 +1,8 @@
 ﻿angular.module("umbraco").controller("uSupport.createTicket.controller", function (eventsService, $scope, userService, uSupportHelperResources, uSupportTicketTypeResources) {
 
     var vm = this;
+    var unsubscribeOpen;
+    var unsubscribeClose;
 
     vm.step = 1;
     $scope.model.ticket = {};
@@ -23,13 +25,17 @@
     function process() {
         vm.step += vm.selectedTicketType.PropertyId !== 0 ? 1 : 2;
 
-        var unsubscribeOpen = eventsService.on("appState.editors.open", function () {
-            document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7499";
-        });
+        if (!unsubscribeOpen) {
+            unsubscribeOpen = eventsService.on("appState.editors.open", function () {
+                document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7499";
+            });
+        }
 
-        var unsubscribeClose = eventsService.on("appState.editors.close", function () {
-            document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7500";
-        });
+        if (!unsubscribeClose) {
+            unsubscribeClose = eventsService.on("appState.editors.close", function () {
+                document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7500";
+            });
+        }
 
         switch (vm.step) {
             case 2:
@@ -155,9 +161,14 @@
                 break;
         }
 
-        $scope.$on("$destroy", function () {
-            unsubscribeOpen();
-            unsubscribeClose();
-        });
     }
+
+    $scope.$on("$destroy", function () {
+        if (unsubscribeOpen) {
+            unsubscribeOpen();
+        }
+        if (unsubscribeClose) {
+            unsubscribeClose();
+        }
+    });
 });

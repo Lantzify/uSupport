@@ -10,7 +10,7 @@
 
     uSupportTicketTypeResources.getAllTicketTypes().then(function (ticketTypes) {
         vm.ticketTypes = ticketTypes;
-        
+
     });
 
     vm.selectTicketType = function (ticketType) {
@@ -23,17 +23,18 @@
     function process() {
         vm.step += vm.selectedTicketType.PropertyId !== 0 ? 1 : 2;
 
+        var unsubscribeOpen = eventsService.on("appState.editors.open", function () {
+            document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7499";
+        });
+
+        var unsubscribeClose = eventsService.on("appState.editors.close", function () {
+            document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7500";
+        });
+
         switch (vm.step) {
             case 2:
                 vm.loadingProperty = true;
                 uSupportTicketTypeResources.getDataTypeFromId(vm.selectedTicketType.PropertyId).then(function (dataType) {
-                    var unsubscribeOpen = eventsService.on("appState.editors.open", function () {
-                        document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7499";
-                    });
-
-                    var unsubscribeClose = eventsService.on("appState.editors.close", function () {
-                        document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7500";
-                    });
 
                     $scope.model.title = vm.selectedTicketTypeName;
                     $scope.model.subtitle = vm.selectedTicketType.PropertyDescription;
@@ -63,11 +64,6 @@
                     }
 
                     vm.loadingProperty = false;
-
-                    $scope.$on("$destroy", function () {
-                        unsubscribeOpen();
-                        unsubscribeClose();
-                    });
                 });
                 break;
             case 3:
@@ -86,6 +82,7 @@
                             label: "Ticket title",
                             description: "Enter a appropriate title",
                             view: "textbox",
+                            labelOnTop: true,
                             validation: {
                                 mandatory: true,
                                 pattern: ""
@@ -95,7 +92,13 @@
                             alias: "ticketSummary",
                             label: "Ticket summary",
                             description: "Try to explain the issue as clearly as possible",
-                            view: "textarea",
+                            view: "rte",
+                            labelOnTop: true,
+                            config: {
+                                editor: {
+                                    toolbar: ["bold", "italic", "underline", "link", "umbmediapicker"]
+                                }
+                            },
                             validation: {
                                 mandatory: true,
                                 pattern: ""
@@ -139,16 +142,22 @@
                                 view: "readonlyvalue"
                             },
                             {
-                            alias: "ticketId",
-                            label: "Ticket id",
-                            value: externalTicketId,
-                            view: "readonlyvalue"
-                        });
+                                alias: "ticketId",
+                                label: "Ticket id",
+                                value: externalTicketId,
+                                view: "readonlyvalue"
+                            });
 
                         $scope.model.ticket["externalTicketId"] = externalTicketId;
                     });
                 });
+
                 break;
         }
+
+        $scope.$on("$destroy", function () {
+            unsubscribeOpen();
+            unsubscribeClose();
+        });
     }
 });

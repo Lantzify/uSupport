@@ -4,13 +4,14 @@ using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Mapping;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using uSupport.Migrations.Schemas;
 using Microsoft.Extensions.Logging;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.Models.Membership;
-using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Core.Models.ContentEditing;
+using Umbraco.Cms.Web.BackOffice.Controllers;
 using static uSupport.Helpers.uSupportTypeHelper;
 
 namespace uSupport.Controllers
@@ -18,7 +19,8 @@ namespace uSupport.Controllers
 	public class uSupportTicketAuthorizedApiController : UmbracoAuthorizedApiController
 	{
 		private readonly IUserService _userService;
-        private readonly IUmbracoMapper _umbracoMapper;
+		private readonly IHtmlSanitizer _htmlSanitizer;
+		private readonly IUmbracoMapper _umbracoMapper;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger<IuSupportTicketService> _logger;
         private readonly IuSupportTicketService _uSupportTicketService;
@@ -29,7 +31,8 @@ namespace uSupport.Controllers
 
 
 		public uSupportTicketAuthorizedApiController(IUserService userService,
-            IUmbracoMapper umbracoMapper,
+			IHtmlSanitizer htmlSanitizer,
+			IUmbracoMapper umbracoMapper,
 			IEventAggregator eventAggregator,
 			ILogger<IuSupportTicketService> logger,
 			IuSupportTicketService uSupportTicketService,
@@ -40,6 +43,7 @@ namespace uSupport.Controllers
 		{
 			_eventAggregator = eventAggregator;
 			_logger = logger;
+			_htmlSanitizer = htmlSanitizer;
 			_umbracoMapper = umbracoMapper;
 			_userService = userService;
 			_uSupportTicketService = uSupportTicketService;
@@ -101,10 +105,13 @@ namespace uSupport.Controllers
 			try
 			{
 				ticket.StatusId = _uSupportTicketStatusService.GetDefaultStatus().Id;
+				ticket.Summary = _htmlSanitizer.Sanitize(ticket.Summary);
+
 				var createdTicket = _uSupportTicketService.Create(ticket);
 
                 var author = _userService.GetUserById(ticket.AuthorId);
-                createdTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
+				if(author != null)
+					createdTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
 
 				if (_uSupportSettingsService.GetSendEmailOnTicketCreatedSetting())
 				{

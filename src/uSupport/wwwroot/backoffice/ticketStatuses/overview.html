@@ -33,12 +33,10 @@
 										<th>Default</th>
 										<th>Active</th>
 										<th>Resolved</th>
-
-										<th></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="status in vm.ticketStatuses">
+									<tr ng-repeat="status in vm.ticketStatuses" ng-click="vm.openStatus(status.Id)" class="ticket-item-hover clickable-th">
 										<td class="status-icon">
 											<umb-badge size="s"
 													   color="{{status.Color}}"
@@ -54,13 +52,6 @@
 										</td>
 										<td>
 											<umb-icon title="{{!status.Active}}" icon="{{ !status.Active ? 'icon-check' : 'icon-wrong' }}" ng-class="{'color-green' : !status.Active, 'color-red' : status.Active}"></umb-icon>
-										</td>
-										<td>
-											<umb-button action="vm.openStatus(status.Id)"
-														type="button"
-														button-style="link"
-														label="Open">
-											</umb-button>
 										</td>
 									</tr>
 								</tbody>

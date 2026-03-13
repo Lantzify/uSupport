@@ -259,6 +259,6 @@
     transform: translateY(-50%);
 }
 
-.ticket-item-hover:hover {
+.uSupport .ticket-item-hover:hover {
 	background: #f2f3f3;
 }

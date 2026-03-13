@@ -34,11 +34,10 @@
 										<th>Alias</th>
 										<th>Description</th>
 										<th>Uses property</th>
-										<th></th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="type in vm.ticketTypes">
+									<tr ng-repeat="type in vm.ticketTypes" ng-click="vm.openType(type.Id)" class="ticket-item-hover clickable-th">
 										<td class="status-icon">
 											<umb-icon title="{{type.Name}}" icon="{{type.Icon}}" class="{{type.Color}}"></umb-icon>
 										</td>
@@ -48,13 +47,6 @@
 										<td>
 											<umb-icon title="{{type.PropertyId }}" icon="{{ type.PropertyId ? 'icon-check' : 'icon-wrong' }}" ng-class="{'color-green' : type.PropertyId, 'color-red' : !type.PropertyId}"></umb-icon>
 										</td>
-										<td>
-											<umb-button action="vm.openType(type.Id)"
-														type="button"
-														button-style="link"
-														label="Open">
-											</umb-button>
-										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -63,12 +55,5 @@
 				</div>
 			</div>
 		</umb-editor-container>
-
-		<umb-editor-footer>
-
-		</umb-editor-footer>
-
 	</umb-editor-view>
-
-
 </div>

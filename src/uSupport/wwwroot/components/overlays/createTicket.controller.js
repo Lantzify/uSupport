@@ -27,13 +27,19 @@
 
         if (!unsubscribeOpen) {
             unsubscribeOpen = eventsService.on("appState.editors.open", function () {
-                document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7499";
+                var overlay = document.querySelector(".umb-overlay");
+                if (overlay) {
+                    overlay.style.zIndex = "7499";
+                }
             });
         }
 
         if (!unsubscribeClose) {
             unsubscribeClose = eventsService.on("appState.editors.close", function () {
-                document.getElementsByClassName("umb-overlay")[0].style.zIndex = "7500";
+                var overlay = document.querySelector(".umb-overlay");
+                if (overlay) {
+                    overlay.style.zIndex = "7500";
+                }
             });
         }
 

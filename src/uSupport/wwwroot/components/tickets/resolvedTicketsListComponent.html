@@ -24,31 +24,26 @@
                             Type
                             <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'TypeId'"></umb-icon>
                         </th>
-                        <th class="clickable-th" ng-click="vm.sortBy('Title')">
-                            Title
-                            <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Title'"></umb-icon>
-                        </th>
-                        <th class="clickable-th" ng-click="vm.sortBy('Summary')" ng-if="vm.useLongList">
-                            Summary
-                            <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Summary'"></umb-icon>
-                        </th>
-                        <th class="clickable-th" ng-click="vm.sortBy('ExternalTicketId')" ng-if="vm.useLongList && vm.adminDashboard">
+                        <th class="clickable-th" ng-click="vm.sortBy('ExternalTicketId')">
                             Ticket Id
                             <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'ExternalTicketId'"></umb-icon>
                         </th>
-                        <th ng-if="vm.useLongList" class="clickable-th" ng-click="vm.sortBy('Submitted')">
-                            Submitted
-                            <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Submitted'"></umb-icon>
+                        <th class="clickable-th" ng-click="vm.sortBy('Title')">
+                            Title
+                            <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Title'"></umb-icon>
                         </th>
                         <th class="clickable-th" ng-click="vm.sortBy('Resolved')">
                             Resolved
                             <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Resolved'"></umb-icon>
                         </th>
-                        <th></th>
+                        <th class="clickable-th" ng-click="vm.sortBy('Submitted')">
+                            Submitted
+                            <umb-icon icon="{{vm.sortOrder.reverse ? 'icon-navigation-up' : 'icon-navigation-down'}}" ng-if="vm.sortOrder.column == 'Submitted'"></umb-icon>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="ticket in vm.resolvedTickets">
+                    <tr ng-repeat="ticket in vm.resolvedTickets" ng-click="vm.openTicket(ticket.Id)" class="ticket-item-hover clickable-th">
                         <td>
                             <umb-badge size="s"
                                        color="{{ticket.Status.Color}}"
@@ -59,23 +54,15 @@
                         <td class="status-icon">
                             <umb-icon title="{{ticket.Type.Name}}" icon="{{ticket.Type.Icon}}" class="{{ticket.Type.Color}}"></umb-icon>
                         </td>
-                        <td><strong>{{ticket.Title}}</strong></td>
-                        <td ng-if="vm.useLongList">
+                        <td><strong>{{ticket.ExternalTicketId}}</strong></td>
+                        <td title="{{ticket.Title}}">
                             <strong>
-                                {{ ticket.Summary | limitTo: 10  }}
-                                {{ ticket.Summary .length > 10 ? '...' : ''}}
+                                {{ ticket.Title | limitTo: 25  }}
+                                {{ ticket.Title.length > 25 ? '...' : ''}}
                             </strong>
                         </td>
-                        <td ng-if="vm.useLongList && vm.adminDashboard"><strong>{{ticket.ExternalTicketId}}</strong></td>
-                        <td ng-if="vm.useLongList"><strong>{{ticket.Submitted | date:'yyyy-MM-dd'}}</strong></td>
                         <td><strong>{{ticket.Resolved | date:'yyyy-MM-dd'}}</strong></td>
-                        <td>
-                            <umb-button action="vm.openTicket(ticket.Id)"
-                                        type="button"
-                                        button-style="link"
-                                        label="Open">
-                            </umb-button>
-                        </td>
+                        <td><strong>{{ticket.Submitted | date:'yyyy-MM-dd'}}</strong></td>
                     </tr>
                 </tbody>
             </table>

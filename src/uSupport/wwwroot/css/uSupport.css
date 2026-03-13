@@ -4,7 +4,7 @@
 
 
 /*Dashboard*/
-@media (max-width:1200px) {
+@media (max-width:1280px) {
 
 	.uSupport.dashboard.user > .uSupport-flex-column {
 		flex-direction: column;
@@ -257,4 +257,8 @@
 	position: absolute;
 	top: 50%;
     transform: translateY(-50%);
+}
+
+.ticket-item-hover:hover {
+	background: #f2f3f3;
 }

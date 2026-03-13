@@ -26,7 +26,7 @@
                     model.submitButtonState = "busy";
 
                     model.ticket["title"] = model.properties[0].value;
-                    model.ticket["summary"] = model.properties[1].value;
+                    model.ticket["summary"] = model.properties[1].value.markup;
 
                     uSupportTicketResources.createTicket(model.ticket).then(function () {
                         overlayService.close();

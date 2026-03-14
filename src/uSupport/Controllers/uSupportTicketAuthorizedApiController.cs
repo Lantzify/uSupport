@@ -78,11 +78,10 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<uSupportTicketHistory> GetTicketHistory(Guid ticketId)
-		{
-			return _uSupportTicketHistoryService.GetByTicketId(ticketId);
-		}
+		public uSupportPage<uSupportTicketHistory> GetPagedHistoryByTicketId(Guid ticketId, long page) => _uSupportTicketHistoryService.GetPagedByTicketId(ticketId, page);
 
+		[HttpGet]
+		public IEnumerable<uSupportTicketHistory> GetTicketHistory(Guid ticketId) => _uSupportTicketHistoryService.GetByTicketId(ticketId);
 
 		[HttpGet]
 		public bool AnyResolvedTickets() => _uSupportTicketService.AnyResolvedTickets();

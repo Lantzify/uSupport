@@ -1,4 +1,5 @@
-﻿using uSupport.Helpers;
+﻿using uSupport.Dtos;
+using uSupport.Helpers;
 using uSupport.Dtos.Tables;
 using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
@@ -43,7 +44,10 @@ namespace uSupport.Controllers
             _uSupportTicketCommentService = uSupportTicketCommentService;
         }
 
-        [HttpGet]
+		[HttpGet]
+		public uSupportPage<uSupportTicketComment> GetPagedCommentsForTicket(Guid ticketId, long page) => _uSupportTicketCommentService.GetPagedCommentsForTicket(ticketId, page);
+
+		[HttpGet]
         public IEnumerable<uSupportTicketComment> GetCommentsFromTicketId(Guid ticketId) => _uSupportTicketCommentService.GetCommentsFromTicketId(ticketId).ToList();
 
 
@@ -62,11 +66,18 @@ namespace uSupport.Controllers
 				
 				var updatedTicket =_uSupportTicketService.Update(ticket.ConvertDtoToSchema());
 
-                string emailSetting = _uSupportSettingsService.GetTicketUpdateEmailSetting();
-                if (!string.IsNullOrWhiteSpace(emailSetting))
+                if (_uSupportSettingsService.GetSendEmailOnTicketCommentSetting())
                 {
+                    string toAddress = _uSupportSettingsService.GetTicketUpdateEmailSetting();
+					if (ticket.AuthorId != ticketComment.UserId)
+                    {
+                        var author = _userService.GetUserById(ticket.AuthorId);
+                        if(author != null)
+                            toAddress = author.Email;
+					}
+
 					_uSupportSettingsService.SendEmail(
-	                    emailSetting,
+						 toAddress,
 	                    _uSupportSettingsService.GetEmailSubjectUpdateTicket(),
 	                    _uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
 	                    ticket);

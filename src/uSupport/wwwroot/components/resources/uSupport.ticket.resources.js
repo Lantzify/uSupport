@@ -36,6 +36,11 @@
                     $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetTicket?ticketId=" + ticketId)
                 );
             },
+            getPagedHistoryByTicketId: function (ticketId, page) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedHistoryByTicketId?ticketId=" + ticketId + "&page=" + page)
+                );
+            },
             getPagedActiveTickets: function (page, searchTerm, sort) {
                 var url = uSupportConfig.baseApiUrl + "uSupportTicketAuthorizedApi/GetPagedActiveTickets?page=" + page + "&sortColumnName=" + sort.column + "&sortReverse=" + sort.reverse;
 

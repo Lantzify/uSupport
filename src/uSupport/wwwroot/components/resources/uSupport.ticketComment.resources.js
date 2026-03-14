@@ -16,6 +16,11 @@
                     $http.get(uSupportConfig.baseApiUrl + "uSupportTicketCommentAuthorizedApi/GetCommentsFromTicketId?ticketId=" + id)
                 );
             },
+            getPagedCommentsForTicket: function (ticketId, page) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(uSupportConfig.baseApiUrl + "uSupportTicketCommentAuthorizedApi/GetPagedCommentsForTicket?ticketId=" + ticketId + "&page=" + page)
+                );
+            },
         };
     });
 })();

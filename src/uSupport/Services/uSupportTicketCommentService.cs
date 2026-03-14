@@ -1,13 +1,14 @@
 ﻿using NPoco;
-using uSupport.Helpers;
+using uSupport.Dtos;
 using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Services;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
-using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Core.Models.Membership;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Core.Models.ContentEditing;
+using static uSupport.Helpers.uSupportPageHelper;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Services
@@ -69,6 +70,45 @@ namespace uSupport.Services
 				}
 
 				return commentDtos;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+		}
+
+		public uSupportPage<uSupportTicketComment> GetPagedCommentsForTicket(Guid ticketId, long page)
+		{
+			var context = GetScope();
+			try
+			{
+				var sql = new Sql()
+					.Select("*")
+					.From(TicketCommentTableAlias)
+					.Where($"{TicketCommentTableAlias}.TicketId = UPPER('{ticketId}')")
+					.OrderBy($"{TicketCommentTableAlias}.Date DESC");
+
+				var sqlCount = new Sql()
+					.Select($"COUNT({TicketCommentTableAlias}.Id)")
+					.From(TicketCommentTableAlias)
+					.Where($"{TicketCommentTableAlias}.TicketId = UPPER('{ticketId}')");
+
+				var commentCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
+				var comments = context.Scope.Database.SkipTake<uSupportTicketComment>((page - 1) * PageSize, PageSize, sql);
+
+				List<uSupportTicketComment> commentDtos = new List<uSupportTicketComment>();
+
+				foreach (var comment in comments.ToList())
+				{
+					var user = _userService.GetUserById(comment.UserId);
+
+					comment.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+
+					commentDtos.Add(comment);
+				}
+
+				return MapPageToUSupportPage(commentDtos, commentCount, page, PageSize);
 			}
 			finally
 			{

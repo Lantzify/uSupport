@@ -7,6 +7,7 @@ namespace uSupport.Services.Interfaces
 	{
 		void SendEmail(string toAddress, string subject, string templateViewPath, object model);
 		bool GetSendEmailOnTicketCreatedSetting();
+		bool GetSendEmailOnTicketCommentSetting();
         string GetTicketUpdateEmailSetting();
 		string GetEmailSubjectNewTicket(uSupportTicket? ticket = null);
 		string GetEmailSubjectUpdateTicket(uSupportTicket? ticket = null);

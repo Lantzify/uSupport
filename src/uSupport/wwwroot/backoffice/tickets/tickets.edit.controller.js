@@ -34,7 +34,7 @@
         vm.ticket = ticket;
         $q.all({
             user: userService.getCurrentUser(),
-            history: uSupportTicketResources.getPagedHistoryByTicketId(ticket.Id, 0),
+            history: uSupportTicketResources.getPagedHistoryByTicketId(ticket.Id, 1),
             statuses: uSupportTicketStatusResources.getAllTicketStatuses(),
             types: uSupportTicketTypeResources.getAllTicketTypes(),
             getChildActions: uSupportHelperServices.getChildActions("tickets", "-1", ticket.Id)

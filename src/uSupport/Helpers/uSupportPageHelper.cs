@@ -1,15 +1,12 @@
-﻿using System;
-using uSupport.Dtos;
-using uSupport.Dtos.Tables;
-using System.Collections.Generic;
+﻿using uSupport.Dtos;
 
 namespace uSupport.Helpers
 {
 	public static class uSupportPageHelper
 	{
-		public static uSupportPage<uSupportTicket> MapPageToUSupportPage(List<uSupportTicket> items, long totalItems, long currentPage, long itemsPerPage)
+		public static uSupportPage<T> MapPageToUSupportPage<T>(List<T> items, long totalItems, long currentPage, long itemsPerPage)
 		{
-			uSupportPage<uSupportTicket> page = new uSupportPage<uSupportTicket>()
+			uSupportPage<T> page = new uSupportPage<T>()
 			{
 				TotalItems = totalItems,
 				ItemsPerPage = itemsPerPage,

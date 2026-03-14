@@ -34,7 +34,7 @@
         vm.ticket = ticket;
         $q.all({
             user: userService.getCurrentUser(),
-            history: uSupportTicketResources.getTicketHistory(ticket.Id),
+            history: uSupportTicketResources.getPagedHistoryByTicketId(ticket.Id, 0),
             statuses: uSupportTicketStatusResources.getAllTicketStatuses(),
             types: uSupportTicketTypeResources.getAllTicketTypes(),
             getChildActions: uSupportHelperServices.getChildActions("tickets", "-1", ticket.Id)
@@ -61,7 +61,7 @@
 
             vm.history = promises.history;
 
-            if (vm.history.length) {
+            if (vm.history.Items.length) {
                 vm.navigation.push({
                     name: "History",
                     alias: "history",

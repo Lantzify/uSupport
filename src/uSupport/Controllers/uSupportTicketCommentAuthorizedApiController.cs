@@ -78,9 +78,9 @@ namespace uSupport.Controllers
 
 					_uSupportSettingsService.SendEmail(
 						 toAddress,
-	                    _uSupportSettingsService.GetEmailSubjectUpdateTicket(),
+	                    _uSupportSettingsService.GetEmailSubjectUpdateTicket(updatedTicket),
 	                    _uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
-	                    ticket);
+						updatedTicket);
 				}
 
                 _eventAggregator.Publish(new AddTicketCommentNotification(updatedTicket, comment));

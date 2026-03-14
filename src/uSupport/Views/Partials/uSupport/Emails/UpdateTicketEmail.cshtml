@@ -1,4 +1,4 @@
-﻿@using uSupport.Extensions
+@using uSupport.Extensions
 @inherits uSupportTemplate<uSupport.Dtos.Tables.uSupportTicket>
 @{
 	var baseUrl = GetBaseUrl(Context.Request);
@@ -45,7 +45,7 @@
 							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
 
 							<h4 style="margin-bottom: 5px;">Summary</h4>
-							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">@Model.Summary</p>
+							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">@Html.Raw(Model.Summary)</p>
 
 							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
 
@@ -55,37 +55,39 @@
 								@if (Model.Comments != null && Model.Comments.Count() > 1)
 								{
 									<div style="border-left: 2px solid #d8d7d9;height: 85%;position: absolute; left: 25px;top: 50%;transform: translateY(-50%);z-index: 0;"></div>
+
+									<table style="position: relative; width: 100%;">
+
+										@foreach (var comment in Model.Comments)
+										{
+											var isLast = comment.Id == Model.Comments.LastOrDefault()?.Id;
+											<tr>
+												<td style="min-width: 160px; @(isLast ? "padding-bottom: 25px;" : null) vertical-align: baseline; ">
+													<table>
+														<tr>
+															<td>
+																<img src="@baseUrl/media/@comment.User?.Avatars[0]" alt="profile picture" style="width:40px; height:40px; border-radius: 50%;">
+															</td>
+															<td>
+																@comment.User?.Name<br />
+																<span style="font-size: 14px; margin-top: -4px; display: block; color: #817f85;">
+																	@comment.Date.ToString("yyyy-MM-dd")
+																</span>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td style="width: 70%; @(isLast ? "padding-bottom: 25px;" : null) vertical-align: middle;">
+													<p style="font-size: 15px;">
+														@comment.Comment
+													</p>
+												</td>
+											</tr>
+										}
+
+									</table>
 								}
 
-								<table style="position: relative; width: 100%;">
-
-									@foreach (var comment in Model.Comments)
-									{
-										<tr>
-											<td style="min-width: 160px; @(comment.Id != Model.Comments.LastOrDefault().Id ? "padding-bottom: 25px;" : null) vertical-align: baseline; ">
-												<table>
-													<tr>
-														<td>
-															<img src="@baseUrl/media/@comment.User?.Avatars[0]" alt="profile picture" style="width:40px; height:40px; border-radius: 50%;">
-														</td>
-														<td>
-															@comment.User?.Name<br />
-															<span style="font-size: 14px; margin-top: -4px; display: block; color: #817f85;">
-																@comment.Date.ToString("yyyy-MM-dd")
-															</span>
-														</td>
-													</tr>
-												</table>
-											</td>
-											<td style="width: 70%; @(comment.Id != Model.Comments.LastOrDefault().Id ? "padding-bottom: 25px;" : null) vertical-align: middle;">
-												<p style="font-size: 15px;">
-													@comment.Comment
-												</p>
-											</td>
-										</tr>
-									}
-
-								</table>
 							</div>
 
 							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />

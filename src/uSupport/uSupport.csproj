@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
+	<PropertyGroup>
 			<TargetFramework>net8.0</TargetFramework>
 			<StaticWebAssetBasePath>App_Plugins/uSupport</StaticWebAssetBasePath>
+			<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 			<ImplicitUsings>enable</ImplicitUsings>
-			<Nullable>enable</Nullable> 
+			<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -62,5 +63,5 @@
 			<PackagePath></PackagePath>
 		</None>
 	</ItemGroup>
-
+		
 </Project>

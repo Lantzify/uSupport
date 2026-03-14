@@ -40,6 +40,11 @@
             return 'gray';
         } else if (type === 'comment' || type === 'resolved') {
             return 'success';
+        } else if (type === 'sentemail') {
+            return 'secondary';
         }
+
+        // Fallback for any unknown or newly added action types
+        return 'secondary';
     };
 });

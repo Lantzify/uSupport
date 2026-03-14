@@ -14,8 +14,8 @@
                     TicketUpdateEmail: "None",
                     EmailSubjectNewTicket: "A new ticket has been created",
 		            EmailSubjectUpdateTicket: "Your ticket has been updated",
-                    EmailTemplateNewTicketPath: "/Views/uSupport/Emails/NewTicketEmail.cshtml",
-                    EmailTemplateUpdateTicketPath: "/Views/uSupport/Emails/UpdateTicketEmail.cshtml",
+                    EmailTemplateNewTicketPath: "/Views/Partials/uSupport/Emails/NewTicketEmail.cshtml",
+                    EmailTemplateUpdateTicketPath: "/Views/Partials/uSupport/Emails/UpdateTicketEmail.cshtml",
 				}
 			}
         }

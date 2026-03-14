@@ -12,8 +12,8 @@
                                 <umb-avatar size="xs"
                                             name="{{item.User ? item.User.name : 'System'}}"
                                             color="secondary"
-                                            img-src="{{item.User.avatars[0]}}"
-                                            img-srcset="{{item.User.avatars[1]}} 2x, {{item.User.avatars[2]}} 3x">
+                                            img-src="{{item.User && item.User.avatars ? item.User.avatars[0] : ''}}"
+                                            img-srcset="{{item.User && item.User.avatars ? (item.User.avatars[1] + ' 2x, ' + item.User.avatars[2] + ' 3x') : ''}}">
                                 </umb-avatar>
                             </div>
                             <div>

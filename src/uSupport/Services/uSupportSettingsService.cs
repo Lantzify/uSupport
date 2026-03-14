@@ -5,11 +5,9 @@ using uSupport.Dtos.Settings;
 using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using uSupport.Services.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 using Umbraco.Cms.Core.Models.Email;
 using Microsoft.AspNetCore.Mvc.Razor;
 using uSupport.Notifications.Tickets;
@@ -35,7 +33,6 @@ namespace uSupport.Services
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IRazorViewEngine _razorViewEngine;
 		private readonly ITempDataProvider _tempDataProvider;
-		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IOptions<GlobalSettings> _globalSettings;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		
@@ -47,8 +44,6 @@ namespace uSupport.Services
 			IEventAggregator eventAggregator,
 			IRazorViewEngine razorViewEngine,
 			ITempDataProvider tempDataProvider,
-			IHostEnvironment hostingEnvironment,
-			IWebHostEnvironment webHostEnvironment,
 			IOptions<GlobalSettings> globalSettings,
 			IHttpContextAccessor httpContextAccessor,
 			IOptions<uSupportSettings> uSupportSettings)
@@ -58,7 +53,6 @@ namespace uSupport.Services
 			_eventAggregator = eventAggregator;
 			_razorViewEngine = razorViewEngine;
 			_tempDataProvider = tempDataProvider;
-			_webHostEnvironment = webHostEnvironment;
 			_globalSettings = globalSettings;
 			_httpContextAccessor = httpContextAccessor;
 			_uSupportSettings = uSupportSettings;

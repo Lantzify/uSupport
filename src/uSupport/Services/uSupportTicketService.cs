@@ -82,7 +82,7 @@ namespace uSupport.Services
 				}
 				else
 				{
-				 sql.OrderBy("LastUpdated DESC");
+					sql.OrderBy("LastUpdated DESC");
 				}
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
@@ -188,7 +188,6 @@ namespace uSupport.Services
 			var ticket = base.Create(dto);
 
 			_eventAggregator.Publish(new CreateTicketNotification(ticket));
-			_eventAggregator.Publish(new TicketHistoryNotification(dto.AuthorId, null, ticket));
 
 			return ticket;
 		}

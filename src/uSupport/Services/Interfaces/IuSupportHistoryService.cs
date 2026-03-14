@@ -7,6 +7,7 @@ namespace uSupport.Services.Interfaces
 	public interface IuSupportTicketHistoryService
 	{
 		IEnumerable<uSupportTicketHistory> GetByTicketId(Guid ticketId);
+		uSupportPage<uSupportTicketHistory> GetPagedByTicketId(Guid ticketId, long page);
 		uSupportTicketHistory Get(Guid id);
 		uSupportTicketHistory Create(uSupportTicketHistorySchema history);
 		uSupportTicketHistory Update(uSupportTicketHistorySchema history);

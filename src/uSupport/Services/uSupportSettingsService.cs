@@ -2,14 +2,15 @@
 using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Mail;
 using uSupport.Dtos.Settings;
+using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.Models.Email;
 using Microsoft.AspNetCore.Mvc.Razor;
+using uSupport.Notifications.Tickets;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -21,35 +22,46 @@ namespace uSupport.Services
 {
 	public class uSupportSettingsService : IuSupportSettingsService
 	{
+		private const string LegacyNewTicketTemplatePath = "/App_Plugins/uSupport/templates/NewTicketEmail.cshtml";
+		private const string LegacyUpdateTicketTemplatePath = "/App_Plugins/uSupport/templates/UpdateTicketEmail.cshtml";
+		private const string DefaultNewTicketTemplatePath = "/Views/uSupport/Emails/NewTicketEmail.cshtml";
+		private const string DefaultUpdateTicketTemplatePath = "/Views/uSupport/Emails/UpdateTicketEmail.cshtml";
+
 		private readonly uSupportSettingsTicket _defaultSettings;
+		private readonly ILogger<IuSupportTicketService> _logger;
 		private readonly IEmailSender _emailSender;
+		private readonly IEventAggregator _eventAggregator;
 		private readonly IRazorViewEngine _razorViewEngine;
+		private readonly ITempDataProvider _tempDataProvider;
 		private readonly IOptions<GlobalSettings> _globalSettings;
 		private readonly IHttpContextAccessor _httpContextAccessor;
+		
 		private readonly IOptions<uSupportSettings> _uSupportSettings;
-		private readonly ITempDataProvider _tempDataProvider;
-        private readonly ILogger<IuSupportTicketService> _logger;
-		public uSupportSettingsService(IEmailSender emailSender,
-			ITempDataProvider tempDataProvider,
+		
+        
+		public uSupportSettingsService(ILogger<IuSupportTicketService> logger,
+			IEmailSender emailSender,
+			IEventAggregator eventAggregator,
 			IRazorViewEngine razorViewEngine,
-			ILogger<IuSupportTicketService> logger,
-			IHostEnvironment hostingEnvironment,
-			IHttpContextAccessor httpContextAccessor,
+			ITempDataProvider tempDataProvider,
 			IOptions<GlobalSettings> globalSettings,
+			IHttpContextAccessor httpContextAccessor,
 			IOptions<uSupportSettings> uSupportSettings)
         {
+			_logger = logger;
+			_emailSender = emailSender;
+			_eventAggregator = eventAggregator;
+			_razorViewEngine = razorViewEngine;
 			_tempDataProvider = tempDataProvider;
 			_globalSettings = globalSettings;
-			_uSupportSettings = uSupportSettings;
 			_httpContextAccessor = httpContextAccessor;
-			_razorViewEngine = razorViewEngine;
-			_emailSender = emailSender;
-			_logger = logger;
+			_uSupportSettings = uSupportSettings;
 			
             _defaultSettings = new uSupportSettingsTicket();
 		}
 
 		public bool GetSendEmailOnTicketCreatedSetting() => _uSupportSettings.Value.Tickets.SendEmailOnTicketCreated;
+		public bool GetSendEmailOnTicketCommentSetting() => _uSupportSettings.Value.Tickets.SendEmailOnTicketComment;
         public string GetTicketUpdateEmailSetting() => _uSupportSettings.Value.Tickets.TicketUpdateEmail;
 
 		public string GetEmailSubjectNewTicket(uSupportTicket? ticket = null)
@@ -128,8 +140,11 @@ namespace uSupport.Services
 												true);
 				}
 
+				if (model is uSupportTicket ticket)
+					_eventAggregator.Publish(new EmailSendingNotification(ticket.Id, toAddress, subject, templateViewPath));
 
-                await _emailSender.SendAsync(message, emailType: "Contact");
+
+				await _emailSender.SendAsync(message, emailType: "Contact");
             }
 			catch (Exception ex)
 			{
@@ -142,15 +157,24 @@ namespace uSupport.Services
             if (string.IsNullOrEmpty(templateViewPath))
                 throw new Exception("Failed to find email template.");
 
-            if (!templateViewPath.EndsWith(".cshtml"))
+            if (!templateViewPath.EndsWith(".cshtml", StringComparison.OrdinalIgnoreCase))
                 throw new Exception("Template file must end with '.cshtml'");
 
-            ActionContext actionContext = new(_httpContextAccessor.HttpContext, new Microsoft.AspNetCore.Routing.RouteData(), new ActionDescriptor());
+			if(_httpContextAccessor.HttpContext == null)
+				throw new Exception("HttpContext is null");
+
+			ActionContext actionContext = new(_httpContextAccessor.HttpContext, new Microsoft.AspNetCore.Routing.RouteData(), new ActionDescriptor());
             using (StringWriter stringWriter = new())
             {
-                ViewEngineResult viewResult = _razorViewEngine.GetView(templateViewPath, templateViewPath, false);
+                ViewEngineResult viewResult = _razorViewEngine.GetView(null, templateViewPath, false);
 
-                ViewDataDictionary viewData = new(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+				if (!viewResult.Success)
+				{
+					var searchedLocations = string.Join(", ", viewResult.SearchedLocations ?? []);
+					throw new Exception($"Failed to find template at '{templateViewPath}'. Searched locations: {searchedLocations}");
+				}
+
+				ViewDataDictionary viewData = new(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
                     Model = model
                 };
@@ -166,5 +190,5 @@ namespace uSupport.Services
                 return stringWriter.ToString();
             }
         }
-    }
+	}
 }

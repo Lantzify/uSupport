@@ -1,4 +1,4 @@
-﻿@using uSupport.Extensions
+@using uSupport.Extensions
 @inherits uSupportTemplate<uSupport.Dtos.Tables.uSupportTicket>
 @{
 	var baseUrl = GetBaseUrl(Context.Request);
@@ -45,7 +45,7 @@
 							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
 
 							<h4 style="margin-bottom: 5px;">Summary</h4>
-							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">@Model.Summary</p>
+							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">@Html.Raw(Model.Summary)</p>
 
 							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
 

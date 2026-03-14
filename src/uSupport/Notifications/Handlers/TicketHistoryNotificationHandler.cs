@@ -3,10 +3,14 @@ using System.Text.Json;
 using Umbraco.Cms.Core.Events;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
+using uSupport.Notifications.Tickets;
 
 namespace uSupport.Notifications.Handlers
 {
-	public class TicketHistoryNotificationHandler : INotificationHandler<TicketHistoryNotification>
+	public class TicketHistoryNotificationHandler : INotificationHandler<TicketHistoryNotification>, 
+		INotificationHandler<CreateTicketNotification>,
+		INotificationHandler<EmailSendingNotification>,
+		INotificationHandler<AddTicketCommentNotification>
 	{
 		private readonly IuSupportTicketHistoryService _uSupportTicketHistoryService;
 		public TicketHistoryNotificationHandler(IuSupportTicketHistoryService uSupportTicketHistoryService)
@@ -20,14 +24,9 @@ namespace uSupport.Notifications.Handlers
 			{
 				TicketId = notification.NewTicket.Id,
 				UserId = notification.UserId,
-				ActionType = notification.OldTicket == null ? "Created" : "Updated",
+				ActionType = "Updated",
 			};
 
-			if (notification.OldTicket == null)
-			{
-				_uSupportTicketHistoryService.Create(history);
-				return;
-			}
 
 			var changes = new List<uSupportChange>();
 
@@ -70,6 +69,51 @@ namespace uSupport.Notifications.Handlers
 				history.ActionType = "Resolved";
 
 			_uSupportTicketHistoryService.Create(history);
+		}
+
+		public void Handle(CreateTicketNotification notification)
+		{
+			_uSupportTicketHistoryService.Create(new uSupportTicketHistorySchema()
+			{
+				TicketId = notification.Ticket.Id,
+				UserId = notification.Ticket.AuthorId,
+				ActionType = "Created",
+			});
+		}
+
+		public void Handle(EmailSendingNotification notification)
+		{
+			_uSupportTicketHistoryService.Create(new uSupportTicketHistorySchema()
+			{
+				TicketId = notification.TicketId,
+				UserId = 0,
+				ActionType = "SentEmail",
+				ChangesJson = JsonSerializer.Serialize(new List<uSupportChange>()
+				{
+					new uSupportChange()
+					{
+						Field = "Email",
+						New = notification.ToAddress
+					}
+				})
+			});
+		}
+
+		public void Handle(AddTicketCommentNotification notification)
+		{
+			_uSupportTicketHistoryService.Create(new uSupportTicketHistorySchema()
+			{
+				TicketId = notification.Ticket.Id,
+				UserId = notification.Comment.UserId,
+				ActionType = "Comment",
+				ChangesJson = JsonSerializer.Serialize(new List<uSupportChange>()
+				{
+					new uSupportChange()
+					{
+						Field = "Comment"
+					}
+				})
+			});
 		}
 	}
 }

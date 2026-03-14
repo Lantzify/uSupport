@@ -13,7 +13,7 @@
             </div>
             <div>
                 <div>{{comment.User.name}}</div>
-                <div class="history-item__date">{{comment.Date | date:'yyyy-MM-dd'}}</div>
+                <div class="history-item__date">{{comment.Date | date:'yyyy-MM-dd HH:mm'}}</div>
             </div>
         </div>
         <div>
@@ -23,16 +23,27 @@
 
 </div>
 
-<div>
-    <textarea class="umb-property-editor umb-textarea textstring" placeholder="Enter comment here" rows="5" ng-model="vm.comment"></textarea>
-</div>
+<umb-pagination page-number="vm.pagination.pageNumber"
+                total-pages="vm.pagination.totalPages"
+                on-next="vm.loadComments"
+                on-prev="vm.loadComments"
+                on-change="vm.loadComments"
+                on-go-to-page="vm.loadComments"
+                ng-if="vm.pagination.totalPages >= 1">
+</umb-pagination>
 
-<div class="flex justify-end mt3" style="max-width:800px;">
-    <umb-button type="button"
-                button-style="success"
-                disabled="!vm.comment.length"
-                label="Comment"
-                state="vm.commentbuttonState"
-                action="vm.addComment()">
-    </umb-button>
-</div>
+<form name="formName" novalidate>
+    <div>
+        <textarea no-dirty-check class="umb-property-editor umb-textarea textstring" placeholder="Enter comment here" rows="5" ng-model="vm.comment"></textarea>
+    </div>
+
+    <div class="flex justify-end mt3" style="max-width:800px;">
+        <umb-button type="button"
+                    button-style="success"
+                    disabled="!vm.comment.length"
+                    label="Comment"
+                    state="vm.commentbuttonState"
+                    action="vm.addComment()">
+        </umb-button>
+    </div>
+</form>

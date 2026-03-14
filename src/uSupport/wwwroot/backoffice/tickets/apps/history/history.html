@@ -6,18 +6,18 @@
                 <div class="history">
                     <div class="history-line"></div>
 
-                    <div class="history-item" ng-repeat="item in model.history">
+                    <div class="history-item" ng-repeat="item in vm.history">
                         <div class="history-item__break">
                             <div class="history-item__avatar">
                                 <umb-avatar size="xs"
-                                            name="{{item.User.name}}"
+                                            name="{{item.User ? item.User.name : 'System'}}"
                                             color="secondary"
-                                            img-src="{{item.User.avatars[0]}}"
-                                            img-srcset="{{item.User.avatars[1]}} 2x, {{item.User.avatars[2]}} 3x">
+                                            img-src="{{item.User && item.User.avatars ? item.User.avatars[0] : ''}}"
+                                            img-srcset="{{item.User && item.User.avatars ? (item.User.avatars[1] + ' 2x, ' + item.User.avatars[2] + ' 3x') : ''}}">
                                 </umb-avatar>
                             </div>
                             <div>
-                                <div class="ng-binding">Admin</div>
+                                <div class="ng-binding">{{item.User ? item.User.name : 'System'}}</div>
                                 <div class="history-item__date">{{item.Date | date:'yyyy-MM-dd HH:mm'}}</div>
                             </div>
                         </div>
@@ -27,9 +27,12 @@
                                        class="history-item__badge">
                                 {{item.ActionType}}
                             </umb-badge>
-                  
+
                             <span class="history-item__description">
                                 <div ng-repeat="change in item.Changes">
+                                    <div ng-if="change.Field == 'Email'">
+                                       to: {{change.New}}
+                                    </div>
 
                                     <div ng-if="change.Field == 'Status'">
                                         Status: <s class="mr1" style="color: #d42054;">{{vm.getStatusName(change.Old)}}</s><span style="color: #2bc37c;">{{vm.getStatusName(change.New)}}</span>
@@ -47,6 +50,15 @@
                         </div>
                     </div>
                 </div>
+
+                <umb-pagination page-number="vm.pagination.pageNumber"
+                                total-pages="vm.pagination.totalPages"
+                                on-next="vm.loadHistory"
+                                on-prev="vm.loadHistory"
+                                on-change="vm.loadHistory"
+                                on-go-to-page="vm.loadHistory"
+                                ng-if="vm.pagination.totalPages >= 1">
+                </umb-pagination>
             </umb-box-content>
         </umb-box>
     </div>

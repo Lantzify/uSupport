@@ -9,6 +9,7 @@ using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Core.Models.ContentEditing;
+using static uSupport.Helpers.uSupportPageHelper;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Services
@@ -51,6 +52,45 @@ namespace uSupport.Services
 				}
 
 				return history;
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
+		}
+
+
+		public uSupportPage<uSupportTicketHistory> GetPagedByTicketId(Guid ticketId, long page)
+		{
+			var context = GetScope();
+			try
+			{
+				var sql = new Sql()
+					.Select("*")
+					.From(TicketHistoryTableAlias)
+					.Where($"{TicketHistoryTableAlias}.TicketId = UPPER('{ticketId}')")
+					.OrderBy($"{TicketHistoryTableAlias}.Date DESC");
+
+				var sqlCount = new Sql()
+					.Select($"COUNT({TicketHistoryTableAlias}.Id)")
+					.From(TicketHistoryTableAlias)
+					.Where($"{TicketHistoryTableAlias}.TicketId = UPPER('{ticketId}')");
+
+				var historyCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
+				var history = context.Scope.Database.SkipTake<uSupportTicketHistory>((page - 1) * PageSize, PageSize, sql);
+
+				foreach (var item in history)
+				{
+					var user = _userService.GetUserById(item.UserId);
+					if (user != null)
+						item.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+
+					if (!string.IsNullOrWhiteSpace(item.ChangesJson))
+						item.Changes = JsonSerializer.Deserialize<IEnumerable<uSupportChange>>(item.ChangesJson);
+				}
+
+				return MapPageToUSupportPage(history, historyCount, page, PageSize);
 			}
 			finally
 			{

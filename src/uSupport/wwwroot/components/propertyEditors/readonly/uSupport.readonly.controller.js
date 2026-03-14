@@ -7,8 +7,6 @@
         }
     });
 
-    console.log($scope.model)
-
     $scope.openEditor = function (node) {
         if ($scope.model.admin) {
             var overlay = {

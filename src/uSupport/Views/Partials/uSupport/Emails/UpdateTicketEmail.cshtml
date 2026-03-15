@@ -1,107 +1,183 @@
-@using uSupport.Extensions
+﻿@using uSupport.Extensions
 @inherits uSupportTemplate<uSupport.Dtos.Tables.uSupportTicket>
 @{
 	var baseUrl = GetBaseUrl(Context.Request);
 }
 
-<div style="font-family: sans-serif;">
-	<table style="background-color: #f2f3f4; width: 100%;">
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #f5f7fa;">
+	<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; background-color: #f5f7fa; padding: 40px 20px;">
 		<tr>
-			<td style="padding: 40px;">
-				<table style="background-color: #fff; width: 100%; max-width: 700px; margin: 0 auto;">
+			<td align="center">
+				<!-- Main Container -->
+				<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: visible; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+					
+					<!-- Header with brand color -->
 					<tr>
-						<td style="padding: 40px;">
-							<h1 style="margin: 0 0 20px; font-size: 30px; line-height: 38px; text-align:center; color: #000;">
-								Your ticket "@Model.ExternalTicketId" has been updated
+						<td style="background: linear-gradient(135deg, #1ba098 0%, #16c9b8 100%); padding: 32px 40px 60px; border-radius: 12px 12px 0 0;">
+							<div style="text-align: right; margin-bottom: 20px;">
+								<span style="display: inline-block; padding: 6px 14px; background-color: rgba(255, 255, 255, 0.2); border-radius: 20px; font-size: 12px; font-weight: 600; color: #ffffff; letter-spacing: 0.5px;">
+									#@Model.ExternalTicketId
+								</span>
+							</div>
+							<p style="margin: 0 0 8px; font-size: 13px; font-weight: 500; color: rgba(255, 255, 255, 0.8); text-align: center; text-transform: uppercase; letter-spacing: 1px;">
+								Ticket Updated
+							</p>
+							<h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #ffffff; line-height: 1.4; text-align: center;">
+								@Model.Title
 							</h1>
+						</td>
+					</tr>
 
-							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
+					<!-- Ticket Info Card - Overlapping -->
+					<tr>
+						<td style="padding: 0 40px;">
+							<div style="background: #f8fafb; border-radius: 10px; padding: 24px; margin-top: -35px; position: relative; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); border: 1px solid #e8eef3;">
+								<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+									<tr>
+										<td style="padding-bottom: 16px;">
+											<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+												<tr>
+													<td style="width: 50%; padding-right: 8px; vertical-align: top; text-align: center;">
+														<div>
+															<p style="margin: 0 0 6px; font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Type</p>
+															<p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a;">@Model.Type.Name</p>
+														</div>
+													</td>
+													<td style="width: 50%; padding-left: 8px; vertical-align: top; text-align: center;">
+														<div>
+															<p style="margin: 0 0 6px; font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Status</p>
+															<p style="margin: 0;">
+																<span style="display: inline-block; padding: 5px 14px; background-color: #d1fae5; color: #065f46; font-size: 12px; font-weight: 600; border-radius: 16px;">@Model.Status.Name</span>
+															</p>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+												<tr>
+													<td style="width: 50%; padding-right: 8px; vertical-align: top; text-align: center;">
+														<div>
+															<p style="margin: 0 0 6px; font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Created</p>
+															<p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a;">@Model.Submitted.ToString("MMM dd, yyyy 'at' h:mm tt")</p>
+														</div>
+													</td>
+													<td style="width: 50%; padding-left: 8px; vertical-align: top; text-align: center;">
+														<div>
+															<p style="margin: 0 0 6px; font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Author</p>
+															<p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a;">@(Model.Author?.Name)</p>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
 
-							<table style="width: 100%;">
-								<tr style="text-align: center;">
-									<td style="width: 25%;">
-										<p style="font-weight: 600;">Id</p>
-										<p style="font-size: 15px;">@Model.ExternalTicketId</p>
-									</td>
-									<td style="width: 25%;">
-										<p style="font-weight: 600;">Type</p>
-										<p style="font-size: 15px;">@Model.Type.Name</p>
-									</td>
-									<td style="width: 25%;">
-										<p style="font-weight: 600;">Status</p>
-										<p style="font-size: 15px;">@Model.Status.Name</p>
-									</td>
-									<td style="width: 25%;">
-										<p style="font-weight: 600;">Date created</p>
-										<p style="font-size: 15px;">@Model.Submitted.ToString("yyyy-MM-dd")</p>
-									</td>
-									<td style="width: 25%;">
-										<p style="font-weight: 600;">Author</p>
-										<p style="font-size: 15px;">@(Model.Author?.Name)</p>
-									</td>
-								</tr>
-							</table>
+					<!-- Summary Section -->
+					<tr>
+						<td style="padding: 36px 40px 28px;">
+							<h2 style="margin: 0 0 14px; font-size: 13px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.8px;">
+								Summary
+							</h2>
+							<div style="font-size: 15px; line-height: 1.7; color: #475569;">
+								@Html.Raw(Model.Summary)
+							</div>
+						</td>
+					</tr>
 
-							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
-
-							<h4 style="margin-bottom: 5px;">Summary</h4>
-							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">@Html.Raw(Model.Summary)</p>
-
-							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
-
-							<h4 style="margin-bottom: 5px;">Comment</h4>
-							<div style="position: relative;">
-
-								@if (Model.Comments != null && Model.Comments.Count() > 1)
-								{
-									<div style="border-left: 2px solid #d8d7d9;height: 85%;position: absolute; left: 25px;top: 50%;transform: translateY(-50%);z-index: 0;"></div>
-
-									<table style="position: relative; width: 100%;">
-
-										@foreach (var comment in Model.Comments)
-										{
-											var isLast = comment.Id == Model.Comments.LastOrDefault()?.Id;
-											<tr>
-												<td style="min-width: 160px; @(isLast ? "padding-bottom: 25px;" : null) vertical-align: baseline; ">
-													<table>
+					<!-- Comments Section -->
+					@if (Model.Comments != null && Model.Comments.Any())
+					{
+						<tr>
+							<td style="padding: 0 40px 28px;">
+								<h2 style="margin: 0 0 16px; font-size: 13px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: 0.8px;">
+									@(Model.Comments.Count() > 1 ? "Recent Comments" : "Comment")
+								</h2>
+								
+								<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+									@foreach (var comment in Model.Comments)
+									{
+										var isLast = comment.Id == Model.Comments.LastOrDefault()?.Id;
+										<tr>
+											<td style="padding-bottom: @(isLast ? "0" : "14px");">
+												<div style="background: #f8fafb; border-left: 3px solid #1ba098; border-radius: 6px; padding: 16px;">
+													<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
 														<tr>
-															<td>
-																<img src="@baseUrl/media/@comment.User?.Avatars[0]" alt="profile picture" style="width:40px; height:40px; border-radius: 50%;">
+															<td style="width: 48px; vertical-align: top; padding-right: 14px;">
+																@if (!string.IsNullOrEmpty(comment.User?.Avatars?.FirstOrDefault()))
+																{
+																	<img src="@baseUrl/media/@comment.User?.Avatars[0]" alt="@comment.User?.Name" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+																}
+																else
+																{
+																	<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1ba098 0%, #16c9b8 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 16px;">
+																		@(comment.User?.Name?.Substring(0, 1).ToUpper() ?? "?")
+																	</div>
+																}
 															</td>
-															<td>
-																@comment.User?.Name<br />
-																<span style="font-size: 14px; margin-top: -4px; display: block; color: #817f85;">
-																	@comment.Date.ToString("yyyy-MM-dd")
-																</span>
+															<td style="vertical-align: top;">
+																<p style="margin: 0 0 4px; font-weight: 600; font-size: 14px; color: #0f172a;">@comment.User?.Name</p>
+																<p style="margin: 0 0 10px; font-size: 12px; color: #94a3b8;">@comment.Date.ToString("yyyy-MM-dd hh:mm")</p>
+																<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #475569;">@comment.Comment</p>
 															</td>
 														</tr>
 													</table>
-												</td>
-												<td style="width: 70%; @(isLast ? "padding-bottom: 25px;" : null) vertical-align: middle;">
-													<p style="font-size: 15px;">
-														@comment.Comment
-													</p>
-												</td>
-											</tr>
-										}
+												</div>
+											</td>
+										</tr>
+									}
+								</table>
+							</td>
+						</tr>
+					}
 
-									</table>
-								}
-
+					<!-- Updated By Section -->
+					<tr>
+						<td style="padding: 0 40px 28px;">
+							<div style="background: #fef3c7; border-left: 3px solid #f59e0b; border-radius: 6px; padding: 14px 16px;">
+								<p style="margin: 0; font-size: 13px; color: #92400e;">
+									<strong>Updated by:</strong> @Model.LastUpdatedBy
+								</p>
 							</div>
+						</td>
+					</tr>
 
-							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
+					<!-- Divider -->
+					<tr>
+						<td style="padding: 0 40px;">
+							<div style="height: 1px; background: #e2e8f0;"></div>
+						</td>
+					</tr>
 
-							<p style="margin-top: 0; font-size: 15px; line-height: 28px;">
-								Updated by: @Model.LastUpdatedBy
+					<!-- CTA Button -->
+					<tr>
+						<td style="padding: 32px 40px 40px; text-align: center;">
+							<a href="@baseUrl/umbraco" target="_blank" style="display: inline-block; text-decoration: none; color: #ffffff; font-size: 15px; font-weight: 600; padding: 14px 36px; background: linear-gradient(135deg, #1ba098 0%, #16c9b8 100%); border-radius: 8px; box-shadow: 0 2px 8px rgba(27, 160, 152, 0.25);">
+								View Ticket →
+							</a>
+						</td>
+					</tr>
+
+				</table>
+
+				<!-- Footer -->
+				<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; margin-top: 24px;">
+					<tr>
+						<td style="padding: 0 20px; text-align: center;">
+							<p style="margin: 0; font-size: 13px; color: #94a3b8; line-height: 1.6;">
+								This is an automated notification from uSupport
 							</p>
-
-							<hr style="border: 0; height: 1px; background: #ebebe9; margin: 20px 0;" />
-
-							<a href="@baseUrl/umbraco" target="_blank" style="display: inline-block; text-decoration: none; color: #fff; margin-top: 20px; border-radius: 32px; padding: 14px 44px; background-color: #016fd2;">Go to ticket</a>
 						</td>
 					</tr>
 				</table>
+
 			</td>
 		</tr>
 	</table>

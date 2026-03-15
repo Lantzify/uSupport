@@ -178,7 +178,7 @@ namespace uSupport.Controllers
 					}
 					else
 					{
- 						_logger.LogWarning("Email was not sent for ticket '{TicketId}' because uSupport settings are missing.", updatedTicket.ExternalTicketId);
+ 						_logger.LogWarning("Email was not sent for ticket '{TicketId}' on update because uSupport settings are missing.", updatedTicket.ExternalTicketId);
 					}
 				}
 

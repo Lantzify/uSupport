@@ -39,7 +39,7 @@ namespace uSupport.Services
 			try
 			{
 				var ticketStatus = context.Scope.Database.Query<uSupportTicketType>($"SELECT Id FROM {TicketTypeTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
-				return ticketStatus.Id;
+				return ticketStatus?.Id ?? Guid.Empty;
 			}
 			finally
 			{

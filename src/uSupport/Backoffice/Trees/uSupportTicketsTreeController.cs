@@ -37,13 +37,11 @@ namespace uSupport.Backoffice.Trees
             _menuItemCollectionFactory = menuItemCollectionFactory ?? throw new ArgumentNullException(nameof(menuItemCollectionFactory));
         }
 
-        protected override ActionResult<TreeNode> CreateRootNode(FormCollection queryStrings)
+        protected override ActionResult<TreeNode?> CreateRootNode(FormCollection queryStrings)
         {
             var rootResult = base.CreateRootNode(queryStrings);
-            if (!(rootResult.Result is null))
-            {
+            if (rootResult.Result is not null || rootResult.Value is null)
                 return rootResult;
-            }
 
             var root = rootResult.Value;
             root.RoutePath = string.Format("/{0}/{1}/{2}", uSupportConstants.SectionAlias, "tickets", "overview");
@@ -77,7 +75,7 @@ namespace uSupport.Backoffice.Trees
             var menu = _menuItemCollectionFactory.Create();
             if (id != Umbraco.Cms.Core.Constants.System.Root.ToInvariantString())
             {
-                menu.Items.Add<ActionDelete>(LocalizedTextService, true, true).LaunchDialogView("/App_Plugins/uSupport/components/actions/delete.html", "Delete");
+                menu.Items.Add<ActionDelete>(LocalizedTextService, true, true)?.LaunchDialogView("/App_Plugins/uSupport/components/actions/delete.html", "Delete");
             }
 
             return menu;

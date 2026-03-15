@@ -10,7 +10,7 @@ namespace uSupport.Dtos.Tables
 		public int UserId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay User { get; set; }
+		public UserDisplay? User { get; set; }
 		public DateTime Date { get; set; }
 		public string Comment { get; set; }
 	}

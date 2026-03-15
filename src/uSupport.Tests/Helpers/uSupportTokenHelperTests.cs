@@ -96,9 +96,11 @@ namespace uSupport.Tests.Helpers
 		public void ReplaceTokens_WithNullTicket_ReturnsOriginalTemplate()
 		{
 			string template = "Ticket: {ExternalTicketId}";
-			
+
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			var result = uSupportTokenHelper.ReplaceTokens(template, null);
-			
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+
 			Assert.That(result, Is.EqualTo(template));
 		}
 

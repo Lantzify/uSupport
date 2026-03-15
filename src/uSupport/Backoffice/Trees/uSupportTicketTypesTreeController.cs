@@ -37,14 +37,12 @@ namespace uSupport.Backoffice.Trees
 			_menuItemCollectionFactory = menuItemCollectionFactory ?? throw new ArgumentNullException(nameof(menuItemCollectionFactory));
 		}
 
-		protected override ActionResult<TreeNode> CreateRootNode(FormCollection queryStrings)
+		protected override ActionResult<TreeNode?> CreateRootNode(FormCollection queryStrings)
 		{
 			var rootResult = base.CreateRootNode(queryStrings);
-			if (!(rootResult.Result is null))
-			{
+			if (rootResult.Result is not null || rootResult.Value is null)
 				return rootResult;
-			}
-
+			
 			var root = rootResult.Value;
 			root.RoutePath = string.Format("/{0}/{1}/{2}", uSupportConstants.SectionAlias, TicketTypesTreeAlias, "overview");
 			root.Icon = "icon-ticket";
@@ -77,12 +75,12 @@ namespace uSupport.Backoffice.Trees
 
 			if (id == Umbraco.Cms.Core.Constants.System.Root.ToInvariantString())
 			{
-				menu.Items.Add<ActionNew>(LocalizedTextService, true, false).NavigateToRoute($"/uSupport/ticketTypes/edit/-1?create");
-				menu.Items.Add<ActionSort>(LocalizedTextService, true, true).LaunchDialogView("/App_Plugins/uSupport/components/actions/sort.html", "Sort");
+				menu.Items.Add<ActionNew>(LocalizedTextService, true, false)?.NavigateToRoute($"/uSupport/ticketTypes/edit/-1?create");
+				menu.Items.Add<ActionSort>(LocalizedTextService, true, true)?.LaunchDialogView("/App_Plugins/uSupport/components/actions/sort.html", "Sort");
             }
             else
             {
-				menu.Items.Add<ActionDelete>(LocalizedTextService, true, true).LaunchDialogView("/App_Plugins/uSupport/components/actions/delete.html", "Delete");
+				menu.Items.Add<ActionDelete>(LocalizedTextService, true, true)?.LaunchDialogView("/App_Plugins/uSupport/components/actions/delete.html", "Delete");
 			}
 			
 			return menu;

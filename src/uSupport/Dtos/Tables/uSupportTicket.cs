@@ -9,20 +9,20 @@ namespace uSupport.Dtos.Tables
 		public string Title { get; set; }
 		public string Summary { get; set; }
 		public Guid TypeId { get; set; }
-		public uSupportTicketType Type { get; set; }
+		public uSupportTicketType? Type { get; set; }
 		public Guid StatusId { get; set; }
-		public uSupportTicketStatus Status{ get; set; }
+		public uSupportTicketStatus? Status{ get; set; }
 		public int AuthorId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay Author { get; set; }
+		public UserDisplay? Author { get; set; }
         public DateTime Submitted { get; set; }
 		public DateTime? Resolved { get; set; }
 		public string? LastUpdatedBy { get; set; }
 		public DateTime? LastUpdated { get; set; }
 		public string ExternalTicketId { get; set; }
-		public string PropertyValue { get; set; }
+		public string? PropertyValue { get; set; }
 		public string? InternalComment { get; set; }
-		public IEnumerable<uSupportTicketComment> Comments { get; set; }
+		public IEnumerable<uSupportTicketComment>? Comments { get; set; }
 	}
 }

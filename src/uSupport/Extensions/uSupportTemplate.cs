@@ -10,7 +10,7 @@ namespace uSupport.Extensions
         {
             var uriString = request?.GetEncodedUrl() ?? null;
 
-            return !string.IsNullOrWhiteSpace(uriString) ? new Uri(uriString).GetLeftPart(UriPartial.Authority) : null;
+            return !string.IsNullOrWhiteSpace(uriString) ? new Uri(uriString).GetLeftPart(UriPartial.Authority) : string.Empty;
         }
     }
 }

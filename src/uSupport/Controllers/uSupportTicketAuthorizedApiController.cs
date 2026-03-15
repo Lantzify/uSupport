@@ -115,13 +115,21 @@ namespace uSupport.Controllers
 					createdTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
 
 				var settings = _uSupportSettingsService.GetSettings();
-				if (settings != null && settings.SendEmailOnTicketCreated && !string.IsNullOrWhiteSpace(settings.TicketUpdateEmail))
+				if (settings != null && settings.SendEmailOnTicketCreated)
 				{
-					_uSupportSettingsService.SendEmail(
-						settings.TicketUpdateEmail,
-						uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectNewTicket, createdTicket),
-						settings.EmailTemplateNewTicketPath,
-						createdTicket);
+					if (!string.IsNullOrWhiteSpace(settings.TicketUpdateEmail))
+					{
+						_uSupportSettingsService.SendEmail(
+							settings.TicketUpdateEmail,
+							uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectNewTicket, createdTicket),
+							settings.EmailTemplateNewTicketPath,
+							createdTicket);
+					}
+					else
+					{
+						_logger.LogWarning("Email for ticket {ExternalTicketId} was not sent due to 'TicketUpdateEmail' not beeing set", createdTicket.ExternalTicketId);
+					}
+
 				}			
 
 				return createdTicket;
@@ -166,7 +174,7 @@ namespace uSupport.Controllers
 				if (dto.SendEmail)
 				{
 					var settings = _uSupportSettingsService.GetSettings();
-					if (settings != null)
+					if (settings != null && updatedTicket.Author != null && !string.IsNullOrWhiteSpace(updatedTicket.Author.Email))
 					{
 						_uSupportSettingsService.SendEmail(
 							updatedTicket.Author.Email,
@@ -183,7 +191,7 @@ namespace uSupport.Controllers
 				}
 
 
-				if (!updatedTicket.Status.Active)			
+				if (!updatedTicket.Status?.Active ?? false)			
                     _eventAggregator.Publish(new UpdateTicketResolvedNotification(updatedTicket));
 
 				_eventAggregator.Publish(new TicketHistoryNotification(dto.UserId, oldTicket, updatedTicket));

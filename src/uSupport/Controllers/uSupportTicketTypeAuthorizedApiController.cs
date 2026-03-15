@@ -33,7 +33,7 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<string> GetAllDataTypes()
+		public IEnumerable<string?> GetAllDataTypes()
 		{
 			string[] excludedDataTypes = new string[]
 			{
@@ -67,7 +67,7 @@ namespace uSupport.Controllers
 		public string GetDataTypeViewFromEditorAlias(string editorAlias) {
 			var arr = editorAlias.Split('.').Skip(1);
 
-			return arr.FirstOrDefault().ToLower() + string.Join("", arr.Skip(1));
+			return arr.FirstOrDefault()?.ToLower() + string.Join("", arr.Skip(1));
 		}
 
 		[HttpGet]
@@ -79,7 +79,7 @@ namespace uSupport.Controllers
 		[HttpPost]
 		public IEnumerable<uSupportTicketType> GetTicketTypes(List<Guid> ids)
         {
-			if (ids == null) return null;
+			if (ids == null || !ids.Any()) return null;
 
 			return _uSupportTicketTypeService.GetByIds(ids);
 		} 

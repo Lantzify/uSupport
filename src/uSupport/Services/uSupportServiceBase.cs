@@ -37,10 +37,10 @@ namespace uSupport.Services.Interfaces
 					context.Scope.Dispose();
 			}
 
-			var dtoType = dto.GetType();
-			var dtoIdProperty = dtoType.GetProperty("Id");
+			var dtoType = dto?.GetType();
+			var dtoIdProperty = dtoType?.GetProperty("Id");
 
-			return Get(Guid.Parse(dtoIdProperty.GetValue(dto).ToString()));
+			return Get(Guid.Parse(dtoIdProperty?.GetValue(dto)?.ToString() ?? Guid.Empty.ToString()));
 		}
 
 		public virtual T Get(Guid id)
@@ -85,9 +85,9 @@ namespace uSupport.Services.Interfaces
 		{
 			var context = GetScope();
 
-			var dtoType = dto.GetType();
-			var dtoIdProperty = dtoType.GetProperty("Id");
-			var id = Guid.Parse(dtoIdProperty.GetValue(dto).ToString());
+			var dtoType = dto?.GetType();
+			var dtoIdProperty = dtoType?.GetProperty("Id");
+			var id = Guid.Parse(dtoIdProperty?.GetValue(dto)?.ToString() ?? Guid.Empty.ToString());
 
 			try
 			{

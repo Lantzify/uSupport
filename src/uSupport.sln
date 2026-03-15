@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uSupport", "uSupport\uSuppo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uSupport.v13.Web", "uSupport.v13.Web\uSupport.v13.Web.csproj", "{32122ABE-0A96-4AE9-8D82-4F4E3E0C5965}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uSupport.SchemaGenerator", "uSupport.SchemaGenerator\uSupport.SchemaGenerator.csproj", "{CD0CF3CA-3632-4AEF-90AA-D999048886C1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uSupport.Tests", "uSupport.Tests\uSupport.Tests.csproj", "{D7EC31C3-C289-4083-8CD9-A1417A1E108C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
@@ -27,10 +25,6 @@ Global
 		{32122ABE-0A96-4AE9-8D82-4F4E3E0C5965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32122ABE-0A96-4AE9-8D82-4F4E3E0C5965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32122ABE-0A96-4AE9-8D82-4F4E3E0C5965}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD0CF3CA-3632-4AEF-90AA-D999048886C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD0CF3CA-3632-4AEF-90AA-D999048886C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD0CF3CA-3632-4AEF-90AA-D999048886C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD0CF3CA-3632-4AEF-90AA-D999048886C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D7EC31C3-C289-4083-8CD9-A1417A1E108C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D7EC31C3-C289-4083-8CD9-A1417A1E108C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7EC31C3-C289-4083-8CD9-A1417A1E108C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,7 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CD0CF3CA-3632-4AEF-90AA-D999048886C1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D7EC31C3-C289-4083-8CD9-A1417A1E108C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

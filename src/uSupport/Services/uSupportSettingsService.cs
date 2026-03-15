@@ -1,10 +1,10 @@
-﻿using uSupport.Helpers;
+﻿using NPoco;
 using uSupport.Dtos.Tables;
 using Umbraco.Cms.Core.Mail;
-using uSupport.Dtos.Settings;
 using Umbraco.Cms.Core.Events;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using uSupport.Migrations.Schemas;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using uSupport.Services.Interfaces;
@@ -12,22 +12,18 @@ using Umbraco.Cms.Core.Models.Email;
 using Microsoft.AspNetCore.Mvc.Razor;
 using uSupport.Notifications.Tickets;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Umbraco.Cms.Core.Configuration.Models;
+using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Services
 {
-	public class uSupportSettingsService : IuSupportSettingsService
+	public class uSupportSettingsService : uSupportServiceBase<uSupportSettings, uSupportSettingsSchema>, IuSupportSettingsService
 	{
-		private const string LegacyNewTicketTemplatePath = "/App_Plugins/uSupport/templates/NewTicketEmail.cshtml";
-		private const string LegacyUpdateTicketTemplatePath = "/App_Plugins/uSupport/templates/UpdateTicketEmail.cshtml";
-		private const string DefaultNewTicketTemplatePath = "/Views/uSupport/Emails/NewTicketEmail.cshtml";
-		private const string DefaultUpdateTicketTemplatePath = "/Views/uSupport/Emails/UpdateTicketEmail.cshtml";
-
-		private readonly uSupportSettingsTicket _defaultSettings;
 		private readonly ILogger<IuSupportTicketService> _logger;
 		private readonly IEmailSender _emailSender;
 		private readonly IEventAggregator _eventAggregator;
@@ -36,18 +32,16 @@ namespace uSupport.Services
 		private readonly IOptions<GlobalSettings> _globalSettings;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		
-		private readonly IOptions<uSupportSettings> _uSupportSettings;
-		
-        
 		public uSupportSettingsService(ILogger<IuSupportTicketService> logger,
 			IEmailSender emailSender,
+			IScopeProvider scopeProvider,
+			IScopeAccessor scopeAccessor,
 			IEventAggregator eventAggregator,
 			IRazorViewEngine razorViewEngine,
 			ITempDataProvider tempDataProvider,
 			IOptions<GlobalSettings> globalSettings,
-			IHttpContextAccessor httpContextAccessor,
-			IOptions<uSupportSettings> uSupportSettings)
-        {
+			IHttpContextAccessor httpContextAccessor) : base(SettingsTableAlias, scopeProvider, scopeAccessor)
+		{
 			_logger = logger;
 			_emailSender = emailSender;
 			_eventAggregator = eventAggregator;
@@ -55,49 +49,24 @@ namespace uSupport.Services
 			_tempDataProvider = tempDataProvider;
 			_globalSettings = globalSettings;
 			_httpContextAccessor = httpContextAccessor;
-			_uSupportSettings = uSupportSettings;
-			
-            _defaultSettings = new uSupportSettingsTicket();
 		}
 
-		public bool GetSendEmailOnTicketCreatedSetting() => _uSupportSettings.Value.Tickets.SendEmailOnTicketCreated;
-		public bool GetSendEmailOnTicketCommentSetting() => _uSupportSettings.Value.Tickets.SendEmailOnTicketComment;
-        public string GetTicketUpdateEmailSetting() => _uSupportSettings.Value.Tickets.TicketUpdateEmail;
-
-		public string GetEmailSubjectNewTicket(uSupportTicket? ticket = null)
+		public uSupportSettings GetSettings()
 		{
-			var emailSubjectNewTicket = _uSupportSettings.Value.Tickets.EmailSubjectNewTicket;
-			if (!string.IsNullOrWhiteSpace(emailSubjectNewTicket))
-				return uSupportTokenHelper.ReplaceTokens(emailSubjectNewTicket, ticket);
+			var context = GetScope();
+			try
+			{
+				var sql = new Sql()
+								.Select("*")
+								.From(SettingsTableAlias);
 
-			return uSupportTokenHelper.ReplaceTokens(_defaultSettings.EmailSubjectNewTicket, ticket);
-		}
-
-		public string GetEmailSubjectUpdateTicket(uSupportTicket? ticket = null)
-		{
-			var emailSubjectUpdateTicket = _uSupportSettings.Value.Tickets.EmailSubjectUpdateTicket;
-			if (!string.IsNullOrWhiteSpace(emailSubjectUpdateTicket))
-				return uSupportTokenHelper.ReplaceTokens(emailSubjectUpdateTicket, ticket);
-
-			return uSupportTokenHelper.ReplaceTokens(_defaultSettings.EmailSubjectUpdateTicket, ticket);
-		}
-
-		public string GetEmailTemplateNewTicketPath()
-		{
-			var emailTemplateNewTicketPath = _uSupportSettings.Value.Tickets.EmailTemplateNewTicketPath;
-			if (!string.IsNullOrWhiteSpace(emailTemplateNewTicketPath))
-				return emailTemplateNewTicketPath;
-
-			return _defaultSettings.EmailTemplateNewTicketPath;
-		}
-
-		public string GetEmailTemplateUpdateTicketPath()
-		{
-			var emailTemplateUpdateTicketPath = _uSupportSettings.Value.Tickets.EmailTemplateUpdateTicketPath;
-			if (!string.IsNullOrWhiteSpace(emailTemplateUpdateTicketPath))
-				return emailTemplateUpdateTicketPath;
-
-			return _defaultSettings.EmailTemplateUpdateTicketPath;
+				return context.Scope.Database.Fetch<uSupportSettings>(sql).FirstOrDefault();
+			}
+			finally
+			{
+				if (context.Created)
+					context.Scope.Dispose();
+			}
 		}
 
 		public async void SendEmail(string toAddress, string subject, string templateViewPath, object model)

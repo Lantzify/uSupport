@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using uSupport.Dtos.Tables;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using uSupport.Dtos.Tables;
 using System.Text.RegularExpressions;
 
 namespace uSupport.Helpers

@@ -15,7 +15,7 @@ namespace uSupport.Composers
 							.AddTransient<IuSupportTicketCommentService, uSupportTicketCommentService>()
 							.AddTransient<IuSupportTicketHistoryService, uSupportTicketHistoryService>()
 							.AddTransient<IuSupportTicketService, uSupportTicketService>()
-							.AddScoped<IuSupportSettingsService, uSupportSettingsService>();
+							.AddTransient<IuSupportSettingsService, uSupportSettingsService>();
 		}
 	}
 }

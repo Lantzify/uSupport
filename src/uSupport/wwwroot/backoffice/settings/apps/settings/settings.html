@@ -1,0 +1,13 @@
+﻿<div ng-controller="uSupport.settings.contentApp.controller as vm" class="flex">
+    <div class="umb-package-details__main-content">
+        <umb-box class="form-horizontal">
+            <umb-box-content>
+
+                <umb-property property="property" ng-repeat="property in  model.properties">
+                    <umb-property-editor model="property"></umb-property-editor>
+                </umb-property>
+
+            </umb-box-content>
+        </umb-box>
+    </div>
+</div>

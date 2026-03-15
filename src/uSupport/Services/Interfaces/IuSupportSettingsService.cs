@@ -1,17 +1,15 @@
 ﻿using uSupport.Dtos.Tables;
-using System.Threading.Tasks;
+using uSupport.Migrations.Schemas;
 
 namespace uSupport.Services.Interfaces
 {
 	public interface IuSupportSettingsService
 	{
 		void SendEmail(string toAddress, string subject, string templateViewPath, object model);
-		bool GetSendEmailOnTicketCreatedSetting();
-		bool GetSendEmailOnTicketCommentSetting();
-        string GetTicketUpdateEmailSetting();
-		string GetEmailSubjectNewTicket(uSupportTicket? ticket = null);
-		string GetEmailSubjectUpdateTicket(uSupportTicket? ticket = null);
-		string GetEmailTemplateNewTicketPath();
-		string GetEmailTemplateUpdateTicketPath();
+		uSupportSettings GetSettings();
+		uSupportSettings Get(Guid id);
+		uSupportSettings Create(uSupportSettingsSchema settings);
+		uSupportSettings Update(uSupportSettingsSchema settings);
+		void Delete(Guid id);
 	}
 }

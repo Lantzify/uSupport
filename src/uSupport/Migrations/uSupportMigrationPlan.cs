@@ -2,6 +2,7 @@
 using uSupport.Migrations.Updates._1._2._0;
 using uSupport.Migrations.Updates._2._0._0;
 using uSupport.Migrations.Updates._2._3._0;
+using uSupport.Migrations.Updates._2._4._0;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uSupport.Migrations
@@ -25,7 +26,8 @@ namespace uSupport.Migrations
 				.To<uSupportTicketHistoryTable>("uSuppor-create-ticket-history")
 				.To<RemoveOrphanTicketComments>("uSuppor-remove-orphan-comments")
 				.To<AddLastUpdatedToTickets>("uSupport-add-last-updated-to-tickets")
-				.To<AddInternalCommentColumn>("uSupport-add-internal-comment-column");
+				.To<AddInternalCommentColumn>("uSupport-add-internal-comment-column")
+				.To<uSupportSettingsTable>("uSupport-settings");
 		}
 	}
 }

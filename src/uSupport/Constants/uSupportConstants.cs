@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace uSupport.Constants
+﻿namespace uSupport.Constants
 {
 	public static class uSupportConstants
 	{
@@ -23,6 +21,7 @@ namespace uSupport.Constants
 		public const string TicketStatusTableAlias = "uSupportTicketStatus";
 		public const string TicketHistoryTableAlias = "uSupportTicketHistory";
 		public const string TicketCommentTableAlias = "uSupportTicketComment";
+		public const string SettingsTableAlias = "uSupportSettings";
 
 		//Default ticket types
 		public static readonly Guid PageErrorTicketTypeGuid = new Guid("fc9b64b7-fa81-4de4-ae1a-8a677d314e69");

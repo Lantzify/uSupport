@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using uSupport.Dtos.Tables;
+using Microsoft.AspNetCore.Mvc;
+using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 
@@ -14,22 +16,9 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public bool GetSendEmailOnTicketCreatedSetting() => _uSupportSettingsService.GetSendEmailOnTicketCreatedSetting();
+		public uSupportSettings GetSettings() => _uSupportSettingsService.GetSettings();
 
-        [HttpGet]
-		public string GetTicketUpdateEmailSetting() => _uSupportSettingsService.GetTicketUpdateEmailSetting();
-
-		[HttpGet]
-		public string GetEmailSubjectNewTicket() => _uSupportSettingsService.GetEmailSubjectNewTicket();
-
-		[HttpGet]
-		public string GetEmailSubjectUpdateTicket() => _uSupportSettingsService.GetEmailSubjectUpdateTicket();
-
-		[HttpGet]
-		public string GetEmailTemplateNewTicketPath() => _uSupportSettingsService.GetEmailTemplateNewTicketPath();
-
-		[HttpGet]
-		public string GetEmailTemplateUpdateTicketPath() => _uSupportSettingsService.GetEmailTemplateUpdateTicketPath();
-
+        [HttpPost]
+		public uSupportSettings UpdateSettings(uSupportSettingsSchema settings) => _uSupportSettingsService.Update(settings);
 	}
 }

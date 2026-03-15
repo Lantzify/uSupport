@@ -166,13 +166,20 @@ namespace uSupport.Controllers
 				if (dto.SendEmail)
 				{
 					var settings = _uSupportSettingsService.GetSettings();
-					_uSupportSettingsService.SendEmail(
-						updatedTicket.Author.Email,
-						uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
-						settings.EmailTemplateUpdateTicketPath,
-						updatedTicket);
+					if (settings != null)
+					{
+						_uSupportSettingsService.SendEmail(
+							updatedTicket.Author.Email,
+							uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
+							settings.EmailTemplateUpdateTicketPath,
+							updatedTicket);
 
-					_eventAggregator.Publish(new UpdateTicketSendEmailNotification(updatedTicket));
+						_eventAggregator.Publish(new UpdateTicketSendEmailNotification(updatedTicket));
+					}
+					else
+					{
+ 						_logger.LogWarning("Email was not sent for ticket '{TicketId}' because uSupport settings are missing.", updatedTicket.ExternalTicketId);
+					}
 				}
 
 

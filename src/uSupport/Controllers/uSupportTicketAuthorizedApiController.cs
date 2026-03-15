@@ -105,11 +105,12 @@ namespace uSupport.Controllers
 			{
 				ticket.StatusId = _uSupportTicketStatusService.GetDefaultStatus().Id;
 				ticket.Summary = _htmlSanitizer.Sanitize(ticket.Summary);
+				var author = _userService.GetUserById(ticket.AuthorId);
+				if (author != null)
+					ticket.LastUpdatedBy = author.Name;
 
 				var createdTicket = _uSupportTicketService.Create(ticket);
-
-                var author = _userService.GetUserById(ticket.AuthorId);
-				if(author != null)
+				if (author != null)
 					createdTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
 
 				if (_uSupportSettingsService.GetSendEmailOnTicketCreatedSetting())
@@ -148,10 +149,14 @@ namespace uSupport.Controllers
 				}
 
 				if (oldTicket.TypeId != dto.Ticket.TypeId)
-					dto.Ticket.PropertyValue = null;
+					dto.Ticket.PropertyValue = string.Empty;
 
 				var updatedTicket = _uSupportTicketService.Update(dto.Ticket.ConvertDtoToSchema());
 				
+				var author = _userService.GetUserById(updatedTicket.AuthorId);
+				if (author != null)
+					updatedTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
+
 				if (dto.SendEmail)
 				{
 					_uSupportSettingsService.SendEmail(

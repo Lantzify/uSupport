@@ -9,8 +9,6 @@ using Umbraco.Cms.Core.Services;
 using uSupport.Migrations.Schemas;
 using Microsoft.Extensions.Logging;
 using uSupport.Services.Interfaces;
-using Umbraco.Cms.Core.Models.Membership;
-using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 
 namespace uSupport.Controllers
@@ -65,6 +63,7 @@ namespace uSupport.Controllers
 					ticket.LastUpdatedBy = user.Name;
 				
 				var updatedTicket =_uSupportTicketService.Update(ticket.ConvertDtoToSchema());
+                updatedTicket.Comments = _uSupportTicketCommentService.GetCommentsFromTicketId(updatedTicket.Id);
 
                 if (_uSupportSettingsService.GetSendEmailOnTicketCommentSetting())
                 {

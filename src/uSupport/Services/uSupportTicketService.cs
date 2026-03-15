@@ -78,7 +78,7 @@ namespace uSupport.Services
 
 				if(sort != null)
 				{
-					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "DESC" : "ASC")}");
+					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "ASC" : "DESC" )}");
 				}
 				else
 				{
@@ -124,7 +124,7 @@ namespace uSupport.Services
 
 				if (sort != null)
 				{
-					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "DESC" : "ASC")}");
+					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "ASC" : "DESC")}");
 				}
 				else
 				{

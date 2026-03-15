@@ -11,7 +11,7 @@
         vm.searchTerm = "";
         vm.useLongList = vm.useLongList === "true";
         vm.sortOrder = {
-            column: null,
+            column: "LastUpdated",
             reverse: false
         };
 

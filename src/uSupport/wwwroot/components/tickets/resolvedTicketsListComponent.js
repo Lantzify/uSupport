@@ -9,7 +9,7 @@
         var vm = this;
         vm.searchTerm = "";
         vm.sortOrder = {
-            column: null,
+            column: "Resolved",
             reverse: false
         };
 

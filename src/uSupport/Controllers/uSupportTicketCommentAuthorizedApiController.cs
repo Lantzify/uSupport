@@ -68,19 +68,30 @@ namespace uSupport.Controllers
                 var settings = _uSupportSettingsService.GetSettings();
                 if (settings != null && settings.SendEmailOnTicketComment)
                 {
-					string toAddress = settings.TicketUpdateEmail;
+					string toAddress = string.Empty;
 					if (ticket.AuthorId != ticketComment.UserId)
 					{
 						var author = _userService.GetUserById(ticket.AuthorId);
 						if (author != null)
 							toAddress = author.Email;
 					}
+                    else if (!string.IsNullOrWhiteSpace(settings.TicketUpdateEmail))
+                    {
+						toAddress = settings.TicketUpdateEmail;
+					}
 
-					_uSupportSettingsService.SendEmail(
-							 toAddress,
-							 uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
-							settings.EmailTemplateUpdateTicketPath,
-							updatedTicket);
+                    if (!string.IsNullOrWhiteSpace(toAddress))
+                    {
+						_uSupportSettingsService.SendEmail(
+		                     toAddress,
+		                     uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
+		                    settings.EmailTemplateUpdateTicketPath,
+		                    updatedTicket);
+                    }
+                    else
+                    {
+						_logger.LogWarning("Email was not sent for ticket '{TicketId}' on comment because no to address was found.", updatedTicket.ExternalTicketId);
+					}
 				}			
 
                 _eventAggregator.Publish(new AddTicketCommentNotification(updatedTicket, comment));

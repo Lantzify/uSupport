@@ -1,13 +1,11 @@
-﻿using uSupport.Constants;
-
-namespace uSupport.Dtos.Settings
+﻿namespace uSupport.Dtos.Tables
 {
-	public class uSupportSettingsTicket
+	public class uSupportSettings
 	{
-		public const string Tickets = uSupportConstants.SectionAlias + ":Settings:Tickets";
-		public bool SendEmailOnTicketCreated { get; set; } = true;
-		public bool SendEmailOnTicketComment { get; set; } = true;
-		public string TicketUpdateEmail { get; set; } = "None";
+		public Guid Id { get; set; }
+		public bool SendEmailOnTicketCreated { get; set; }
+		public bool SendEmailOnTicketComment { get; set; }
+		public string? TicketUpdateEmail { get; set; }
 		public string EmailSubjectNewTicket { get; set; } = "A new ticket '{ExternalTicketId}' has been created";
 		public string EmailSubjectUpdateTicket { get; set; } = "Ticket '{ExternalTicketId}' has been updated";
 		public string EmailTemplateNewTicketPath { get; set; } = "/Views/Partials/uSupport/Emails/NewTicketEmail.cshtml";

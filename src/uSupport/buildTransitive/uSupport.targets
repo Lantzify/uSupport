@@ -1,5 +1,0 @@
-﻿<Project>
-		<ItemGroup>
-				<UmbracoJsonSchemaFiles Include="$(MSBuildThisFileDirectory)..\content\appsettings-schema.uSupport.json" Weight="-80" />
-		</ItemGroup>
-</Project>

@@ -65,22 +65,23 @@ namespace uSupport.Controllers
 				var updatedTicket =_uSupportTicketService.Update(ticket.ConvertDtoToSchema());
                 updatedTicket.Comments = _uSupportTicketCommentService.GetCommentsFromTicketId(updatedTicket.Id);
 
-                if (_uSupportSettingsService.GetSendEmailOnTicketCommentSetting())
+                var settings = _uSupportSettingsService.GetSettings();
+                if (settings != null && settings.SendEmailOnTicketComment)
                 {
-                    string toAddress = _uSupportSettingsService.GetTicketUpdateEmailSetting();
+					string toAddress = settings.TicketUpdateEmail;
 					if (ticket.AuthorId != ticketComment.UserId)
-                    {
-                        var author = _userService.GetUserById(ticket.AuthorId);
-                        if(author != null)
-                            toAddress = author.Email;
+					{
+						var author = _userService.GetUserById(ticket.AuthorId);
+						if (author != null)
+							toAddress = author.Email;
 					}
 
 					_uSupportSettingsService.SendEmail(
-						 toAddress,
-	                    _uSupportSettingsService.GetEmailSubjectUpdateTicket(updatedTicket),
-	                    _uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
-						updatedTicket);
-				}
+							 toAddress,
+							 uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
+							settings.EmailTemplateUpdateTicketPath,
+							updatedTicket);
+				}			
 
                 _eventAggregator.Publish(new AddTicketCommentNotification(updatedTicket, comment));
 

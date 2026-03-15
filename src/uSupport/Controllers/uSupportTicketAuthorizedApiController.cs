@@ -1,4 +1,5 @@
 ﻿using uSupport.Dtos;
+using uSupport.Helpers;
 using uSupport.Dtos.Tables;
 using uSupport.Notifications;
 using Umbraco.Cms.Core.Events;
@@ -113,14 +114,15 @@ namespace uSupport.Controllers
 				if (author != null)
 					createdTicket.Author = _umbracoMapper.Map<IUser, UserDisplay>(author);
 
-				if (_uSupportSettingsService.GetSendEmailOnTicketCreatedSetting())
+				var settings = _uSupportSettingsService.GetSettings();
+				if (settings != null && settings.SendEmailOnTicketCreated && !string.IsNullOrWhiteSpace(settings.TicketUpdateEmail))
 				{
-                    _uSupportSettingsService.SendEmail(
-                        _uSupportSettingsService.GetTicketUpdateEmailSetting(),
-						_uSupportSettingsService.GetEmailSubjectNewTicket(createdTicket),
-                        _uSupportSettingsService.GetEmailTemplateNewTicketPath(),
-                        createdTicket);
-                }				
+					_uSupportSettingsService.SendEmail(
+						settings.TicketUpdateEmail,
+						uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectNewTicket, createdTicket),
+						settings.EmailTemplateNewTicketPath,
+						createdTicket);
+				}			
 
 				return createdTicket;
 			}
@@ -151,6 +153,10 @@ namespace uSupport.Controllers
 				if (oldTicket.TypeId != dto.Ticket.TypeId)
 					dto.Ticket.PropertyValue = string.Empty;
 
+				var updateUser = _userService.GetUserById(dto.UserId);
+				if (updateUser != null)
+					dto.Ticket.LastUpdatedBy = updateUser.Name;
+				
 				var updatedTicket = _uSupportTicketService.Update(dto.Ticket.ConvertDtoToSchema());
 				
 				var author = _userService.GetUserById(updatedTicket.AuthorId);
@@ -159,10 +165,11 @@ namespace uSupport.Controllers
 
 				if (dto.SendEmail)
 				{
+					var settings = _uSupportSettingsService.GetSettings();
 					_uSupportSettingsService.SendEmail(
-						_userService.GetUserById(dto.Ticket.AuthorId).Email,
-						_uSupportSettingsService.GetEmailSubjectUpdateTicket(updatedTicket),
-						_uSupportSettingsService.GetEmailTemplateUpdateTicketPath(),
+						updatedTicket.Author.Email,
+						uSupportTokenHelper.ReplaceTokens(settings.EmailSubjectUpdateTicket, updatedTicket),
+						settings.EmailTemplateUpdateTicketPath,
 						updatedTicket);
 
 					_eventAggregator.Publish(new UpdateTicketSendEmailNotification(updatedTicket));

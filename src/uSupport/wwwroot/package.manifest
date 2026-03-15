@@ -8,6 +8,7 @@
 		"/App_Plugins/uSupport/backoffice/tickets/apps/history/history.controller.js",
 
 		"/App_Plugins/uSupport/backoffice/settings/settings.overview.controller.js",
+		"/App_Plugins/uSupport/backoffice/settings/apps/settings/settings.controller.js",
 
 		"/App_Plugins/uSupport/backoffice/ticketStatuses/ticketStatuses.overview.controller.js",
 		"/App_Plugins/uSupport/backoffice/ticketStatuses/ticketStatuses.edit.controller.js",

@@ -20,7 +20,7 @@
         {
             alias: "TicketUpdateEmail",
             label: "Ticket update email",
-            description: "Email that ticket updates will be sent to. (Can be a comma seperated list of emails)",
+            description: "Email that ticket updates will be sent to. (Can be a comma separated list of emails)",
             view: "textbox",
             value: $scope.model.settings.TicketUpdateEmail
         },

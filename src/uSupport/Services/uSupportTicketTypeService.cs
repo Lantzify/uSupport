@@ -33,13 +33,13 @@ namespace uSupport.Services
 			}
 		}
 
-		public Guid GetTypeIdFromName(string name)
+		public Guid? GetTypeIdFromName(string name)
 		{
 			var context = GetScope();
 			try
 			{
 				var ticketStatus = context.Scope.Database.Query<uSupportTicketType>($"SELECT Id FROM {TicketTypeTableAlias} WHERE [Name] = @name", new { name }).FirstOrDefault();
-				return ticketStatus?.Id ?? Guid.Empty;
+				return ticketStatus?.Id;
 			}
 			finally
 			{

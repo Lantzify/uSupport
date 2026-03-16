@@ -33,7 +33,7 @@ namespace uSupport.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<string?> GetAllDataTypes()
+		public IEnumerable<string> GetAllDataTypes()
 		{
 			string[] excludedDataTypes = new string[]
 			{
@@ -49,9 +49,11 @@ namespace uSupport.Controllers
 				"Umbraco.Grid",			
 			};
 
-			var dataTypes = _dataTypeService.GetAll()
-												.Where(x => !excludedDataTypes.Contains(x.EditorAlias))
-												.Select(x => x.Name).ToList();
+			List<string> dataTypes = _dataTypeService.GetAll()
+												.Where(x => !excludedDataTypes.Contains(x.EditorAlias) && x.Name != null)
+												.Select(x => x.Name ?? string.Empty)
+												.Distinct()
+												.ToList();
 			dataTypes.Sort();
 
 			return dataTypes;
@@ -79,13 +81,22 @@ namespace uSupport.Controllers
 		[HttpPost]
 		public IEnumerable<uSupportTicketType> GetTicketTypes(List<Guid> ids)
         {
-			if (ids == null || !ids.Any()) return null;
+			if (ids == null || !ids.Any())
+				return Enumerable.Empty<uSupportTicketType>();
 
 			return _uSupportTicketTypeService.GetByIds(ids);
-		} 
-			
+		}
+
 		[HttpGet]
-		public Guid GetTypeIdFromName(string name) => _uSupportTicketTypeService.GetTypeIdFromName(name);
+		public ActionResult<Guid> GetTypeIdFromName(string name)
+		{
+			var typeId = _uSupportTicketTypeService.GetTypeIdFromName(name);
+
+			if (!typeId.HasValue)
+				return NotFound($"Ticket type with name '{name}' was not found.");
+
+			return typeId.Value;
+		}
 
 
 		[HttpPost]

@@ -127,7 +127,7 @@ namespace uSupport.Controllers
 					}
 					else
 					{
-						_logger.LogWarning("Email for ticket {ExternalTicketId} was not sent due to 'TicketUpdateEmail' not beeing set", createdTicket.ExternalTicketId);
+						_logger.LogWarning("Email for ticket {ExternalTicketId} was not sent due to 'TicketUpdateEmail' not being set", createdTicket.ExternalTicketId);
 					}
 
 				}			

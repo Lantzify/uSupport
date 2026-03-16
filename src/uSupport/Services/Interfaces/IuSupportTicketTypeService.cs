@@ -10,7 +10,7 @@ namespace uSupport.Services.Interfaces
 		IEnumerable<uSupportTicketType> GetAll();
 		uSupportTicketType Get(Guid id);
 		IEnumerable<uSupportTicketType> GetByIds(List<Guid> ids);
-		Guid GetTypeIdFromName(string name);
+		Guid? GetTypeIdFromName(string name);
 		uSupportTicketType Create(uSupportTicketTypeSchema ticketType);
 		uSupportTicketType Update(uSupportTicketTypeSchema ticketType);
 		void Delete(Guid id);

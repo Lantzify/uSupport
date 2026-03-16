@@ -20,7 +20,7 @@ namespace uSupport.Migrations.Schemas
 		public int UserId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay User { get; set; }
+		public UserDisplay? User { get; set; }
 
 		[Column("Date")]
 		public DateTime Date { get; set; } = DateTime.Now;

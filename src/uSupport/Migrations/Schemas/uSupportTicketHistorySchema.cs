@@ -25,10 +25,10 @@ namespace uSupport.Migrations.Schemas
 		public int UserId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay User { get; set; }
+		public UserDisplay? User { get; set; }
 
 		[ResultColumn]
-		public IEnumerable<uSupportChange> Changes { get; set; }
+		public IEnumerable<uSupportChange>? Changes { get; set; }
 
 		[Column("ChangesJson")]
 		[NullSetting]

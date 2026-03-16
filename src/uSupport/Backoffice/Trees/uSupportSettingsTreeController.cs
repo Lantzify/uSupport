@@ -1,5 +1,4 @@
-﻿using System;
-using Umbraco.Cms.Core;
+﻿using Umbraco.Cms.Core;
 using uSupport.Constants;
 using Umbraco.Cms.Core.Trees;
 using Umbraco.Cms.Core.Events;
@@ -31,13 +30,12 @@ namespace uSupport.Backoffice.Trees
 		}
 
 
-		protected override ActionResult<TreeNode> CreateRootNode(FormCollection queryStrings)
+		protected override ActionResult<TreeNode?> CreateRootNode(FormCollection queryStrings)
 		{
 			var rootResult = base.CreateRootNode(queryStrings);
-			if (!(rootResult.Result is null))
-			{
+			if (rootResult.Result is not null || rootResult.Value is null)
 				return rootResult;
-			}
+			
 
 			var root = rootResult.Value;
 			root.RoutePath = "uSupport/settings/overview";

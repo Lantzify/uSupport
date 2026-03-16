@@ -47,9 +47,11 @@ namespace uSupport.Controllers
 		public UserDisplay SaveUser(uSupportUserSaveDto uSupportUserSaveDto)
 		{
 			var user = _userService.GetUserById(uSupportUserSaveDto.Id);
+			if (user == null)
+				return null;
 
-			user.Name = uSupportUserSaveDto.Name;
-			user.Email = uSupportUserSaveDto.Email;
+			user.Name = uSupportUserSaveDto?.Name;
+			user.Email = uSupportUserSaveDto?.Email ?? string.Empty;
 
 			_userService.Save(user);
 
@@ -59,7 +61,11 @@ namespace uSupport.Controllers
 		[HttpPost]
 		public IUser ClearAvatar(UserDisplay displayUser)
 		{
-			var user = _userService.GetUserById(int.Parse(displayUser.Id.ToString()));
+			int userId = int.Parse(displayUser.Id?.ToString() ?? string.Empty);
+			var user = _userService.GetUserById(userId);
+			if (user == null)
+				return null;
+
 			user.Avatar = "";
 
 			_userService.Save(user);
@@ -80,9 +86,13 @@ namespace uSupport.Controllers
 					default:
 						int id = int.Parse($"{value}");
 						UmbracoObjectTypes objectType = _entityService.GetObjectType(id);
+						var entity = _entityService.Get(id, objectType);
+						if(entity == null)
+							return null;
+
 						return new List<object> ()
 						{
-							_entityService.Get(id, objectType)
+							entity
 						};
 				}
 			}

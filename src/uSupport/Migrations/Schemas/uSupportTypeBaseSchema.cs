@@ -21,10 +21,10 @@ namespace uSupport.Migrations.Schemas
 
 		[Column("Color")]
 		[NullSetting]
-		public string Color { get; set; }
+		public string? Color { get; set; }
 
 		[Column("Icon")]
 		[NullSetting]
-		public string Icon { get; set; }
+		public string? Icon { get; set; }
 	}
 }

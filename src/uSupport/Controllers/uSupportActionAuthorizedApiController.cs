@@ -56,7 +56,7 @@ namespace uSupport.Controllers
             switch (dto.Type)
             {
 				case uSupportConstants.TicketTypesTreeAlias:
-					return _uSupportTicketService.GetAll()?.Where(x => x.TypeId == dto.Id).ConvertToDeletePreviewDto();
+					return _uSupportTicketService.GetAll()?.Where(x => x.TypeId == dto.Id)?.ConvertToDeletePreviewDto();
 				case uSupportConstants.TicketStatusesTreeAlias:
 					return _uSupportTicketService.GetAll()?.Where(x => x.StatusId == dto.Id).ConvertToDeletePreviewDto();
 				default:
@@ -102,6 +102,9 @@ namespace uSupport.Controllers
 		[HttpPost]
 		public void Sort(SortActionDto dto)
         {
+			if (dto.List == null || !dto.List.Any())
+				return;
+
 			switch (dto.Type)
 			{
 				case uSupportConstants.TicketTypesTreeAlias:

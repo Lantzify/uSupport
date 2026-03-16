@@ -24,13 +24,13 @@ namespace uSupport.Migrations.Schemas
         public Guid TypeId { get; set; }
 
         [ResultColumn]
-        public uSupportTicketType Type { get; set; }
+        public uSupportTicketType? Type { get; set; }
 
 		[Column("StatusId")]
 		public Guid StatusId { get; set; }
 	
         [ResultColumn]
-		public uSupportTicketStatus Status { get; set; }
+		public uSupportTicketStatus? Status { get; set; }
 
 		[Column("AuthorId")]
         public int AuthorId { get; set; }

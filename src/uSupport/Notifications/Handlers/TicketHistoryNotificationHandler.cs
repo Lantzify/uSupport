@@ -65,7 +65,7 @@ namespace uSupport.Notifications.Handlers
 
 			history.ChangesJson = JsonSerializer.Serialize(changes);
 
-			if(!notification.NewTicket.Status.Active)
+			if(!notification.NewTicket?.Status?.Active ?? false)
 				history.ActionType = "Resolved";
 
 			_uSupportTicketHistoryService.Create(history);

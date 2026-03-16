@@ -37,10 +37,14 @@ namespace uSupport.Services.Interfaces
 					context.Scope.Dispose();
 			}
 
-			var dtoType = dto.GetType();
-			var dtoIdProperty = dtoType.GetProperty("Id");
+			var dtoType = dto?.GetType();
+			var dtoIdProperty = dtoType?.GetProperty("Id");
+			var idValue = dtoIdProperty?.GetValue(dto)?.ToString();
 
-			return Get(Guid.Parse(dtoIdProperty.GetValue(dto).ToString()));
+			if (string.IsNullOrWhiteSpace(idValue) || !Guid.TryParse(idValue, out var id) || id == Guid.Empty)
+				throw new InvalidOperationException($"Failed to create {typeof(T).Name}: Invalid or missing Id after insert.");
+
+			return Get(id);
 		}
 
 		public virtual T Get(Guid id)
@@ -83,11 +87,17 @@ namespace uSupport.Services.Interfaces
 
 		public virtual T Update(Schema dto)
 		{
-			var context = GetScope();
+			if (dto == null)
+				throw new ArgumentNullException(nameof(dto));
 
 			var dtoType = dto.GetType();
 			var dtoIdProperty = dtoType.GetProperty("Id");
-			var id = Guid.Parse(dtoIdProperty.GetValue(dto).ToString());
+			var idValue = dtoIdProperty?.GetValue(dto)?.ToString();
+
+			if (string.IsNullOrWhiteSpace(idValue) || !Guid.TryParse(idValue, out var id) || id == Guid.Empty)
+				throw new ArgumentException($"Cannot update {typeof(T).Name}: Invalid or missing Id.", nameof(dto));
+
+			var context = GetScope();
 
 			try
 			{

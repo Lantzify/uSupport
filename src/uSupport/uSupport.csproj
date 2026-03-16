@@ -6,6 +6,7 @@
 			<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 			<ImplicitUsings>enable</ImplicitUsings>
 			<Nullable>enable</Nullable>
+			<NoWarn>CS8603</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -30,9 +30,11 @@ namespace uSupport.Migrations.Updates._2._0._0
 				using (var scope = _scopeProvider.CreateScope())
 				{
 					var adminGroup = _userService.GetUserGroupByAlias(Security.AdminGroupAlias);
-					adminGroup.AddAllowedSection(Constants.uSupportConstants.SectionAlias);
-
-					_userService.Save(adminGroup);
+					if(adminGroup != null)
+					{
+						adminGroup.AddAllowedSection(Constants.uSupportConstants.SectionAlias);
+						_userService.Save(adminGroup);
+					}
 
 					scope.Complete();
 				}

@@ -10,12 +10,12 @@ namespace uSupport.Dtos.Tables
 		public string ActionType { get; set; }
 
 		[ResultColumn]
-		public IEnumerable<uSupportChange> Changes { get; set; }
-		public string ChangesJson { get; set; }
+		public IEnumerable<uSupportChange>? Changes { get; set; }
+		public string? ChangesJson { get; set; }
 		public int UserId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay User { get; set; }
+		public UserDisplay? User { get; set; }
 		public DateTime Date { get; set; }
 	}
 }

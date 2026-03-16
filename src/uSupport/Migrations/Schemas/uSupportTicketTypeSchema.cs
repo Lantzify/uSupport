@@ -9,7 +9,7 @@ namespace uSupport.Migrations.Schemas
 	{
 		[Column("Description")]
         [NullSetting]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Column("PropertyId")]
         [NullSetting]
@@ -17,14 +17,14 @@ namespace uSupport.Migrations.Schemas
 
         [Column("PropertyName")]
         [NullSetting]
-        public string PropertyName { get; set; }
+        public string? PropertyName { get; set; }
 
         [Column("PropertyDescription")]
         [NullSetting]
-        public string PropertyDescription { get; set; }
+        public string? PropertyDescription { get; set; }
 
         [Column("PropertyView")]
         [NullSetting]
-        public string PropertyView { get; set; }
+        public string? PropertyView { get; set; }
     }
 }

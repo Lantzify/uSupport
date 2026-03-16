@@ -49,6 +49,10 @@
         {
             "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/settings.PNG",
             "Caption": "Overview over the current settings"
+        },
+        {
+            "ImageUrl": "https://raw.githubusercontent.com/Lantzify/uSupport/main/assets/email-template.png",
+            "Caption": "Email template"
         }
     ]
 }

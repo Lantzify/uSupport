@@ -39,3 +39,4 @@ If you find any issues with the package feel free to raise a issue!
 ![Ticket types](assets/ticketTypes.PNG "Ticket types")
 ![Ticket statuses](assets/ticketStatus.PNG "Ticket statuses")
 ![Settings](assets/settings.PNG "Settings")
+![Email template](assets/email-template.png "Email template")

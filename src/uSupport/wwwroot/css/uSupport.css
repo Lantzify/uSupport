@@ -262,3 +262,23 @@
 .uSupport .ticket-item-hover:hover {
 	background: #f2f3f3;
 }
+
+.uSupport .p-comments {
+	padding-bottom:42px;
+}
+
+.uSupport .p-comments p:last-child {
+	margin-bottom: 0;
+}
+
+.uSupport .comment-seperator {
+	margin-left: 15px;
+	position: absolute;
+	width: calc(100% - 16px);
+	bottom: -11px;
+	left: 1px;
+}
+
+.uSupport#openTicket .no-line .umb-property:last-of-type .umb-control-group:after {
+	display:none;
+}

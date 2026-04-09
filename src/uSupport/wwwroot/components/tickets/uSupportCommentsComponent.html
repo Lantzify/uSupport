@@ -1,24 +1,25 @@
 ﻿
 <div class="history">
     <div class="history-line" aria-hidden="false"></div>
-    <div class="history-item mb5" style="align-items: flex-start;" ng-repeat="comment in vm.comments">
-        <div class="history-item__break" ng-class="{'adminView' : vm.adminView}">
-            <div class="history-item__avatar">
-                <umb-avatar size="xs"
-                            name="{{comment.User.name}}"
-                            color="secondary"
-                            img-src="{{comment.User.avatars[0]}}"
-                            img-srcset="{{comment.User.avatars[1]}} 2x, {{comment.User.avatars[2]}} 3x">
-                </umb-avatar>
+    <div ng-repeat="comment in vm.comments" class="relative">
+        <div class="history-item mb5" style="align-items: flex-start;">
+            <div class="history-item__break" ng-class="{'adminView' : vm.adminView}">
+                <div class="history-item__avatar">
+                    <umb-avatar size="xs"
+                                name="{{comment.User.name}}"
+                                color="secondary"
+                                img-src="{{comment.User.avatars[0]}}"
+                                img-srcset="{{comment.User.avatars[1]}} 2x, {{comment.User.avatars[2]}} 3x">
+                    </umb-avatar>
+                </div>
+                <div>
+                    <div>{{comment.User.name}}</div>
+                    <div class="history-item__date">{{comment.Date | date:'yyyy-MM-dd HH:mm'}}</div>
+                </div>
             </div>
-            <div>
-                <div>{{comment.User.name}}</div>
-                <div class="history-item__date">{{comment.Date | date:'yyyy-MM-dd HH:mm'}}</div>
-            </div>
+            <div class="p-comments" ng-bind-html="comment.Comment"></div>
         </div>
-        <div>
-            {{comment.Comment}}
-        </div>
+        <hr class="comment-seperator" />
     </div>
 
 </div>
@@ -33,14 +34,16 @@
 </umb-pagination>
 
 <form name="formName" novalidate>
-    <div>
-        <textarea no-dirty-check class="umb-property-editor umb-textarea textstring" placeholder="Enter comment here" rows="5" ng-model="vm.comment"></textarea>
+    <div class="no-line">
+        <umb-property  property="property" ng-repeat="property in vm.properties">
+            <umb-property-editor model="property"></umb-property-editor>
+        </umb-property>
     </div>
 
     <div class="flex justify-end mt3" style="max-width:800px;">
         <umb-button type="button"
                     button-style="success"
-                    disabled="!vm.comment.length"
+                    disabled="!vm.properties[0].value.markup.length"
                     label="Comment"
                     state="vm.commentbuttonState"
                     action="vm.addComment()">

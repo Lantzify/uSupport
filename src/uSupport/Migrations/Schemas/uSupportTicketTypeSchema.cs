@@ -26,5 +26,9 @@ namespace uSupport.Migrations.Schemas
         [Column("PropertyView")]
         [NullSetting]
         public string? PropertyView { get; set; }
+
+        [Column("DataTypeKey")]
+        [NullSetting]
+        public Guid? DataTypeKey { get; set; }
     }
 }

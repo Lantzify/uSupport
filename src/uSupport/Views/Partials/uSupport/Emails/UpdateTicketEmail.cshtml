@@ -111,9 +111,9 @@
 													<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
 														<tr>
 															<td style="width: 48px; vertical-align: top; padding-right: 14px;">
-																@if (!string.IsNullOrEmpty(comment.User?.Avatars?.FirstOrDefault()))
+																@if (!string.IsNullOrEmpty(comment.User?.AvatarUrls.FirstOrDefault()))
 																{
-																	<img src="@baseUrl/media/@comment.User?.Avatars[0]" alt="@comment.User?.Name" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+																	<img src="@baseUrl@comment.User!.AvatarUrls[0]" alt="@comment.User?.Name" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
 																}
 																else
 																{
@@ -125,7 +125,7 @@
 															<td style="vertical-align: top;">
 																<p style="margin: 0 0 4px; font-weight: 600; font-size: 14px; color: #0f172a;">@comment.User?.Name</p>
 																<p style="margin: 0 0 10px; font-size: 12px; color: #94a3b8;">@comment.Date.ToString("yyyy-MM-dd hh:mm")</p>
-																<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #475569;">@comment.Comment</p>
+																<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #475569;">@Html.Raw(comment.Comment)</p>
 															</td>
 														</tr>
 													</table>

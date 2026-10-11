@@ -1,5 +1,5 @@
 ﻿using NPoco;
-using Umbraco.Cms.Core.Models.ContentEditing;
+using uSupport.Dtos;
 
 namespace uSupport.Dtos.Tables
 {
@@ -15,7 +15,7 @@ namespace uSupport.Dtos.Tables
 		public int AuthorId { get; set; }
 
 		[ResultColumn]
-		public UserDisplay? Author { get; set; }
+		public uSupportUser? Author { get; set; }
         public DateTime Submitted { get; set; }
 		public DateTime? Resolved { get; set; }
 		public string? LastUpdatedBy { get; set; }

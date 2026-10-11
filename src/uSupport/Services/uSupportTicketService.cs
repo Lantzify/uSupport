@@ -76,14 +76,7 @@ namespace uSupport.Services
 					sqlCount.Where(searchPattern, $"%{searchTerm}%");
 				}
 
-				if(sort != null)
-				{
-					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "ASC" : "DESC" )}");
-				}
-				else
-				{
-					sql.OrderBy("LastUpdated DESC");
-				}
+				sql.OrderBy(GetOrderBy(sort, "LastUpdated"));
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -122,14 +115,7 @@ namespace uSupport.Services
 					sqlCount.Where(searchPattern, $"%{searchTerm}%");
 				}
 
-				if (sort != null)
-				{
-					sql.OrderBy($"{sort.ColumnName} {(sort.Reverse ? "ASC" : "DESC")}");
-				}
-				else
-				{
-					sql.OrderBy("Resolved DESC");
-				}
+				sql.OrderBy(GetOrderBy(sort, "Resolved"));
 
 				var ticketCount = context.Scope.Database.Fetch<int>(sqlCount).FirstOrDefault();
 				var tickets = context.Scope.Database.SkipTake<uSupportTicket>((page - 1) * PageSize, PageSize, sql);
@@ -143,6 +129,22 @@ namespace uSupport.Services
 			}
 		}
 
+		private static readonly HashSet<string> SortableColumns = new(StringComparer.OrdinalIgnoreCase)
+		{
+			"StatusId", "TypeId", "ExternalTicketId", "Title", "Submitted", "Resolved", "LastUpdated", "LastUpdatedBy"
+		};
+
+		/// <summary>
+		/// Builds the ORDER BY clause. Only whitelisted column names reach the SQL.
+		/// </summary>
+		public static string GetOrderBy(uSupportSort? sort, string defaultColumn)
+		{
+			var column = sort?.ColumnName != null && SortableColumns.TryGetValue(sort.ColumnName, out var match) ? match : defaultColumn;
+			var direction = sort == null || sort.Descending ? "DESC" : "ASC";
+
+			return $"{TicketTableAlias}.{column} {direction}";
+		}
+
 		public bool AnyResolvedTickets()
 		{
 			var context = GetScope();
@@ -154,7 +156,7 @@ namespace uSupport.Services
 					.From(TicketTableAlias)
 					.Where($"{TicketTableAlias}.StatusId IN ({statuses})");
 
-				return context.Scope.Database.Fetch<uSupportTicket>(sqlCount).Any();
+				return context.Scope.Database.ExecuteScalar<int>(sqlCount) > 0;
 			}
 			finally
 			{

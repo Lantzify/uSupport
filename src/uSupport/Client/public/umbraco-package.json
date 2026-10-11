@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../uSupport.Web/umbraco-package-schema.json",
+  "name": "uSupport",
+  "alias": "uSupport",
+  "extensions": [
+    {
+      "type": "backofficeEntryPoint",
+      "name": "uSupport entry point",
+      "alias": "uSupport.EntryPoint",
+      "js": "/App_Plugins/uSupport/uSupport.js"
+    }
+  ]
+}

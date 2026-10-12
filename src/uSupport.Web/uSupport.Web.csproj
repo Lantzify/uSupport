@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clean" Version="7.0.7" />
     <PackageReference Include="Umbraco.Cms" Version="17.5.0" />
     <PackageReference Include="Umbraco.Cms.DevelopmentMode.Backoffice" Version="17.0.2" />
   </ItemGroup>

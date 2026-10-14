@@ -4,8 +4,8 @@ import { UMB_CURRENT_USER_CONTEXT, UMB_CURRENT_USER_MODAL } from '@umbraco-cms/b
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
 import type { UmbCurrentUserModel } from '@umbraco-cms/backoffice/current-user';
 import { USUPPORT_CREATE_TICKET_MODAL } from '../tickets/modals/tokens.js';
-import type { USupportTicketsTableElement } from '../tickets/tickets-table.element.js';
-import '../tickets/tickets-table.element.js';
+import type { USupportTicketsTableElement } from '../tickets/components/tickets-table.element.js';
+import '../tickets/components/tickets-table.element.js';
 
 /** "Support" dashboard in the Content section: create tickets and follow your tickets. */
 @customElement('usupport-user-dashboard')

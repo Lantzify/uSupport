@@ -2,10 +2,10 @@ import { css, customElement, html, nothing, property, state } from '@umbraco-cms
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UMB_CURRENT_USER_CONTEXT } from '@umbraco-cms/backoffice/current-user';
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
-import { USupportRepository, type Ticket, type TicketList } from '../repository/usupport.repository.js';
-import { USUPPORT_SECTION_ALIAS, USUPPORT_TICKET_ENTITY_TYPE, workspacePath } from '../constants.js';
-import { formatDate, statusTag, typeIcon } from '../shared/display.js';
-import { USUPPORT_OPEN_TICKET_MODAL } from './modals/tokens.js';
+import { USupportRepository, type Ticket, type TicketList } from '../../repository/usupport.repository.js';
+import { USUPPORT_SECTION_ALIAS, USUPPORT_TICKET_ENTITY_TYPE, workspacePath } from '../../constants.js';
+import { formatDate, statusTag, typeIcon } from '../../shared/display.js';
+import { USUPPORT_OPEN_TICKET_MODAL } from '../modals/tokens.js';
 
 interface Column {
 	key: string;

@@ -2,9 +2,9 @@ import { customElement, html, state } from '@umbraco-cms/backoffice/external/lit
 import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import { USupportRepository, type Ticket } from '../../repository/usupport.repository.js';
-import { ticketDetails, ticketLayoutStyles } from '../ticket-details.js';
-import '../comments.element.js';
-import '../ticket-property.element.js';
+import { ticketDetails, ticketLayoutStyles } from '../components/ticket-details.js';
+import '../components/comments.element.js';
+import '../components/ticket-property.element.js';
 
 /** Read-only ticket view for users without the uSupport section; they can still comment. */
 @customElement('usupport-open-ticket-modal')

@@ -4,8 +4,8 @@ import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { USupportRepository, type TicketType } from '../../repository/usupport.repository.js';
 import { USUPPORT_RICH_TEXT_DATA_TYPE_KEY, markupOf } from '../../constants.js';
 import { typeIcon } from '../../shared/display.js';
-import type { USupportTicketPropertyElement } from '../ticket-property.element.js';
-import '../ticket-property.element.js';
+import type { USupportTicketPropertyElement } from '../components/ticket-property.element.js';
+import '../components/ticket-property.element.js';
 
 /** Two steps: pick a ticket type, then fill in its custom property, title and summary. */
 @customElement('usupport-create-ticket-modal')

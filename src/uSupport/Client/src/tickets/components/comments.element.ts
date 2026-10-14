@@ -1,9 +1,9 @@
 import { css, customElement, html, nothing, property, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
-import { USupportRepository, type TicketComment } from '../repository/usupport.repository.js';
-import { USUPPORT_RICH_TEXT_DATA_TYPE_KEY, markupOf } from '../constants.js';
-import { formatDate } from '../shared/display.js';
+import { USupportRepository, type TicketComment } from '../../repository/usupport.repository.js';
+import { USUPPORT_RICH_TEXT_DATA_TYPE_KEY, markupOf } from '../../constants.js';
+import { formatDate } from '../../shared/display.js';
 import type { USupportTicketPropertyElement } from './ticket-property.element.js';
 import './ticket-property.element.js';
 

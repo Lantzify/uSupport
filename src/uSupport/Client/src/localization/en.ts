@@ -46,7 +46,6 @@ export default {
 		details: 'Details',
 		internalComment: 'Internal comment',
 		internalCommentDescription: 'Only visible to uSupport users',
-		internalCommentUpdated: 'Updated the internal comment',
 		emailTo: 'Email sent to',
 
 		comment: 'Comment',

@@ -1,6 +1,6 @@
 import { css, customElement, html } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
-import './tickets-table.element.js';
+import '../components/tickets-table.element.js';
 
 /** Tickets overview in the uSupport section: active and resolved tickets. */
 @customElement('usupport-tickets-overview-view')

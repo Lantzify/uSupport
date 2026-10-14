@@ -3,7 +3,7 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import type { Ticket, TicketHistory, TicketStatus, TicketType } from '../../../repository/usupport.repository.js';
 import { USUPPORT_TICKET_WORKSPACE_CONTEXT, type USupportTicketWorkspaceContext } from '../ticket-workspace.context.js';
-import { ticketDetails, ticketLayoutStyles } from '../../ticket-details.js';
+import { ticketDetails, ticketLayoutStyles } from '../../components/ticket-details.js';
 import { formatDate } from '../../../shared/display.js';
 
 const ACTION_COLOR: Record<string, string> = {

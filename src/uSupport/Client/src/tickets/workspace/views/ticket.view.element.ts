@@ -3,9 +3,9 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import type { Ticket, TicketStatus, TicketType } from '../../../repository/usupport.repository.js';
 import { USUPPORT_TICKET_WORKSPACE_CONTEXT, type TicketDraft, type USupportTicketWorkspaceContext } from '../ticket-workspace.context.js';
-import { ticketDetails, ticketLayoutStyles } from '../../ticket-details.js';
-import '../../comments.element.js';
-import '../../ticket-property.element.js';
+import { ticketDetails, ticketLayoutStyles } from '../../components/ticket-details.js';
+import '../../components/comments.element.js';
+import '../../components/ticket-property.element.js';
 
 @customElement('usupport-ticket-view')
 export class USupportTicketViewElement extends UmbLitElement {

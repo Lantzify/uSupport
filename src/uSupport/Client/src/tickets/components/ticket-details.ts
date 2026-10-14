@@ -1,7 +1,7 @@
 import { css, html, nothing } from '@umbraco-cms/backoffice/external/lit';
 import type { UmbLocalizationController } from '@umbraco-cms/backoffice/localization-api';
-import type { Ticket } from '../repository/usupport.repository.js';
-import { formatDate, statusTag, typeIconName } from '../shared/display.js';
+import type { Ticket } from '../../repository/usupport.repository.js';
+import { formatDate, statusTag, typeIconName } from '../../shared/display.js';
 
 export const ticketDetails = (ticket: Ticket, localize: UmbLocalizationController) => {
 	const row = (label: string, value: unknown) =>

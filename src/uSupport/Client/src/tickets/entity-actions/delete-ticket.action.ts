@@ -1,8 +1,8 @@
 import { UmbEntityActionBase } from '@umbraco-cms/backoffice/entity-action';
 import { umbConfirmModal } from '@umbraco-cms/backoffice/modal';
 import { UmbLocalizationController } from '@umbraco-cms/backoffice/localization-api';
-import { USupportRepository } from '../repository/usupport.repository.js';
-import { USUPPORT_TICKETS_ROOT_ENTITY_TYPE, workspacePath } from '../constants.js';
+import { USupportRepository } from '../../repository/usupport.repository.js';
+import { USUPPORT_TICKETS_ROOT_ENTITY_TYPE, workspacePath } from '../../constants.js';
 
 /** "Delete" in the ticket workspace's "..." menu. */
 export class USupportDeleteTicketAction extends UmbEntityActionBase<never> {

@@ -7,9 +7,9 @@ import { ticketDetails, ticketLayoutStyles } from '../../ticket-details.js';
 import { formatDate } from '../../../shared/display.js';
 
 const ACTION_COLOR: Record<string, string> = {
-	Created: 'positive',
-	Updated: 'default',
-	Comment: 'default',
+	Created: 'default',
+	Updated: 'positive',
+	Comment: 'positive',
 	Resolved: 'positive',
 	SentEmail: 'warning',
 };
@@ -49,21 +49,20 @@ export class USupportTicketHistoryViewElement extends UmbLitElement {
 	#name = (items: Array<{ id: string; name: string }>, id?: string | null) =>
 		items.find((x) => x.id.toLowerCase() === id?.toLowerCase())?.name ?? id ?? '';
 
+	#diff = (label: string, oldValue?: string | null, newValue?: string | null) =>
+		html`<div>${this.localize.term(label)}: <s class="old">${oldValue}</s> <span class="new">${newValue}</span></div>`;
+
 	#renderChange(item: TicketHistory) {
 		return (item.changes ?? []).map((change) => {
 			switch (change.field) {
 				case 'Email':
 					return html`<div>${this.localize.term('uSupport_emailTo')} ${change.new}</div>`;
 				case 'Status':
-					return html`<div>
-						${this.localize.term('uSupport_status')}: ${this.#name(this._statuses, change.old)} → ${this.#name(this._statuses, change.new)}
-					</div>`;
+					return this.#diff('uSupport_status', this.#name(this._statuses, change.old), this.#name(this._statuses, change.new));
 				case 'Type':
-					return html`<div>
-						${this.localize.term('uSupport_type')}: ${this.#name(this._types, change.old)} → ${this.#name(this._types, change.new)}
-					</div>`;
+					return this.#diff('uSupport_type', this.#name(this._types, change.old), this.#name(this._types, change.new));
 				case 'InternalComment':
-					return html`<div>${this.localize.term('uSupport_internalCommentUpdated')}</div>`;
+					return this.#diff('uSupport_internalComment', change.old, change.new);
 				default:
 					return nothing;
 			}
@@ -76,22 +75,28 @@ export class USupportTicketHistoryViewElement extends UmbLitElement {
 		return html`
 			<div class="layout">
 				<uui-box headline=${this.localize.term('uSupport_history')}>
-					${this._history.map(
-						(item) => html`
-							<div class="item">
-								<uui-avatar name=${item.user?.name ?? 'uSupport'} img-src=${item.user?.avatarUrls?.[0] ?? ''}></uui-avatar>
-								<div>
-									<uui-tag color=${ACTION_COLOR[item.actionType] ?? 'default'}>${item.actionType}</uui-tag>
-									<strong>${item.user?.name}</strong>
-									<small>${formatDate(item.date)}</small>
-									${this.#renderChange(item)}
-								</div>
-							</div>
-						`,
-					)}
+					${this._history.length
+						? html`<umb-history-list>
+								${this._history.map(
+									(item) => html`
+										<umb-history-item .name=${item.user?.name ?? 'uSupport'} .detail=${formatDate(item.date)}>
+											<umb-user-avatar slot="avatar" .name=${item.user?.name} .imgUrls=${item.user?.avatarUrls ?? []}></umb-user-avatar>
+											<div class="log-type">
+												<uui-tag color=${ACTION_COLOR[item.actionType] ?? 'default'}>${item.actionType}</uui-tag>
+												<div>${this.#renderChange(item)}</div>
+											</div>
+										</umb-history-item>
+									`,
+								)}
+							</umb-history-list>`
+						: this.localize.term('content_noItemsToShow')}
 					${this._totalPages > 1
 						? html`<uui-pagination
 								.current=${this._page}
+								firstlabel=${this.localize.term('general_first')}
+								previouslabel=${this.localize.term('general_previous')}
+								nextlabel=${this.localize.term('general_next')}
+								lastlabel=${this.localize.term('general_last')}
 								.total=${this._totalPages}
 								@change=${(e: Event) => {
 									this._page = (e.target as HTMLElement & { current: number }).current;
@@ -108,15 +113,27 @@ export class USupportTicketHistoryViewElement extends UmbLitElement {
 		UmbTextStyles,
 		ticketLayoutStyles,
 		css`
-			.item {
-				display: flex;
-				gap: var(--uui-size-space-4);
-				padding: var(--uui-size-space-3) 0;
-				border-bottom: 1px solid var(--uui-color-border);
+			.old {
+				color: var(--uui-color-danger);
 			}
-			small {
-				color: var(--uui-color-text-alt);
-				margin-left: var(--uui-size-space-2);
+			.new {
+				color: var(--uui-color-positive);
+			}
+			.log-type {
+				display: grid;
+				grid-template-columns: var(--uui-size-40) auto;
+				gap: var(--uui-size-layout-1);
+			}
+			.log-type uui-tag {
+				justify-self: center;
+				height: fit-content;
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+			uui-pagination {
+				display: flex;
+				justify-content: center;
+				margin-top: var(--uui-size-layout-1);
 			}
 		`,
 	];

@@ -3,6 +3,7 @@ import { UmbEntityActionBase, UmbRequestReloadChildrenOfEntityEvent } from '@umb
 import { UMB_ACTION_EVENT_CONTEXT } from '@umbraco-cms/backoffice/action';
 import { umbConfirmModal, umbOpenModal } from '@umbraco-cms/backoffice/modal';
 import { UmbLocalizationController } from '@umbraco-cms/backoffice/localization-api';
+import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { USupportRepository } from '../repository/usupport.repository.js';
 import { USUPPORT_TICKET_ENTITY_TYPE, workspacePath } from '../constants.js';
 import { LOOKUPS, type LookupConfig } from './lookup.js';
@@ -73,8 +74,9 @@ export class DeleteLookupAction extends LookupActionBase {
 			color: 'danger',
 			confirmLabel: this.localize.term('actions_delete'),
 		});
-		await this.config.delete(this.repository, id);
+		if (!(await this.config.delete(this.repository, id))) return;
 		await this.reloadTree();
+		(await this.getContext(UMB_NOTIFICATION_CONTEXT))?.peek('positive', { data: { message: this.localize.term('general_deleted') } });
 
 		// Deleted from its own workspace ("..." menu): leave the now-missing item.
 		if (location.pathname.endsWith(`/edit/${id}`)) history.pushState(null, '', `/umbraco/${workspacePath(this.config.rootEntityType)}`);

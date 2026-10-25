@@ -2,6 +2,7 @@ import type { TicketStatus } from '../repository/usupport.repository.js';
 import { USUPPORT_TICKET_STATUS_WORKSPACE_ALIAS } from '../constants.js';
 import { USupportLookupWorkspaceContext } from '../shared/lookup-workspace.context.js';
 import { LOOKUPS } from '../shared/lookup.js';
+import { EMPTY_GUID } from '../constants.js';
 
 export class USupportTicketStatusWorkspaceContext extends USupportLookupWorkspaceContext<TicketStatus> {
 	readonly workspaceAlias = USUPPORT_TICKET_STATUS_WORKSPACE_ALIAS;
@@ -9,7 +10,7 @@ export class USupportTicketStatusWorkspaceContext extends USupportLookupWorkspac
 	protected readonly editor = () => import('./ticket-status-editor.element.js');
 
 	protected readonly empty = (): TicketStatus => ({
-		id: '',
+		id: EMPTY_GUID,
 		name: '',
 		alias: '',
 		icon: 'icon-tag',

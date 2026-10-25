@@ -9,7 +9,7 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
 	host.consumeContext(UMB_AUTH_CONTEXT, (auth) => {
 		if (!auth) return;
 		const config = auth.getOpenApiConfiguration();
-		client.setConfig({ auth: config.token, baseUrl: config.base, credentials: config.credentials });
+		client.setConfig({ auth: config.token, baseUrl: config.base, credentials: config.credentials, throwOnError: true });
 		client.interceptors.request.use(async (request) => {
 			request.headers.set('Authorization', `Bearer ${await auth.getLatestToken()}`);
 			return request;

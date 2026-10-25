@@ -1,6 +1,7 @@
 import { UmbEntityActionBase } from '@umbraco-cms/backoffice/entity-action';
 import { umbConfirmModal } from '@umbraco-cms/backoffice/modal';
 import { UmbLocalizationController } from '@umbraco-cms/backoffice/localization-api';
+import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { USupportRepository } from '../../repository/usupport.repository.js';
 import { USUPPORT_TICKETS_ROOT_ENTITY_TYPE, workspacePath } from '../../constants.js';
 
@@ -19,7 +20,8 @@ export class USupportDeleteTicketAction extends UmbEntityActionBase<never> {
 			color: 'danger',
 			confirmLabel: this.#localize.term('actions_delete'),
 		});
-		await this.#repository.deleteTicket(id);
+		if (!(await this.#repository.deleteTicket(id))) return;
+		(await this.getContext(UMB_NOTIFICATION_CONTEXT))?.peek('positive', { data: { message: this.#localize.term('general_deleted') } });
 		history.pushState(null, '', `/umbraco/${workspacePath(USUPPORT_TICKETS_ROOT_ENTITY_TYPE)}`);
 	}
 }

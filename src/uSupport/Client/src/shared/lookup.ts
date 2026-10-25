@@ -28,7 +28,7 @@ export interface LookupConfig {
 	itemIcon: (item: LookupItem) => string;
 	getAll: (repository: USupportRepository) => Promise<LookupItem[] | undefined>;
 	getDependents: (repository: USupportRepository, id: string) => Promise<DependentTicket[] | undefined>;
-	delete: (repository: USupportRepository, id: string) => Promise<unknown>;
+	delete: (repository: USupportRepository, id: string) => Promise<boolean>;
 	sort: (repository: USupportRepository, ids: string[]) => Promise<unknown>;
 }
 

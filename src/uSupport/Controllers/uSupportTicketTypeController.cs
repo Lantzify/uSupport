@@ -79,7 +79,7 @@ namespace uSupport.Controllers
 		[HttpDelete("{id:guid}")]
 		[Authorize(Policy = uSupportConstants.uSupportSectionAccess)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public IActionResult Delete(Guid id)
 		{
@@ -88,7 +88,7 @@ namespace uSupport.Controllers
 				return NotFound();
 
 			if (GetDependentTicketItems(id).Any())
-				return BadRequest("The ticket type is used by one or more tickets.");
+				return Problem(title: "The ticket type is used by one or more tickets.", statusCode: StatusCodes.Status400BadRequest);
 
 			_uSupportTicketTypeService.Delete(id);
 			_eventAggregator.Publish(new DeleteTicketTypeNotification(type));

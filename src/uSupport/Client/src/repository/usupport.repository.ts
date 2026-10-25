@@ -44,13 +44,19 @@ export class USupportRepository extends UmbControllerBase {
 		return error ? undefined : data;
 	}
 
+	/** Deletes return no body, so report success as a boolean. */
+	async #delete(promise: Promise<unknown>) {
+		const { error } = await tryExecute(this, promise);
+		return !error;
+	}
+
 	// Tickets
 	getTickets = (list: TicketList, query: TicketQuery) =>
 		this.#run(list === 'active' ? TicketService.getUsupportTicketActive({ query }) : TicketService.getUsupportTicketResolved({ query }));
 	getTicket = (id: string) => this.#run(TicketService.getUsupportTicketById({ path: { id } }));
 	createTicket = (body: CreateTicketRequestModel) => this.#run(TicketService.postUsupportTicket({ body }));
 	updateTicket = (id: string, body: UpdateTicketRequestModel) => this.#run(TicketService.putUsupportTicketById({ path: { id }, body }));
-	deleteTicket = (id: string) => this.#run(TicketService.deleteUsupportTicketById({ path: { id } }));
+	deleteTicket = (id: string) => this.#delete(TicketService.deleteUsupportTicketById({ path: { id } }));
 	getHistory = (id: string, page: number) => this.#run(TicketService.getUsupportTicketByIdHistory({ path: { id }, query: { page } }));
 
 	// Comments
@@ -64,7 +70,7 @@ export class USupportRepository extends UmbControllerBase {
 	getType = (id: string) => this.#run(TicketTypeService.getUsupportTicketTypeById({ path: { id } }));
 	createType = (body: USupportTicketTypeModel) => this.#run(TicketTypeService.postUsupportTicketType({ body }));
 	updateType = (id: string, body: USupportTicketTypeModel) => this.#run(TicketTypeService.putUsupportTicketTypeById({ path: { id }, body }));
-	deleteType = (id: string) => this.#run(TicketTypeService.deleteUsupportTicketTypeById({ path: { id } }));
+	deleteType = (id: string) => this.#delete(TicketTypeService.deleteUsupportTicketTypeById({ path: { id } }));
 	getTypeDependents = (id: string) => this.#run(TicketTypeService.getUsupportTicketTypeByIdDependentTickets({ path: { id } }));
 	sortTypes = (ids: string[]) => this.#run(TicketTypeService.putUsupportTicketTypeSort({ body: ids }));
 
@@ -73,7 +79,7 @@ export class USupportRepository extends UmbControllerBase {
 	getStatus = (id: string) => this.#run(TicketStatusService.getUsupportTicketStatusById({ path: { id } }));
 	createStatus = (body: USupportTicketStatusModel) => this.#run(TicketStatusService.postUsupportTicketStatus({ body }));
 	updateStatus = (id: string, body: USupportTicketStatusModel) => this.#run(TicketStatusService.putUsupportTicketStatusById({ path: { id }, body }));
-	deleteStatus = (id: string) => this.#run(TicketStatusService.deleteUsupportTicketStatusById({ path: { id } }));
+	deleteStatus = (id: string) => this.#delete(TicketStatusService.deleteUsupportTicketStatusById({ path: { id } }));
 	getStatusDependents = (id: string) => this.#run(TicketStatusService.getUsupportTicketStatusByIdDependentTickets({ path: { id } }));
 	sortStatuses = (ids: string[]) => this.#run(TicketStatusService.putUsupportTicketStatusSort({ body: ids }));
 

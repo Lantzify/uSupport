@@ -3,7 +3,7 @@ import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { USupportRepository, type TicketType } from '../../repository/usupport.repository.js';
 import { USUPPORT_RICH_TEXT_DATA_TYPE_KEY, markupOf } from '../../constants.js';
-import { typeIcon } from '../../shared/display.js';
+import { typeIconName } from '../../shared/display.js';
 import type { USupportTicketPropertyElement } from '../components/ticket-property.element.js';
 import '../components/ticket-property.element.js';
 
@@ -71,12 +71,17 @@ export class USupportCreateTicketModalElement extends UmbModalBaseElement<never,
 
 	#renderTypes() {
 		return html`
+			<p class="subtitle">${this.localize.term('uSupport_chooseType')}</p>
 			<div class="types">
 				${this._types.map(
 					(type) => html`
-						<uui-card-block-type name=${type.name} description=${type.description ?? ''} @open=${() => (this._type = type)}>
-							${typeIcon(type)}
-						</uui-card-block-type>
+						<button class="type" type="button" @click=${() => (this._type = type)}>
+							<umb-icon name=${typeIconName(type)}></umb-icon>
+							<span>
+								<strong>${type.name}</strong>
+								<small>${type.description}</small>
+							</span>
+						</button>
 					`,
 				)}
 			</div>
@@ -114,13 +119,43 @@ export class USupportCreateTicketModalElement extends UmbModalBaseElement<never,
 			max-height: 70vh;
 			overflow-y: auto;
 		}
+		.subtitle {
+			margin-top: 0;
+			color: var(--uui-color-text-alt);
+		}
 		.types {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+			display: flex;
+			flex-direction: column;
 			gap: var(--uui-size-space-4);
 		}
-		uui-card-block-type umb-icon {
-			font-size: var(--uui-size-8);
+		.type {
+			display: flex;
+			align-items: center;
+			gap: var(--uui-size-space-5);
+			padding: var(--uui-size-space-5);
+			border: 1px solid var(--uui-color-border);
+			border-radius: var(--uui-border-radius);
+			background: var(--uui-color-surface);
+			color: var(--uui-color-text);
+			font: inherit;
+			text-align: left;
+			cursor: pointer;
+			transition: background-color 120ms;
+		}
+		.type:hover,
+		.type:focus-visible {
+			background: var(--uui-color-surface-emphasis);
+		}
+		.type umb-icon {
+			font-size: var(--uui-size-14);
+		}
+		.type span {
+			display: flex;
+			flex-direction: column;
+			gap: var(--uui-size-space-1);
+		}
+		.type small {
+			color: var(--uui-color-text-alt);
 		}
 		uui-input {
 			width: 100%;

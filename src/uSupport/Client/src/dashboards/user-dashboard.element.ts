@@ -1,6 +1,6 @@
 import { css, customElement, html, query, state } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
-import { UMB_CURRENT_USER_CONTEXT, UMB_CURRENT_USER_MODAL } from '@umbraco-cms/backoffice/current-user';
+import { UMB_CURRENT_USER_CONTEXT } from '@umbraco-cms/backoffice/current-user';
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
 import type { UmbCurrentUserModel } from '@umbraco-cms/backoffice/current-user';
 import { USUPPORT_CREATE_TICKET_MODAL } from '../tickets/modals/tokens.js';
@@ -30,7 +30,6 @@ export class USupportUserDashboardElement extends UmbLitElement {
 	render() {
 		return html`
 			<div class="usupport-dashboard">
-		
 				<uui-button
 						style="margin-bottom: var(--uui-size-layout-1);"
 						look="outline"
@@ -38,28 +37,14 @@ export class USupportUserDashboardElement extends UmbLitElement {
 						label=${this.localize.term('uSupport_createTicket')}
 						@click=${this.#createTicket}></uui-button>
 
-				<div class="layout">
-					<div class="main">
-						<uui-box headline=${this.localize.term('uSupport_activeTickets')}>
-							<usupport-tickets-table list="active"></usupport-tickets-table>
-						</uui-box>
-						<uui-box headline=${this.localize.term('uSupport_resolvedTickets')}>
-							<usupport-tickets-table list="resolved"></usupport-tickets-table>
-						</uui-box>
-					</div>
-
-					
-					<uui-box class="profile">
-						<uui-avatar size="xl" name=${this._user?.name ?? ''} img-src=${this._user?.avatarUrls?.[3] ?? ''}></uui-avatar>
-						<h3>${this._user?.name}</h3>
-						<p>${this._user?.email}</p>
-						<uui-button
-							look="secondary"
-							label=${this.localize.term('uSupport_editProfile')}
-							@click=${() => umbOpenModal(this, UMB_CURRENT_USER_MODAL).catch(() => undefined)}></uui-button>
+				<div class="main">
+					<uui-box headline=${this.localize.term('uSupport_activeTickets')}>
+						<usupport-tickets-table list="active"></usupport-tickets-table>
+					</uui-box>
+					<uui-box headline=${this.localize.term('uSupport_resolvedTickets')}>
+						<usupport-tickets-table list="resolved"></usupport-tickets-table>
 					</uui-box>
 				</div>
-	
 			</div>
 		`;
 	}
@@ -68,24 +53,10 @@ export class USupportUserDashboardElement extends UmbLitElement {
 		.usupport-dashboard {
 			padding: var(--uui-size-layout-1);
 		}
-		.layout {
-			display: grid;
-			grid-template-columns: 1fr 280px;
-			gap: var(--uui-size-layout-1);
-		}
 		.main {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uui-size-layout-1);
-		}
-		.profile {
-			text-align: center;
-			align-self: start;
-		}
-		@media (max-width: 1000px) {
-			.layout {
-				grid-template-columns: 1fr;
-			}
 		}
 	`;
 }

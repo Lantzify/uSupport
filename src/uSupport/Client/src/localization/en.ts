@@ -26,7 +26,7 @@ export default {
 		resolvedTickets: 'Resolved tickets',
 		viewActiveTickets: 'View active tickets',
 		createTicket: 'Create ticket',
-		chooseType: 'What is the ticket about?',
+		chooseType: "Choose what type of problem you're having",
 		ticketCreated: 'Ticket %0% was created',
 		ticketSaved: 'Ticket saved',
 		ticketSavedAndSent: 'Ticket saved and email sent to the author',
@@ -53,7 +53,7 @@ export default {
 		commentAdded: 'Comment added',
 
 		icon: 'Icon',
-		color: 'Colour',
+		color: 'Color',
 		preview: 'Preview',
 		active: 'Active',
 		activeDescription: 'Tickets with an inactive status count as resolved',

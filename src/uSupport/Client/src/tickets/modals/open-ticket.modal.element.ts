@@ -1,4 +1,4 @@
-import { customElement, html, state } from '@umbraco-cms/backoffice/external/lit';
+import { customElement, html, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
 import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import { USupportRepository, type Ticket } from '../../repository/usupport.repository.js';
@@ -26,16 +26,23 @@ export class USupportOpenTicketModalElement extends UmbModalBaseElement<{ id: st
 					? html`
 							<div class="layout">
 								<div class="main">
+									<uui-box>
+										<umb-property-layout label='Ticket title'}>
+											<p slot="editor">${ticket.title}</p>
+										</umb-property-layout>
 									
-									${ticket.type?.dataTypeKey
-										? html`<uui-box>
-												<usupport-ticket-property
-													readonly
-													.dataTypeKey=${ticket.type.dataTypeKey}
-													label=${ticket.type.propertyName ?? ''}
-													.value=${ticket.propertyValue}></usupport-ticket-property>
-											</uui-box>`
-										: ''}
+										<umb-property-layout label='Ticket summary'}>
+											<p slot="editor">${unsafeHTML(ticket.summary)}</p>
+										</umb-property-layout>
+										
+										${ticket.type?.dataTypeKey
+											? html`<usupport-ticket-property
+														readonly
+														.dataTypeKey=${ticket.type.dataTypeKey}
+														label=${ticket.type.propertyName ?? ''}
+														.value=${ticket.propertyValue}></usupport-ticket-property>`
+											: ''}
+									</uui-box>
 									<uui-box headline=${this.localize.term('uSupport_comments')}>
 										<usupport-comments .ticketId=${ticket.id}></usupport-comments>
 									</uui-box>

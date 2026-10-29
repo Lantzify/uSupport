@@ -1,21 +1,23 @@
 import { html, nothing } from '@umbraco-cms/backoffice/external/lit';
 import type { TicketStatus } from '../repository/usupport.repository.js';
 
-/** Status colours are stored as v13 badge names; map them onto uui-tag. */
-const STATUS_TAG: Record<string, { color: string; look: string }> = {
-	primary: { color: 'default', look: 'primary' },
-	secondary: { color: 'default', look: 'secondary' },
-	success: { color: 'positive', look: 'primary' },
-	warning: { color: 'warning', look: 'primary' },
-	danger: { color: 'danger', look: 'primary' },
-	gray: { color: 'default', look: 'outline' },
+/** Status colours are stored as v13 badge names; map them onto the UUI palette tokens closest to the v13 badges (background, text). */
+const STATUS_TAG: Record<string, [string, string]> = {
+	primary: ['--uui-palette-violet-blue', '--uui-palette-white'],
+	secondary: ['--uui-palette-space-cadet', '--uui-palette-white'],
+	success: ['--uui-palette-jungle-green', '--uui-palette-white'],
+	warning: ['--uui-palette-deep-saffron', '--uui-palette-white'],
+	danger: ['--uui-palette-maroon-flush', '--uui-palette-white'],
+	gray: ['--uui-palette-timberwolf', '--uui-palette-violet-blue'],
 };
 export const STATUS_COLORS = Object.keys(STATUS_TAG);
 
 export const statusTag = (status?: Pick<TicketStatus, 'name' | 'color'> | null) => {
 	if (!status) return nothing;
-	const tag = STATUS_TAG[status.color ?? ''] ?? STATUS_TAG.secondary;
-	return html`<uui-tag color=${tag.color} look=${tag.look}>${status.name}</uui-tag>`;
+	const [background, text] = STATUS_TAG[status.color ?? ''] ?? STATUS_TAG.secondary;
+	return html`<uui-tag style="background-color: var(${background}); border-color: var(${background}); color: var(${text})"
+		>${status.name}</uui-tag
+	>`;
 };
 
 /** Types store icon and colour separately (e.g. "icon-layout" + "color-indigo"). */

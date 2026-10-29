@@ -1,13 +1,19 @@
 import path from 'path';
 import { defineConfig, devices } from '@playwright/test';
 
-// Must match Umbraco:CMS:Unattended in appsettings and the https URL in launchSettings.json
-process.env.URL = 'https://localhost:44311';
+
+process.env.URL = 'https://localhost:44318';
+
+//Admin
 process.env.UMBRACO_USER_LOGIN = 'admin@admin.com';
 process.env.UMBRACO_USER_PASSWORD = 'password123';
 
-export const STORAGE_STATE = path.join(__dirname, 'tests/.auth/user.json');
-process.env.STORAGE_STAGE_PATH = STORAGE_STATE;
+// Editor
+process.env.UMBRACO_EDITOR_LOGIN = 'editor@editor.com';
+process.env.UMBRACO_EDITOR_PASSWORD = 'password123';
+
+export const ADMIN_STATE = path.join(__dirname, 'tests/.auth/admin.json');
+export const EDITOR_STATE = path.join(__dirname, 'tests/.auth/editor.json');
 
 export default defineConfig({
   testDir: './tests',
@@ -20,13 +26,29 @@ export default defineConfig({
     testIdAttribute: 'data-mark',
     trace: 'retain-on-failure',
   },
+  // Starts the site if nothing is running on the URL yet; locally it reuses IIS Express from Visual Studio
+  webServer: {
+    command: `dotnet run --project ../uSupport.Web -- --urls ${process.env.URL}`,
+    url: `${process.env.URL}/umbraco`,
+    ignoreHTTPSErrors: true,
+    reuseExistingServer: !process.env.CI,
+    timeout: 5 * 60_000, // first boot runs the unattended install
+  },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    { name: 'admin-setup', testMatch: 'admin.setup.ts' },
+    { name: 'editor-setup', testMatch: 'editor.setup.ts' },
     {
-      name: 'chromium',
-      testMatch: /.*\.spec\.ts/,
-      dependencies: ['setup'],
-      use: { ...devices['Desktop Chrome'], storageState: STORAGE_STATE },
+      name: 'admin',
+      testMatch: '*.spec.ts',
+      testIgnore: 'editor/**',
+      dependencies: ['admin-setup'],
+      use: { ...devices['Desktop Chrome'], storageState: ADMIN_STATE },
+    },
+    {
+      name: 'editor',
+      testMatch: 'editor/**/*.spec.ts',
+      dependencies: ['editor-setup'],
+      use: { ...devices['Desktop Chrome'], storageState: EDITOR_STATE },
     },
   ],
 });

@@ -97,7 +97,7 @@ export abstract class USupportLookupWorkspaceContext<T extends LookupModel = Loo
 		this.#isNew.setValue(false);
 
 		(await this.getContext(UMB_NOTIFICATION_CONTEXT))?.peek('positive', {
-			data: { message: this.#localize.term('speechBubbles_editContentSavedHeader') },
+			data: { message: this.#localize.term(this.config.key === 'status' ? 'uSupport_statusSaved' : 'uSupport_typeSaved') },
 		});
 		(await this.getContext(UMB_ACTION_EVENT_CONTEXT))?.dispatchEvent(
 			new UmbRequestReloadChildrenOfEntityEvent({ entityType: this.config.rootEntityType, unique: null }),

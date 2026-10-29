@@ -30,6 +30,8 @@ export default {
 		ticketCreated: 'Ticket %0% was created',
 		ticketSaved: 'Ticket saved',
 		ticketSavedAndSent: 'Ticket saved and email sent to the author',
+		statusSaved: 'Status saved',
+		typeSaved: 'Type saved',
 		saveAndSendEmail: 'Save and send email',
 		editProfile: 'Edit profile',
 

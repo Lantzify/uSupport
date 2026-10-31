@@ -1,5 +1,5 @@
 import { css, customElement, html, nothing, property, state } from '@umbraco-cms/backoffice/external/lit';
-import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
+import { UmbLitElement, umbFocus } from '@umbraco-cms/backoffice/lit-element';
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
 import { UMB_ICON_PICKER_MODAL } from '@umbraco-cms/backoffice/icon';
 import { typeIcon } from './display.js';
@@ -59,10 +59,12 @@ export class USupportLookupEditorElement extends UmbLitElement {
 						<umb-input-with-alias
 							id="name"
 							label=${this.localize.term('placeholders_entername')}
+							placeholder=${this.localize.term('placeholders_entername')}
 							.value=${this._model?.name ?? ''}
 							.alias=${this._model?.alias ?? ''}
 							?auto-generate-alias=${this._isNew}
 							required
+							${umbFocus()}
 							@change=${(e: Event) => {
 								const input = e.target as HTMLInputElement & { alias?: string };
 								this.#context?.updateModel({ name: input.value ?? '', alias: input.alias ?? '' });

@@ -223,6 +223,8 @@ namespace uSupport.Services
 			try
 			{
 				var ticket = Get(id);
+				if (ticket == null)
+					return;
 
 				base.Delete(id);
 

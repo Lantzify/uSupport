@@ -188,8 +188,12 @@ namespace uSupport.Controllers
 		[HttpDelete("{id:guid}")]
 		[Authorize(Policy = uSupportConstants.uSupportSectionAccess)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public IActionResult Delete(Guid id)
 		{
+			if (_uSupportTicketService.Get(id) == null)
+				return NotFound();
+
 			_uSupportTicketService.Delete(id);
 			return Ok();
 		}

@@ -4,6 +4,7 @@ on:
     types:
       - published
 permissions:
+  id-token: write
   contents: read
 jobs:
   release_name:
@@ -24,11 +25,20 @@ jobs:
       - name: Build frontend assets
         run: npm run build
         working-directory: src/uSupport/Client
+
       - name: Run tests
         run: dotnet test --configuration Release src/uSupport.Tests
       - name: Build project
         run: dotnet build --configuration Release src/uSupport
+
       - name: Package files
         run: dotnet pack --configuration Release  src/uSupport /p:Version=${{github.ref_name}}
+
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{secrets.NUGET_USER}}
+
       - name: Publish the package
-        run: dotnet nuget push src/uSupport/build/Release/uSupport.${{github.ref_name}}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.PRIVATE_NUGET_KEY }}
+        run: dotnet nuget push src/uSupport/build/Release/uSupport.${{github.ref_name}}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{steps.login.outputs.NUGET_API_KEY}}

@@ -1,4 +1,6 @@
-﻿using uSupport.Services;
+using uSupport.Helpers;
+using uSupport.Services;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using uSupport.Services.Interfaces;
 using Umbraco.Cms.Core.DependencyInjection;
@@ -15,7 +17,12 @@ namespace uSupport.Composers
 							.AddTransient<IuSupportTicketCommentService, uSupportTicketCommentService>()
 							.AddTransient<IuSupportTicketHistoryService, uSupportTicketHistoryService>()
 							.AddTransient<IuSupportTicketService, uSupportTicketService>()
-							.AddTransient<IuSupportSettingsService, uSupportSettingsService>();
+							.AddTransient<IuSupportSettingsService, uSupportSettingsService>()
+							.AddTransient<uSupportUserHelper>();
+
+			builder.Services.ConfigureOptions<ConfigureSwaggerGenOptions>();
+			builder.Services.AddSingleton<IOperationIdHandler, uSupportOperationIdHandler>();
+			builder.Services.AddSingleton<ISchemaIdHandler, uSupportSchemaIdHandler>();
 		}
 	}
 }

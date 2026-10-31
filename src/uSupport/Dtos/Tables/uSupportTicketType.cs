@@ -7,5 +7,6 @@
         public string? PropertyName { get; set; }
         public string? PropertyDescription { get; set; }
         public string? PropertyView { get; set; }
+        public Guid? DataTypeKey { get; set; }
     }
 }

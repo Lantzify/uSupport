@@ -11,6 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: 'src/uSupport/Client/package-lock.json'
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: src/uSupport/Client
+
+      - name: Build frontend assets
+        run: npm run build
+        working-directory: src/uSupport/Client
+      - name: Run tests
+        run: dotnet test --configuration Release src/uSupport.Tests
       - name: Build project
         run: dotnet build --configuration Release src/uSupport
       - name: Package files

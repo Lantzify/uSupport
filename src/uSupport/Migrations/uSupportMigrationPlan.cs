@@ -29,7 +29,8 @@ namespace uSupport.Migrations
 				.To<AddLastUpdatedToTickets>("uSupport-add-last-updated-to-tickets")
 				.To<AddInternalCommentColumn>("uSupport-add-internal-comment-column")
 				.To<uSupportSettingsTable>("uSupport-settings")
-				.To<AddDataTypeKeyToTicketTypes>("uSupport-17-data-type-key");
+				.To<AddDataTypeKeyToTicketTypes>("uSupport-17-data-type-key")
+				.To<MigrateContentPickerValues>("uSupport-17-content-picker-values");
 		}
 	}
 }

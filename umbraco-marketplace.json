@@ -11,7 +11,7 @@
         "Free"
     ],
     "Title": "uSupport",
-    "Description": "uSupport is an feature rich ticketing system designed specifically for the Umbraco. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.",
+    "Description": "uSupport is a feature-rich ticketing system designed specifically for Umbraco. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.",
     "DiscussionForumUrl": "https://our.umbraco.com/packages/backoffice-extensions/usupport/usupport-support/",
     "DocumentationUrl": "https://Lantzify.github.io/uSupport-documentation/",
     "IssueTrackerUrl": "https://github.com/Lantzify/uSupport/issues",

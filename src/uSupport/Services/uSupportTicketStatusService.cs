@@ -66,7 +66,7 @@ namespace uSupport.Services
 			var context = GetScope();
 			try
 			{
-				return context.Scope.Database.Query<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} ORDER BY [Order]");
+				return context.Scope.Database.Fetch<uSupportTicketStatus>($"SELECT * FROM {TicketStatusTableAlias} ORDER BY [Order]");
 			}
 			finally
 			{

@@ -56,12 +56,20 @@ namespace uSupport.Controllers
 		[HttpGet("active")]
 		[ProducesResponseType<uSupportPage<uSupportTicket>>(StatusCodes.Status200OK)]
 		public IActionResult GetActive(long page = 1, string? searchTerm = null, string? sortColumn = null, bool sortDescending = true)
-			=> Ok(_uSupportTicketService.GetPagedActiveTickets(page, searchTerm, ToSort(sortColumn, sortDescending)));
+		{
+			var tickets = _uSupportTicketService.GetPagedActiveTickets(page, searchTerm, ToSort(sortColumn, sortDescending));
+			HideInternalComments(tickets.Items);
+			return Ok(tickets);
+		}
 
 		[HttpGet("resolved")]
 		[ProducesResponseType<uSupportPage<uSupportTicket>>(StatusCodes.Status200OK)]
 		public IActionResult GetResolved(long page = 1, string? searchTerm = null, string? sortColumn = null, bool sortDescending = true)
-			=> Ok(_uSupportTicketService.GetPagedResolvedTickets(page, searchTerm, ToSort(sortColumn, sortDescending)));
+		{
+			var tickets = _uSupportTicketService.GetPagedResolvedTickets(page, searchTerm, ToSort(sortColumn, sortDescending));
+			HideInternalComments(tickets.Items);
+			return Ok(tickets);
+		}
 
 		[HttpGet("any-resolved")]
 		[ProducesResponseType<bool>(StatusCodes.Status200OK)]
@@ -77,12 +85,25 @@ namespace uSupport.Controllers
 				return NotFound();
 
 			ticket.Author = _userHelper.GetUser(ticket.AuthorId);
+			HideInternalComments([ticket]);
 			return Ok(ticket);
 		}
 
 		[HttpGet("{id:guid}/history")]
 		[ProducesResponseType<uSupportPage<uSupportTicketHistory>>(StatusCodes.Status200OK)]
-		public IActionResult GetHistory(Guid id, long page = 1) => Ok(_uSupportTicketHistoryService.GetPagedByTicketId(id, page));
+		public IActionResult GetHistory(Guid id, long page = 1)
+		{
+			var history = _uSupportTicketHistoryService.GetPagedByTicketId(id, page);
+			if (!IsSupportUser())
+			{
+				foreach (var item in history.Items)
+				{
+					item.Changes = item.Changes?.Where(x => x.Field != "InternalComment").ToList();
+					item.ChangesJson = null;
+				}
+			}
+			return Ok(history);
+		}
 
 		[HttpPost]
 		[ProducesResponseType<uSupportTicket>(StatusCodes.Status200OK)]
@@ -196,6 +217,19 @@ namespace uSupport.Controllers
 
 			_uSupportTicketService.Delete(id);
 			return Ok();
+		}
+
+		// Internal comments are for uSupport section users only; everyone else can still read the tickets.
+		private bool IsSupportUser()
+			=> CurrentUser(_backOfficeSecurityAccessor).AllowedSections.Contains(uSupportConstants.SectionAlias);
+
+		private void HideInternalComments(IEnumerable<uSupportTicket> tickets)
+		{
+			if (IsSupportUser())
+				return;
+
+			foreach (var ticket in tickets)
+				ticket.InternalComment = null;
 		}
 
 		private static uSupportSort? ToSort(string? sortColumn, bool sortDescending)

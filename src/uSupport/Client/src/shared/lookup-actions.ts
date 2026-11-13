@@ -59,7 +59,7 @@ export class DeleteLookupAction extends LookupActionBase {
 					<ul>
 						${dependents.map(
 							(ticket) =>
-								html`<li><a href=${`/umbraco/${workspacePath(USUPPORT_TICKET_ENTITY_TYPE, `edit/${ticket.id}`)}`}>${ticket.name}</a></li>`,
+								html`<li><a href=${`/umbraco/${workspacePath(USUPPORT_TICKET_ENTITY_TYPE, `edit/${ticket.id}`)}`}>${ticket.ticketId} - ${ticket.name}</a></li>`,
 						)}
 					</ul>
 				`,
@@ -70,7 +70,7 @@ export class DeleteLookupAction extends LookupActionBase {
 
 		await umbConfirmModal(this, {
 			headline: this.localize.term('actions_delete'),
-			content: this.localize.term('defaultdialogs_confirmdelete') + '?',
+			content: this.localize.term('defaultdialogs_confirmdelete'),
 			color: 'danger',
 			confirmLabel: this.localize.term('actions_delete'),
 		});

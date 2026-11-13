@@ -18,9 +18,19 @@ export type CreateTicketRequestModel = {
 
 export type PreviewDeleteItemDtoModel = {
     id: string;
+    ticketId?: string | null;
     name?: string | null;
     type?: string | null;
     path?: string | null;
+};
+
+export type ProblemDetails = {
+    type?: string | null;
+    title?: string | null;
+    status?: number | null;
+    detail?: string | null;
+    instance?: string | null;
+    [key: string]: unknown | string | null | string | null | number | null | string | null | string | null | undefined;
 };
 
 export type UpdateTicketRequestModel = {
@@ -265,12 +275,14 @@ export type DeleteUsupportTicketStatusByIdErrors = {
     /**
      * Bad Request
      */
-    400: unknown;
+    400: ProblemDetails;
     /**
      * Not Found
      */
     404: unknown;
 };
+
+export type DeleteUsupportTicketStatusByIdError = DeleteUsupportTicketStatusByIdErrors[keyof DeleteUsupportTicketStatusByIdErrors];
 
 export type DeleteUsupportTicketStatusByIdResponses = {
     /**
@@ -384,6 +396,15 @@ export type PostUsupportTicketTypeData = {
     url: '/umbraco/management/api/v1/usupport/ticket-type';
 };
 
+export type PostUsupportTicketTypeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ProblemDetails;
+};
+
+export type PostUsupportTicketTypeError = PostUsupportTicketTypeErrors[keyof PostUsupportTicketTypeErrors];
+
 export type PostUsupportTicketTypeResponses = {
     /**
      * OK
@@ -406,12 +427,14 @@ export type DeleteUsupportTicketTypeByIdErrors = {
     /**
      * Bad Request
      */
-    400: unknown;
+    400: ProblemDetails;
     /**
      * Not Found
      */
     404: unknown;
 };
+
+export type DeleteUsupportTicketTypeByIdError = DeleteUsupportTicketTypeByIdErrors[keyof DeleteUsupportTicketTypeByIdErrors];
 
 export type DeleteUsupportTicketTypeByIdResponses = {
     /**
@@ -456,10 +479,16 @@ export type PutUsupportTicketTypeByIdData = {
 
 export type PutUsupportTicketTypeByIdErrors = {
     /**
+     * Bad Request
+     */
+    400: ProblemDetails;
+    /**
      * Not Found
      */
     404: unknown;
 };
+
+export type PutUsupportTicketTypeByIdError = PutUsupportTicketTypeByIdErrors[keyof PutUsupportTicketTypeByIdErrors];
 
 export type PutUsupportTicketTypeByIdResponses = {
     /**
@@ -525,6 +554,13 @@ export type DeleteUsupportTicketByIdData = {
     };
     query?: never;
     url: '/umbraco/management/api/v1/usupport/ticket/{id}';
+};
+
+export type DeleteUsupportTicketByIdErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
 };
 
 export type DeleteUsupportTicketByIdResponses = {

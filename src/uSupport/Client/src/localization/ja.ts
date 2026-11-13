@@ -48,7 +48,6 @@ export default {
         details: '詳細',
         internalComment: '内部コメント',
         internalCommentDescription: 'uSupport ユーザーにのみ表示されます',
-        internalCommentUpdated: '内部コメントを更新しました',
         emailTo: 'メール送信先:',
 
         comment: 'コメント',

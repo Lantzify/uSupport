@@ -45,8 +45,12 @@ namespace uSupport.Controllers
 		[HttpPost]
 		[Authorize(Policy = uSupportConstants.uSupportSectionAccess)]
 		[ProducesResponseType<uSupportTicketType>(StatusCodes.Status200OK)]
+		[ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
 		public IActionResult Create(uSupportTicketType model)
 		{
+			if (PropertyNameProblem(model) is { } problem)
+				return problem;
+
 			var schema = model.ConvertDtoToSchema();
 			schema.Id = Guid.NewGuid();
 			schema.Order = _uSupportTicketTypeService.GetTypesCount() + 1;
@@ -61,11 +65,15 @@ namespace uSupport.Controllers
 		[Authorize(Policy = uSupportConstants.uSupportSectionAccess)]
 		[ProducesResponseType<uSupportTicketType>(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
 		public IActionResult Update(Guid id, uSupportTicketType model)
 		{
 			var existing = _uSupportTicketTypeService.Get(id);
 			if (existing == null)
 				return NotFound();
+
+			if (PropertyNameProblem(model) is { } problem)
+				return problem;
 
 			model.Id = id;
 			model.Order = existing.Order;
@@ -122,5 +130,10 @@ namespace uSupport.Controllers
 		// ponytail: loads every ticket and filters in memory; add a WHERE TypeId query if ticket counts grow large
 		private IEnumerable<PreviewDeleteItemDto> GetDependentTicketItems(Guid id)
 			=> _uSupportTicketService.GetAll().Where(x => x.TypeId == id).ConvertToDeletePreviewDto();
+
+		private IActionResult? PropertyNameProblem(uSupportTicketType model)
+			=> model.DataTypeKey != null && string.IsNullOrWhiteSpace(model.PropertyName)
+				? Problem(title: "A property name is required when a data type is selected.", statusCode: StatusCodes.Status400BadRequest)
+				: null;
 	}
 }

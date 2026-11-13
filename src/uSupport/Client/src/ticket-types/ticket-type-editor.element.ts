@@ -39,10 +39,11 @@ export class USupportTicketTypeEditorElement extends UmbLitElement {
 										@change=${(e: Event) =>
 											this.#update({ dataTypeKey: (e.target as HTMLInputElement).value || null })}></umb-data-type-input>
 								</umb-property-layout>
-								<umb-property-layout label=${this.localize.term('uSupport_propertyName')}>
+								<umb-property-layout label=${this.localize.term('uSupport_propertyName')} ?mandatory=${!!model.dataTypeKey}>
 									<uui-input
 										slot="editor"
 										label=${this.localize.term('uSupport_propertyName')}
+										?required=${!!model.dataTypeKey}
 										.value=${model.propertyName ?? ''}
 										@input=${this.#text('propertyName')}></uui-input>
 								</umb-property-layout>

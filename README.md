@@ -7,7 +7,7 @@
 [![Umbraco](https://img.shields.io/badge/marketplace-umbraco-%233544b1#f5c1bc)](https://marketplace.umbraco.com/package/usupport)
 
 [![Release](https://github.com/Lantzify/uSupport/actions/workflows/main.yml/badge.svg)](https://github.com/Lantzify/uSupport/actions/workflows/main.yml)
-[![Umbraco](https://img.shields.io/badge/our-umbraco-%233544b1)](https://our.umbraco.com/packages/backoffice-extensions/usupport/)
+[![E2E](https://github.com/Lantzify/uSupport/actions/workflows/e2e.yml/badge.svg)](https://github.com/Lantzify/uSupport/actions/workflows/e2e.yml)
 
 ## What is uSupport
 uSupport is an feature rich ticketing system designed specifically for Umbraco. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.

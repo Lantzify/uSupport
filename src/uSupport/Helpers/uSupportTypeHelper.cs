@@ -89,6 +89,7 @@ namespace uSupport.Helpers
 			return new PreviewDeleteItemDto()
 			{
 				Id = ticket.Id,
+				TicketId = ticket.ExternalTicketId,
 				Name = ticket.Title,
 				Type = "ticket",
 				Path = ""

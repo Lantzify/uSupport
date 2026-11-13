@@ -15,7 +15,7 @@ export const manifests: Array<UmbExtensionManifest> = [
 		alias: 'uSupport.Dashboard.User',
 		name: 'uSupport User Dashboard',
 		element: () => import('./user-dashboard.element.js'),
-		weight: -10,
+		weight: 1000,
 		meta: { label: '#dashboardTabs_uSupportUserDashboard', pathname: 'support' },
 		conditions: [{ alias: 'Umb.Condition.SectionAlias', match: 'Umb.Section.Content' }],
 	},

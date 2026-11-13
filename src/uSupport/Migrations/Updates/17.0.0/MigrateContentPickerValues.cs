@@ -24,13 +24,18 @@ namespace uSupport.Migrations.Updates._17._0._0
 
 		protected override void DoMigrate()
 		{
-			// Left join: a type whose data type was deleted fell back to the default content picker in AddDataTypeKeyToTicketTypes
-			var tickets = Database.Fetch<uSupportTicketSchema>(new Sql(
-				$"SELECT t.Id, t.PropertyValue FROM {TicketTableAlias} t " +
-				$"INNER JOIN {TicketTypeTableAlias} tt ON t.TypeId = tt.Id " +
-				"LEFT JOIN umbracoDataType dt ON dt.nodeId = tt.PropertyId " +
-				"WHERE tt.PropertyView = 'contentpicker' AND t.PropertyValue IS NOT NULL " +
-				"AND (dt.propertyEditorAlias IS NULL OR dt.propertyEditorAlias = 'Umbraco.ContentPicker')"));
+			// Go by the type's current data type, not the v13 PropertyId/PropertyView, which the v17 type editor never updates
+			var pickerTypeIds = Database.Fetch<uSupportTicketTypeSchema>(new Sql().Select("*").From(TicketTypeTableAlias))
+				.Where(x => x.DataTypeKey is Guid key && IsContentPicker(key))
+				.Select(x => x.Id)
+				.ToHashSet();
+
+			if (pickerTypeIds.Count == 0)
+				return;
+
+			// ponytail: loads every ticket's value once; fine for a one-off migration at ticket-system volumes
+			var tickets = Database.Fetch<uSupportTicketSchema>(new Sql($"SELECT Id, TypeId, PropertyValue FROM {TicketTableAlias} WHERE PropertyValue IS NOT NULL"))
+				.Where(x => pickerTypeIds.Contains(x.TypeId));
 
 			foreach (var ticket in tickets)
 			{
@@ -46,6 +51,14 @@ namespace uSupport.Migrations.Updates._17._0._0
 				ticket.PropertyValue = value;
 				Database.Update(TicketTableAlias, "Id", ticket, new[] { "PropertyValue" });
 			}
+		}
+
+		// Also covers AddDataTypeKeyToTicketTypes' fallback, which points at the default content picker data type
+		private bool IsContentPicker(Guid dataTypeKey)
+		{
+			var id = _idKeyMap.GetIdForKey(dataTypeKey, UmbracoObjectTypes.DataType);
+			return id.Success && Database.ExecuteScalar<string>("SELECT propertyEditorAlias FROM umbracoDataType WHERE nodeId = @0", id.Result)
+				== Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ContentPicker;
 		}
 
 		/// <summary>

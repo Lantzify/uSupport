@@ -1,7 +1,7 @@
 import { css, customElement, html, query } from '@umbraco-cms/backoffice/external/lit';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { umbOpenModal } from '@umbraco-cms/backoffice/modal';
-import { USUPPORT_CREATE_TICKET_MODAL } from '../tickets/modals/tokens.js';
+import { USUPPORT_CREATE_TICKET_MODAL, USUPPORT_OPEN_TICKET_MODAL } from '../tickets/modals/tokens.js';
 import type { USupportTicketsTableElement } from '../tickets/components/tickets-table.element.js';
 import '../tickets/components/tickets-table.element.js';
 
@@ -10,6 +10,12 @@ import '../tickets/components/tickets-table.element.js';
 export class USupportUserDashboardElement extends UmbLitElement {
 	@query('usupport-tickets-table[list="active"]')
 	private _activeTable?: USupportTicketsTableElement;
+
+	// Update emails link here with ?ticket=<id>, so authors without the uSupport section can open their ticket
+	protected firstUpdated() {
+		const id = new URLSearchParams(window.location.search).get('ticket');
+		if (id) umbOpenModal(this, USUPPORT_OPEN_TICKET_MODAL, { data: { id } }).catch(() => undefined);
+	}
 
 	async #createTicket() {
 		const result = await umbOpenModal(this, USUPPORT_CREATE_TICKET_MODAL).catch(() => undefined);

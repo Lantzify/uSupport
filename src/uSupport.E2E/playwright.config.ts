@@ -36,7 +36,7 @@ export default defineConfig({
   },
   projects: [
     { name: 'admin-setup', testMatch: 'admin.setup.ts' },
-    { name: 'editor-setup', testMatch: 'editor.setup.ts' },
+    { name: 'editor-setup', testMatch: 'editor.setup.ts', dependencies: ['admin-setup'] },
     {
       name: 'admin',
       testMatch: '*.spec.ts',

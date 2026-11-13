@@ -1,4 +1,4 @@
-﻿namespace uSupport.Constants
+namespace uSupport.Constants
 {
 	public static class uSupportConstants
 	{
@@ -7,13 +7,8 @@
 
 		public const string uSupportSectionAccess = "uSupportSectionAccess";
 
-		//Tree
-		public const string TicketsTreeAlias = "tickets";
-		public const string SettingsTreeAlias = "settings";
-		public const string TicketTypesTreeAlias = "ticketTypes";
-		public const string TicketStatusesTreeAlias = "ticketStatuses";
-
-		public const string TreeGroupAlias = "uSupportGroup";
+		//Management API
+		public const string ApiName = "uSupport";
 
 		//Table
 		public const string TicketTableAlias = "uSupportTicket";

@@ -1,0 +1,10 @@
+{
+  "name": "usupport",
+  "private": true,
+  "version": "17.0.0",
+  "scripts": {
+    "install-client": "cd ./uSupport/Client/ && npm install",
+    "build-watch": "cd ./uSupport/Client/ && npm run watch",
+    "generate": "cd ./uSupport/Client/ && npm run generate"
+  }
+}

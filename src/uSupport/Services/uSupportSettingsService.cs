@@ -69,7 +69,7 @@ namespace uSupport.Services
 			}
 		}
 
-		public async void SendEmail(string toAddress, string subject, string templateViewPath, object model)
+		public async Task SendEmail(string toAddress, string subject, string templateViewPath, object model)
 		{
 			try
 			{
@@ -113,7 +113,7 @@ namespace uSupport.Services
 					_eventAggregator.Publish(new EmailSendingNotification(ticket.Id, toAddress, subject, templateViewPath));
 
 
-				await _emailSender.SendAsync(message, emailType: "Contact");
+				await _emailSender.SendAsync(message, "Contact", false, null);
             }
 			catch (Exception ex)
 			{

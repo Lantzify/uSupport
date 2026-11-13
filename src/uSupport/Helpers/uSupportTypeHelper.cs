@@ -40,7 +40,8 @@ namespace uSupport.Helpers
 				PropertyDescription = ticketType.PropertyDescription,
 				PropertyId = ticketType.PropertyId,
 				PropertyName = ticketType.PropertyName,
-				PropertyView = ticketType.PropertyView
+				PropertyView = ticketType.PropertyView,
+				DataTypeKey = ticketType.DataTypeKey
 			};
 		}
 

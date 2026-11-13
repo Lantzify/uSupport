@@ -1,26 +1,23 @@
-﻿using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 
 namespace uSupport.Migrations
 {
-	public class RunuSupportMigration : INotificationHandler<UmbracoApplicationStartingNotification>
+	public class RunuSupportMigration : INotificationAsyncHandler<UmbracoApplicationStartingNotification>
 	{
 		private readonly IRuntimeState _runtimeState;
-		private readonly IScopeProvider _scopeProvider;
+		private readonly ICoreScopeProvider _scopeProvider;
 		private readonly IKeyValueService _keyValueService;
 		private readonly IMigrationPlanExecutor _migrationPlanExecutor;
 
-		public RunuSupportMigration(IUserService userService,
-			IRuntimeState runtimeState,
-			IScopeProvider scopeProvider,
+		public RunuSupportMigration(IRuntimeState runtimeState,
+			ICoreScopeProvider scopeProvider,
 			IKeyValueService keyValueService,
-			IUmbracoContextFactory umbracoContext,
 			IMigrationPlanExecutor migrationPlanExecutor)
 		{
 			_runtimeState = runtimeState;
@@ -29,16 +26,13 @@ namespace uSupport.Migrations
 			_migrationPlanExecutor = migrationPlanExecutor;
 		}
 
-		public void Handle(UmbracoApplicationStartingNotification notification)
+		public async Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken)
 		{
 			if (_runtimeState.Level < RuntimeLevel.Run)
 				return;
 
 			var upgrader = new Upgrader(new uSupportMigrationPlan());
-			upgrader.Execute(
-				_migrationPlanExecutor,
-				_scopeProvider,
-				_keyValueService);
+			await upgrader.ExecuteAsync(_migrationPlanExecutor, _scopeProvider, _keyValueService);
 		}
 	}
 }

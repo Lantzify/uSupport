@@ -1,13 +1,10 @@
 ﻿using NPoco;
 using uSupport.Dtos;
 using uSupport.Dtos.Tables;
-using Umbraco.Cms.Core.Mapping;
-using Umbraco.Cms.Core.Services;
 using uSupport.Migrations.Schemas;
 using uSupport.Services.Interfaces;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Scoping;
-using Umbraco.Cms.Core.Models.ContentEditing;
+using uSupport.Helpers;
 using static uSupport.Helpers.uSupportPageHelper;
 using static uSupport.Constants.uSupportConstants;
 
@@ -15,16 +12,13 @@ namespace uSupport.Services
 {
 	public class uSupportTicketCommentService : uSupportServiceBase<uSupportTicketComment, uSupportTicketCommentSchema>, IuSupportTicketCommentService
 	{
-		private readonly IUserService _userService;
-		private readonly IUmbracoMapper _umbracoMapper;
+		private readonly uSupportUserHelper _userHelper;
 
-		public uSupportTicketCommentService(IUserService userService,
+		public uSupportTicketCommentService(uSupportUserHelper userHelper,
 			IScopeProvider scopeProvider,
-			IScopeAccessor scopeAccessor,
-			IUmbracoMapper umbracoMapper) : base(TicketCommentTableAlias, scopeProvider, scopeAccessor)
+			IScopeAccessor scopeAccessor) : base(TicketCommentTableAlias, scopeProvider, scopeAccessor)
 		{
-			_userService = userService;
-			_umbracoMapper = umbracoMapper;
+			_userHelper = userHelper;
 		}
 
 		public IEnumerable<uSupportTicketComment> GetAll()
@@ -62,9 +56,7 @@ namespace uSupport.Services
 
 				foreach (var comment in comments.ToList())
 				{
-					var user = _userService.GetUserById(comment.UserId);
-
-					comment.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+					comment.User = _userHelper.GetUser(comment.UserId);
 
 					commentDtos.Add(comment);
 				}
@@ -101,9 +93,7 @@ namespace uSupport.Services
 
 				foreach (var comment in comments.ToList())
 				{
-					var user = _userService.GetUserById(comment.UserId);
-
-					comment.User = _umbracoMapper.Map<IUser, UserDisplay>(user);
+					comment.User = _userHelper.GetUser(comment.UserId);
 
 					commentDtos.Add(comment);
 				}

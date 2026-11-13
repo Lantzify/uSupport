@@ -62,7 +62,7 @@
 													<td style="width: 50%; padding-right: 8px; vertical-align: top; text-align: center;">
 														<div>
 															<p style="margin: 0 0 6px; font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Last updated</p>
-															<p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a;">@Model.LastUpdated?.ToString("yyyy-MM-dd hh:mm")</p>
+															<p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a;">@Model.LastUpdated?.ToString("yyyy-MM-dd HH:mm")</p>
 														</div>
 													</td>
 													<td style="width: 50%; padding-left: 8px; vertical-align: top; text-align: center;">
@@ -124,7 +124,7 @@
 															</td>
 															<td style="vertical-align: top;">
 																<p style="margin: 0 0 4px; font-weight: 600; font-size: 14px; color: #0f172a;">@comment.User?.Name</p>
-																<p style="margin: 0 0 10px; font-size: 12px; color: #94a3b8;">@comment.Date.ToString("yyyy-MM-dd hh:mm")</p>
+																<p style="margin: 0 0 10px; font-size: 12px; color: #94a3b8;">@comment.Date.ToString("yyyy-MM-dd HH:mm")</p>
 																<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #475569;">@Html.Raw(comment.Comment)</p>
 															</td>
 														</tr>
@@ -159,7 +159,7 @@
 					<!-- CTA Button -->
 					<tr>
 						<td style="padding: 32px 40px 40px; text-align: center;">
-							<a href="@baseUrl/umbraco" target="_blank" style="display: inline-block; text-decoration: none; color: #ffffff; font-size: 15px; font-weight: 600; padding: 14px 36px; background: linear-gradient(135deg, #1ba098 0%, #16c9b8 100%); border-radius: 8px; box-shadow: 0 2px 8px rgba(27, 160, 152, 0.25);">
+							<a href="@baseUrl/umbraco/section/usupport/workspace/usupport-ticket/edit/@Model.Id" target="_blank" style="display: inline-block; text-decoration: none; color: #ffffff; font-size: 15px; font-weight: 600; padding: 14px 36px; background: linear-gradient(135deg, #1ba098 0%, #16c9b8 100%); border-radius: 8px; box-shadow: 0 2px 8px rgba(27, 160, 152, 0.25);">
 								View Ticket →
 							</a>
 						</td>

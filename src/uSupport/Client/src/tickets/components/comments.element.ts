@@ -1,4 +1,5 @@
 import { css, customElement, html, nothing, property, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
+import { sanitizeHTML } from '@umbraco-cms/backoffice/utils';
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UMB_NOTIFICATION_CONTEXT } from '@umbraco-cms/backoffice/notification';
 import { USupportRepository, type TicketComment } from '../../repository/usupport.repository.js';
@@ -59,7 +60,7 @@ export class USupportCommentsElement extends UmbLitElement {
 						<div>
 							<strong>${comment.user?.name}</strong>
 							<small>${formatDate(comment.date)}</small>
-							<div class="body">${unsafeHTML(comment.comment)}</div>
+							<div class="body">${unsafeHTML(sanitizeHTML(comment.comment ?? ''))}</div>
 						</div>
 					</div>
 				`,

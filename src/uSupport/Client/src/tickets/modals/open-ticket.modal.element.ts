@@ -1,4 +1,5 @@
 import { customElement, html, state, unsafeHTML } from '@umbraco-cms/backoffice/external/lit';
+import { sanitizeHTML } from '@umbraco-cms/backoffice/utils';
 import { UmbModalBaseElement } from '@umbraco-cms/backoffice/modal';
 import { UmbTextStyles } from '@umbraco-cms/backoffice/style';
 import { USupportRepository, type Ticket } from '../../repository/usupport.repository.js';
@@ -27,12 +28,12 @@ export class USupportOpenTicketModalElement extends UmbModalBaseElement<{ id: st
 							<div class="layout">
 								<div class="main">
 									<uui-box>
-										<umb-property-layout label='Ticket title'}>
+										<umb-property-layout label=${this.localize.term('uSupport_title')}>
 											<p slot="editor">${ticket.title}</p>
 										</umb-property-layout>
 									
-										<umb-property-layout label='Ticket summary'}>
-											<p slot="editor">${unsafeHTML(ticket.summary)}</p>
+										<umb-property-layout label=${this.localize.term('uSupport_summary')}>
+											<p slot="editor">${unsafeHTML(sanitizeHTML(ticket.summary ?? ''))}</p>
 										</umb-property-layout>
 										
 										${ticket.type?.dataTypeKey

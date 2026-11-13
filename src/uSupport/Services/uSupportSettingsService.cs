@@ -79,7 +79,7 @@ namespace uSupport.Services
                     throw new Exception("Failed to send email. Smtp from is not set in appsettings.");
 
                 if (string.IsNullOrEmpty(toAddress) || toAddress == "None")
-                    throw new Exception("Failed to send email. TicketUpdateEmail is not set in appsettings.");
+                    throw new Exception("Failed to send email. TicketUpdateEmail is not set in uSupport settings.");
 
 				EmailMessage message;
 				var emailBody = await RenderEmailTemplateAsync(templateViewPath, model);

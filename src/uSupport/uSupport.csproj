@@ -25,8 +25,8 @@
 		<PackageProjectUrl>https://github.com/Lantzify/uSupport</PackageProjectUrl>
 		<PackageTags>umbraco umbraco-marketplace uSupport support</PackageTags>
 		<RepositoryUrl>https://github.com/Lantzify/uSupport</RepositoryUrl>
-		<Description>uSupport is an feature rich ticketing system designed specifically for the Umbraco CMS platform. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.</Description>
-		<Summary>uSupport is an feature rich ticketing system designed specifically for the Umbraco CMS platform. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.</Summary>
+		<Description>uSupport is a feature-rich ticketing system designed specifically for the Umbraco CMS platform. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.</Description>
+		<Summary>uSupport is a feature-rich ticketing system designed specifically for the Umbraco CMS platform. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.</Summary>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<IncludeSymbols>true</IncludeSymbols>
 		<PackageReadmeFile>umbraco-marketplace-readme.md</PackageReadmeFile>

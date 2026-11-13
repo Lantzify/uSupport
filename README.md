@@ -10,7 +10,7 @@
 [![E2E](https://github.com/Lantzify/uSupport/actions/workflows/e2e.yml/badge.svg)](https://github.com/Lantzify/uSupport/actions/workflows/e2e.yml)
 
 ## What is uSupport
-uSupport is an feature rich ticketing system designed specifically for Umbraco. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.
+uSupport is a feature-rich ticketing system designed specifically for Umbraco. It is a complete ticketing solution that enables users to create, manage, and view tickets and their associated comments. With uSupport, you can quickly and easily create and manage tickets. uSupport is highly customizable, allowing users to set up their own ticket types and define ticket statuses.
 
 ## Why uSupport
 Say goodbye to the days of digging through countless old emails in search of vital details. With uSupport, everything you need is neatly organized within the Umbraco environment. Streamline your workflow, boost productivity, and effortlessly access all the information you need to address and resolve client issues efficiently.

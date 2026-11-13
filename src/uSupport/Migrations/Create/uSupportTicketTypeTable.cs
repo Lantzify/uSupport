@@ -21,7 +21,7 @@ namespace uSupport.Migrations.Create
 					Icon = "icon-layout",
 					Description = "A page isn''t working",
 					PropertyName = "Page",
-					PropertyDescription = "Select the page that you''re are having an issue with",
+					PropertyDescription = "Select the page that you''re having an issue with",
 					PropertyId = 1046,
 					PropertyView = "contentpicker",
 					Order = 1

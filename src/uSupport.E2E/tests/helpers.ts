@@ -18,6 +18,17 @@ export const TICKETS = {
     type: 'Page error',
     title: 'Home page throws error',
     summary: 'When going to the home page it throws a 500 error'
+  },
+};
+
+export const TYPES = {
+  request: {
+    name: 'Feature request',
+    summary: 'I would like to request a new feature'
+  },
+  meetingRequest: {
+    name: 'Meeting request',
+    summary: 'I would like to request a meeting'
   }
 }
 

@@ -19,7 +19,8 @@
         "AutoDictionaries",
         "AutoBlockList",
         "UmbracoNaviHideIcon",
-        "uSupport.uSync"
+        "uSupport.uSync",
+        "uSupport.Automate"
     ],
     "Screenshots": [
         {

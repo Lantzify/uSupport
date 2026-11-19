@@ -13,5 +13,6 @@ Say goodbye to the days of digging through countless old emails in search of vit
 
 ## Useful links
 - [Documentation](https://lantzify.github.io/uSupport-documentation/)
+- [Automate](https://github.com/Lantzify/uSupport-Automate)
 - [uSync](https://github.com/Lantzify/uSupport-uSync)
 - [Email Templates](https://github.com/Lantzify/uSupport/raw/refs/heads/main/assets/email-templates.zip)

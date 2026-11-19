@@ -30,6 +30,10 @@ export class USupportAdminDashboardElement extends UmbLitElement {
 						<a href="https://github.com/Lantzify/uSupport-uSync" target="_blank" rel="noopener">uSupport uSync</a>
 					</li>
 					<li>
+						<strong>Umbraco Automate integration:</strong>
+						<a href="https://github.com/Lantzify/uSupport-Automate" target="_blank" rel="noopener">uSupport Automate</a>
+					</li>
+					<li>
 						<strong>Email templates:</strong>
 						<a href="https://github.com/Lantzify/uSupport/raw/refs/heads/main/assets/email-templates.zip" target="_blank" rel="noopener"
 							>download the email templates</a

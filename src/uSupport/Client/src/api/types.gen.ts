@@ -127,7 +127,7 @@ export type USupportTicketStatusModel = {
     alias: string;
     name: string;
     color?: string | null;
-    icon: string;
+    icon?: string | null;
     default: boolean;
     active: boolean;
 };
@@ -138,7 +138,7 @@ export type USupportTicketTypeModel = {
     alias: string;
     name: string;
     color?: string | null;
-    icon: string;
+    icon?: string | null;
     description?: string | null;
     propertyId: number;
     propertyName?: string | null;

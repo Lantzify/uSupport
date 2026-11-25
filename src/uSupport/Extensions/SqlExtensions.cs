@@ -1,8 +1,5 @@
 ﻿using NPoco;
-using System;
-using System.Linq;
 using uSupport.Dtos.Tables;
-using System.Collections.Generic;
 using static uSupport.Constants.uSupportConstants;
 
 namespace uSupport.Extensions
@@ -11,7 +8,7 @@ namespace uSupport.Extensions
 	{
 		public static Sql GetFullTicket(this Sql sql)
 		{
-			return sql.InnerJoin(TicketTypeTableAlias)
+			return sql.LeftJoin(TicketTypeTableAlias)
 				.On($"TypeId = UPPER({TicketTypeTableAlias}.Id)")
 				.InnerJoin(TicketStatusTableAlias)
 				.On($"StatusId = UPPER({TicketStatusTableAlias}.Id)");

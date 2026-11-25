@@ -63,12 +63,16 @@ namespace uSupport.Controllers
 		[HttpPut("{id:guid}")]
 		[Authorize(Policy = uSupportConstants.uSupportSectionAccess)]
 		[ProducesResponseType<uSupportTicketStatus>(StatusCodes.Status200OK)]
+		[ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public IActionResult Update(Guid id, uSupportTicketStatus model)
 		{
 			var existing = _uSupportTicketStatusService.Get(id);
 			if (existing == null)
 				return NotFound();
+
+			if (existing.Default && !model.Default)
+				return Problem(title: "New tickets need a default status. Make another status the default instead.", statusCode: StatusCodes.Status400BadRequest);
 
 			model.Id = id;
 			model.Order = existing.Order;
@@ -92,6 +96,9 @@ namespace uSupport.Controllers
 			var status = _uSupportTicketStatusService.Get(id);
 			if (status == null)
 				return NotFound();
+
+			if (status.Default)
+				return Problem(title: "The default ticket status can't be deleted. Make another status the default first.", statusCode: StatusCodes.Status400BadRequest);
 
 			if (GetDependentTicketItems(id).Any())
 				return Problem(title: "The ticket status is used by one or more tickets.", statusCode: StatusCodes.Status400BadRequest);

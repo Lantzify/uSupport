@@ -327,10 +327,16 @@ export type PutUsupportTicketStatusByIdData = {
 
 export type PutUsupportTicketStatusByIdErrors = {
     /**
+     * Bad Request
+     */
+    400: ProblemDetails;
+    /**
      * Not Found
      */
     404: unknown;
 };
+
+export type PutUsupportTicketStatusByIdError = PutUsupportTicketStatusByIdErrors[keyof PutUsupportTicketStatusByIdErrors];
 
 export type PutUsupportTicketStatusByIdResponses = {
     /**
